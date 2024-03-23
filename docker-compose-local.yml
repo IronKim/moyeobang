@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  moyeobang-database:
+    container_name: moyeobang-database
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: ashfe26/moyeobang-database
+    environment:
+      - MYSQL_DATABASE=moyeobang
+      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"

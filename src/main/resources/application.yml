@@ -1,1 +1,39 @@
+debug: false
+management.endpoints.web.exposure.include: "*"
 
+logging:
+  level:
+    com.ironkim.moyeobang: DEBUG
+    org.springframework.web.servlet: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+spring:
+  profiles:
+    active: local #default
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
