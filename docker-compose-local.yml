@@ -13,3 +13,16 @@ services:
       - ./database/config:/etc/mysql/conf.d
     ports:
       - "3306:3306"
+  moyeobang-app:
+    container_name: moyeobang-app
+    build: .
+    depends_on:
+      - moyeobang-database
+    image: ashfe26/moyeobang-app
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "80:8080"
+    restart: always

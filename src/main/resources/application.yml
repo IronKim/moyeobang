@@ -22,12 +22,6 @@ spring:
   config:
     activate:
       on-profile: common
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${SPRING_DATASOURCE_URL}
@@ -37,3 +31,9 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
