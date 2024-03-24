@@ -13,7 +13,6 @@ echo "===== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
 echo "> build 파일명: $JAR_NAME" >> $DEPLOY_LOG_PATH
 
 echo "> docker-compose 실행" >> $DEPLOY_LOG_PATH
-docker-compose -f /home/ec2-user/moyeobang/local-docker-compose.yml up
 
 sleep 3
 
