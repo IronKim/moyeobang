@@ -12,8 +12,8 @@ echo "===== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
 
 echo "> build 파일명: $JAR_NAME" >> $DEPLOY_LOG_PATH
 
+echo "> db.cnf 파일권한 읽기전용으로 변경" >> $DEPLOY_LOG_PATH
+chmod 400 /home/ec2-user/moyeobang/database/config/db.cnf
+
 echo "> docker-compose 실행" >> $DEPLOY_LOG_PATH
-
-sleep 3
-
-echo "> 배포 종료 : $(date +%c)" >> $DEPLOY_LOG_PATH
+docker-compose up -d --build
