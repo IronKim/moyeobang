@@ -32,9 +32,10 @@ jobs:
         shell: bash
 
       - name: add .env file
-        run: echo ".env" >> .env
+        run: | 
+          echo "VARIABLE=$VARIABLE" >> .env
         env:
-          .env: ${{ secrets.ENV }}
+          VARIABLE: ${{ secrets.ENV }}
 
       - name: Make zip file
         run: zip -r ./$GITHUB_SHA .

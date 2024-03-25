@@ -12,11 +12,11 @@ echo "===== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
 
 echo "> build 파일명: $JAR_NAME" >> $DEPLOY_LOG_PATH
 
-echo "> db.cnf 파일권한 읽기전용으로 변경" >> $DEPLOY_LOG_PATH
-chmod 755 /home/ec2-user/moyeobang/database/config/db.cnf
+echo "> db.cnf 파일권한 변경" >> $DEPLOY_LOG_PATH
+chmod 400 /home/ec2-user/moyeobang/database/config/db.cnf
 
-echo "> 도커 이미지 삭제" >> $DEPLOY_LOG_PATH
-docker rmi $(docker images | grep 'moyeobang' | awk '{print $3}') -f
+echo "> 도커 컨네이터 내림" >> $DEPLOY_LOG_PATH
+docker-compose -f /home/ec2-user/moyeobang/docker-compose.yml down -v
 
 echo "> docker-compose 실행" >> $DEPLOY_LOG_PATH
 docker-compose -f /home/ec2-user/moyeobang/docker-compose.yml up -d
