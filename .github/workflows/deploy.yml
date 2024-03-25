@@ -33,7 +33,7 @@ jobs:
 
       - name: add .env file
         run: | 
-          echo "VARIABLE=$VARIABLE" >> .env
+          echo "$VARIABLE" >> .env
         env:
           VARIABLE: ${{ secrets.ENV }}
 
