@@ -1,9 +1,7 @@
 package com.ironkim.moyeobang.domain;
 
 import com.ironkim.moyeobang.domain.constant.PreferenceType;
-import com.ironkim.moyeobang.domain.constant.RoleType;
 import com.ironkim.moyeobang.domain.converter.PreferenceTypesConverter;
-import com.ironkim.moyeobang.dto.request.UserJoinRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -11,9 +9,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
