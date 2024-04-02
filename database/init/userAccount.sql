@@ -9,7 +9,7 @@ CREATE TABLE `user_account` (
   `phone_number` varchar(20) NOT NULL,
   `email` varchar(255) NOT NULL,
   `role_type` varchar(20) NOT NULL,
-  `gender` char(1) NULL,
+  `gender` varchar(1) NULL,
   `nickname` varchar(20) NOT NULL,
   `profile_image` varchar(255) NULL,
   `profile_text` varchar(255) NULL,

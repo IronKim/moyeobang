@@ -24,7 +24,7 @@ import java.util.Set;
 public class UserAccount extends Account {
 
     @Column(length = 1)
-    private Character gender;
+    private String gender;
     @Column(nullable = false, length = 20)
     private String nickname;
     private String profileImage;

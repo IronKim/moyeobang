@@ -1,0 +1,24 @@
+debug: false
+management.endpoints.web.exposure.include: "*"
+
+logging:
+  level:
+    com.ironkim.moyeobang: DEBUG
+    org.springframework.web.servlet: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+spring:
+  profiles: test
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:8:///
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  expired-time-ms: ${JWT_TOKEN_EXPIRED_TIME_MS}
+
+
