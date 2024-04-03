@@ -17,7 +17,9 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLRestriction("deleted_at IS NULL")
 public class SellerAccount extends Account {
     @Column(nullable = false, length = 50)
-    private String sellerName;
-    @Column(nullable = false, length = 20)
+    private String businessName;
+    @Column(nullable = false, length = 10)
     private String businessNumber;
+    @Column(nullable = false, length = 1)
+    private String authStatus;
 }
