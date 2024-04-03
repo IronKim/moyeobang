@@ -1,16 +1,18 @@
 package com.ironkim.moyeobang.service;
 
+import com.ironkim.moyeobang.domain.SellerAccount;
 import com.ironkim.moyeobang.domain.UserAccount;
 import com.ironkim.moyeobang.domain.constant.RoleType;
 import com.ironkim.moyeobang.dto.AccountDto;
+import com.ironkim.moyeobang.dto.SellerAccountDto;
 import com.ironkim.moyeobang.dto.UserAccountDto;
+import com.ironkim.moyeobang.dto.request.SellerJoinRequest;
 import com.ironkim.moyeobang.dto.request.UserJoinRequest;
-import com.ironkim.moyeobang.dto.request.UserLoginRequest;
 import com.ironkim.moyeobang.exception.ErrorCode;
 import com.ironkim.moyeobang.exception.MoyeobangApplicationException;
 import com.ironkim.moyeobang.repository.SellerAccountRepository;
 import com.ironkim.moyeobang.repository.UserAccountRepository;
-import com.ironkim.moyeobang.util.JwtTokenUtils;
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,5 +39,56 @@ public class AuthService {
                 .orElseGet(() -> sellerAccountRepository.findByAccountId(accountId).map(AccountDto::fromAccount)
                         .orElseThrow(() -> new MoyeobangApplicationException(ErrorCode.ACCOUNT_NOT_FOUND, String.format("%s is not founded", accountId))));
     }
-    
+
+    public UserAccountDto userJoin(UserJoinRequest userJoinRequest) {
+        userAccountRepository.findByAccountId(userJoinRequest.getAccountId()).ifPresent(it -> {
+            throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", userJoinRequest.getAccountId()));
+        });
+
+        sellerAccountRepository.findByAccountId(userJoinRequest.getAccountId()).ifPresent(it -> {
+            throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", userJoinRequest.getAccountId()));
+        });
+
+        UserAccount userAccount = userAccountRepository.save(UserAccount.builder()
+                                                        .accountId(userJoinRequest.getAccountId())
+                                                        .password(encoder.encode(userJoinRequest.getPassword()))
+                                                        .roleType(RoleType.USER)
+                                                        .name(userJoinRequest.getName())
+                                                        .birthday(userJoinRequest.getBirthday())
+                                                        .phoneNumber(userJoinRequest.getPhoneNumber())
+                                                        .email(userJoinRequest.getEmail())
+                                                        .gender(userJoinRequest.getGender())
+                                                        .nickname(StringUtils.isBlank(userJoinRequest.getNickname()) ? userJoinRequest.getAccountId() : userJoinRequest.getNickname()) // 닉네임이 없으면 아이디로 설정
+                                                        .profileImage(userJoinRequest.getProfileImage())
+                                                        .profileText(userJoinRequest.getProfileText())
+                                                        .preferenceTypes(userJoinRequest.getPreferenceTypes())
+                                                        .build());
+
+        return UserAccountDto.fromUserAccount(userAccount);
+    }
+
+    public SellerAccountDto sellerJoin(SellerJoinRequest sellerJoinRequest) {
+        userAccountRepository.findByAccountId(sellerJoinRequest.getAccountId()).ifPresent(it -> {
+            throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", sellerJoinRequest.getAccountId()));
+        });
+
+        sellerAccountRepository.findByAccountId(sellerJoinRequest.getAccountId()).ifPresent(it -> {
+            throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", sellerJoinRequest.getAccountId()));
+        });
+
+        SellerAccount sellerAccount = sellerAccountRepository.save(SellerAccount.builder()
+                                                        .accountId(sellerJoinRequest.getAccountId())
+                                                        .password(encoder.encode(sellerJoinRequest.getPassword()))
+                                                        .roleType(RoleType.SELLER)
+                                                        .name(sellerJoinRequest.getName())
+                                                        .birthday(sellerJoinRequest.getBirthday())
+                                                        .phoneNumber(sellerJoinRequest.getPhoneNumber())
+                                                        .email(sellerJoinRequest.getEmail())
+                                                        .businessName(sellerJoinRequest.getBusinessName())
+                                                        .businessNumber(sellerJoinRequest.getBusinessNumber())
+                                                        .authStatus("N")
+                                                        .build());
+
+        return SellerAccountDto.fromSellerAccount(sellerAccount);
+    }
 }

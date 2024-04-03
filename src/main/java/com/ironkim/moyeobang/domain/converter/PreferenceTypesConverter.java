@@ -15,11 +15,15 @@ public class PreferenceTypesConverter implements AttributeConverter<Set<Preferen
 
     @Override
     public String convertToDatabaseColumn(Set<PreferenceType> attribute) {
+        if(attribute == null || attribute.isEmpty()) return null;
+
         return attribute.stream().map(PreferenceType::name).sorted().collect(Collectors.joining(DELIMITER));
     }
 
     @Override
     public Set<PreferenceType> convertToEntityAttribute(String dbData) {
+        if (dbData == null || dbData.isEmpty()) return Set.of();
+
         return Arrays.stream(dbData.split(DELIMITER)).map(PreferenceType::valueOf).collect(Collectors.toSet());
     }
 }
