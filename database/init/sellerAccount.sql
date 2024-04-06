@@ -10,7 +10,7 @@ CREATE TABLE `seller_account` (
   `role_type` varchar(20) NOT NULL,
   `business_name` varchar(20) NOT NULL,
   `business_number` varchar(10) NOT NULL,
-  `status` varchar(1) NOT NULL,
+  `auth_status` varchar(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `created_by` varchar(20) NOT NULL,
   `modified_at` datetime NOT NULL,

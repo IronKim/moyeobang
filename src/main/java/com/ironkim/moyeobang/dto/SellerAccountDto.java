@@ -40,7 +40,7 @@ public class SellerAccountDto {
                 sellerAccount.getRoleType(),
                 sellerAccount.getBusinessName(),
                 sellerAccount.getBusinessNumber(),
-                sellerAccount.getStatus(),
+                sellerAccount.getAuthStatus(),
                 sellerAccount.getCreatedAt(),
                 sellerAccount.getCreatedBy(),
                 sellerAccount.getModifiedAt(),
