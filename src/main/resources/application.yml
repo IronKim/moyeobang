@@ -31,10 +31,27 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB # Max file size.
+      max-request-size: 10MB # Max request size.
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   expired-time-ms: ${JWT_TOKEN_EXPIRED_TIME_MS}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 ---
 spring:
   config:

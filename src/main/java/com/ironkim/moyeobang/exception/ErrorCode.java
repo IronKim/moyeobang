@@ -14,6 +14,8 @@ public enum ErrorCode {
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "Post not founded"),
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "Permission is invalid"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "Request is invalid"),
+    MAX_UPLOAD_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "Max upload size exceeded"),
+    NOT_IMAGE_EXTENSION(HttpStatus.BAD_REQUEST, "Not image extension"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
     ;
 

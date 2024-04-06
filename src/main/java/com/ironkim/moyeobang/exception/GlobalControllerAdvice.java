@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @Slf4j
 @RestControllerAdvice
@@ -32,6 +33,13 @@ public class GlobalControllerAdvice {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Response.error(ErrorCode.BAD_REQUEST.name()));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<?> applicationHandler(MaxUploadSizeExceededException e) {
+        log.error("Error occurs {}", e.toString());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Response.error(ErrorCode.MAX_UPLOAD_SIZE_EXCEEDED.name()));
     }
 
     @ExceptionHandler(RuntimeException.class)
