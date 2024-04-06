@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
-
 @Getter
 @ToString(callSuper = true)
 @MappedSuperclass
@@ -27,9 +25,6 @@ public abstract class Account extends AuditingFields {
 
     @Column(nullable = false, length = 20)
     protected String name;
-
-    @Column(nullable = false)
-    protected LocalDate birthday;
 
     @Column(nullable = false, length = 20)
     protected String phoneNumber;

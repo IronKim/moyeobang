@@ -20,14 +20,14 @@ public class UserAccountDto {
     private String accountId;
     private String password;
     private String name;
-    private LocalDate birthday;
     private String phoneNumber;
     private String email;
     private RoleType roleType;
-    private String gender;
-    private String nickname;
     private String profileImage;
+    private String prifileName;
     private String profileText;
+    private String gender;
+    private LocalDate birthday;
     private Set<PreferenceType> preferenceTypes;
     private LocalDateTime createdAt;
     private String createdBy;
@@ -41,14 +41,14 @@ public class UserAccountDto {
                 userAccount.getAccountId(),
                 userAccount.getPassword(),
                 userAccount.getName(),
-                userAccount.getBirthday(),
                 userAccount.getPhoneNumber(),
                 userAccount.getEmail(),
                 userAccount.getRoleType(),
-                userAccount.getGender(),
-                userAccount.getNickname(),
                 userAccount.getProfileImage(),
+                userAccount.getProfileName(),
                 userAccount.getProfileText(),
+                userAccount.getGender(),
+                userAccount.getBirthday(),
                 userAccount.getPreferenceTypes(),
                 userAccount.getCreatedAt(),
                 userAccount.getCreatedBy(),

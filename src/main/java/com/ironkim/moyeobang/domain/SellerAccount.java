@@ -21,5 +21,5 @@ public class SellerAccount extends Account {
     @Column(nullable = false, length = 10)
     private String businessNumber;
     @Column(nullable = false, length = 1)
-    private String authStatus;
+    private String status;
 }

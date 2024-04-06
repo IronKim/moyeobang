@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +19,6 @@ public class AccountDto implements UserDetails {
     private String accountId;
     private String password;
     private String name;
-    private LocalDate birthday;
     private String phoneNumber;
     private String email;
     private RoleType roleType;
@@ -36,7 +34,6 @@ public class AccountDto implements UserDetails {
                 account.getAccountId(),
                 account.getPassword(),
                 account.getName(),
-                account.getBirthday(),
                 account.getPhoneNumber(),
                 account.getEmail(),
                 account.getRoleType(),

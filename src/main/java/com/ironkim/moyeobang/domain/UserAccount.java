@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -23,12 +24,14 @@ import java.util.Set;
 @SQLRestriction("deleted_at IS NULL")
 public class UserAccount extends Account {
 
+    private String profileImage;
+    @Column(nullable = false, length = 20)
+    private String profileName;
+    @Column(length = 100)
+    private String profileText;
     @Column(length = 1)
     private String gender;
-    @Column(nullable = false, length = 20)
-    private String nickname;
-    private String profileImage;
-    private String profileText;
+    private LocalDate birthday;
     @Convert(converter = PreferenceTypesConverter.class)
     private Set<PreferenceType> preferenceTypes = new LinkedHashSet<>();
 

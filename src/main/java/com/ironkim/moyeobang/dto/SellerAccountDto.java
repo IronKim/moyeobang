@@ -4,7 +4,6 @@ import com.ironkim.moyeobang.domain.SellerAccount;
 import com.ironkim.moyeobang.domain.constant.RoleType;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,13 +17,12 @@ public class SellerAccountDto {
     private String accountId;
     private String password;
     private String name;
-    private LocalDate birthday;
     private String phoneNumber;
     private String email;
     private RoleType roleType;
     private String businessName;
     private String businessNumber;
-    private String authStatus;
+    private String status;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime modifiedAt;
@@ -37,13 +35,12 @@ public class SellerAccountDto {
                 sellerAccount.getAccountId(),
                 sellerAccount.getPassword(),
                 sellerAccount.getName(),
-                sellerAccount.getBirthday(),
                 sellerAccount.getPhoneNumber(),
                 sellerAccount.getEmail(),
                 sellerAccount.getRoleType(),
                 sellerAccount.getBusinessName(),
                 sellerAccount.getBusinessNumber(),
-                sellerAccount.getAuthStatus(),
+                sellerAccount.getStatus(),
                 sellerAccount.getCreatedAt(),
                 sellerAccount.getCreatedBy(),
                 sellerAccount.getModifiedAt(),
