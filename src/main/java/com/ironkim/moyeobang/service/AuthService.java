@@ -49,20 +49,13 @@ public class AuthService {
             throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", userJoinRequest.getAccountId()));
         }
 
-        sellerAccountRepository.findByAccountId(userJoinRequest.getAccountId()).ifPresent(it -> {
-            throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", userJoinRequest.getAccountId()));
-        });
-
         UserAccount userAccount = userAccountRepository.save(UserAccount.builder()
                                                         .accountId(userJoinRequest.getAccountId())
                                                         .password(encoder.encode(userJoinRequest.getPassword()))
                                                         .roleType(RoleType.USER)
                                                         .name(userJoinRequest.getName())
-                                                        .birthday(userJoinRequest.getBirthday())
                                                         .phoneNumber(userJoinRequest.getPhoneNumber())
                                                         .email(userJoinRequest.getEmail())
-                                                        .gender(userJoinRequest.getGender())
-                                                        .nickname(StringUtils.isBlank(userJoinRequest.getNickname()) ? userJoinRequest.getAccountId() : userJoinRequest.getNickname()) // 닉네임이 없으면 아이디로 설정
                                                         .profileImage(userJoinRequest.getProfileImage())
                                                         .profileName(StringUtils.isBlank(userJoinRequest.getProfileName()) ? userJoinRequest.getName() : userJoinRequest.getProfileName()) // 프로필 이름이 없으면 이름으로 대체
                                                         .profileText(userJoinRequest.getProfileText())
@@ -79,16 +72,11 @@ public class AuthService {
             throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", sellerJoinRequest.getAccountId()));
         }
 
-        sellerAccountRepository.findByAccountId(sellerJoinRequest.getAccountId()).ifPresent(it -> {
-            throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", sellerJoinRequest.getAccountId()));
-        });
-
         SellerAccount sellerAccount = sellerAccountRepository.save(SellerAccount.builder()
                                                         .accountId(sellerJoinRequest.getAccountId())
                                                         .password(encoder.encode(sellerJoinRequest.getPassword()))
                                                         .roleType(RoleType.SELLER)
                                                         .name(sellerJoinRequest.getName())
-                                                        .birthday(sellerJoinRequest.getBirthday())
                                                         .phoneNumber(sellerJoinRequest.getPhoneNumber())
                                                         .email(sellerJoinRequest.getEmail())
                                                         .businessName(sellerJoinRequest.getBusinessName())
