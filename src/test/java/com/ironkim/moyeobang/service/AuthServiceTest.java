@@ -133,13 +133,13 @@ class AuthServiceTest {
                 "testId",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
-                "M",
-                "testNickname",
                 "testProfileImage",
+                "testProfileName",
                 "testProfileText",
+                "M",
+                LocalDate.of(1990, 1, 1),
                 Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
         );
     }
@@ -149,7 +149,6 @@ class AuthServiceTest {
                 "testId",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
                 "testBusinessName",

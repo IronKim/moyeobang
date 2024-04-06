@@ -3,7 +3,6 @@ package com.ironkim.moyeobang.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironkim.moyeobang.config.SecurityConfig;
-import com.ironkim.moyeobang.config.TestSecurityConfig;
 import com.ironkim.moyeobang.domain.constant.PreferenceType;
 import com.ironkim.moyeobang.dto.SellerAccountDto;
 import com.ironkim.moyeobang.dto.UserAccountDto;
@@ -49,13 +48,13 @@ public class AuthControllerTest {
                 "testId",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
-                "M",
-                "testNickname",
                 "testProfileImage",
+                "testProfileName",
                 "testProfileText",
+                "M",
+                LocalDate.of(1990, 1, 1),
                 Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
         );
         UserAccountDto userAccountDto = new UserAccountDto();
@@ -79,13 +78,13 @@ public class AuthControllerTest {
                 "testId",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
-                "M",
-                "testNickname",
                 "testProfileImage",
+                "testProfileName",
                 "testProfileText",
+                "M",
+                LocalDate.of(1990, 1, 1),
                 Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
         );
         when(authService.userJoin(any(UserJoinRequest.class))).thenThrow(new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID));
@@ -104,13 +103,13 @@ public class AuthControllerTest {
                 "null",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
-                "M",
-                "testNickname",
                 "testProfileImage",
+                "testProfileName",
                 "testProfileText",
+                "M",
+                LocalDate.of(1990, 1, 1),
                 Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
         );
         when(authService.userJoin(any(UserJoinRequest.class))).thenThrow(new MoyeobangApplicationException(ErrorCode.BAD_REQUEST));
@@ -129,7 +128,6 @@ public class AuthControllerTest {
                 "testId",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
                 "businessName",
@@ -156,7 +154,6 @@ public class AuthControllerTest {
                 "testId",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
                 "businessName",
@@ -178,7 +175,6 @@ public class AuthControllerTest {
                 "testId",
                 "testPassw1!",
                 "testName",
-                LocalDate.of(1990, 1, 1),
                 "01012345678",
                 "test@naver.com",
                 "businessName",

@@ -40,10 +40,14 @@ public class AuthService {
                         .orElseThrow(() -> new MoyeobangApplicationException(ErrorCode.ACCOUNT_NOT_FOUND, String.format("%s is not founded", accountId))));
     }
 
+    public boolean accountIdCheck(String accountId) {
+        return userAccountRepository.findByAccountId(accountId).isPresent() || sellerAccountRepository.findByAccountId(accountId).isPresent();
+    }
+
     public UserAccountDto userJoin(UserJoinRequest userJoinRequest) {
-        userAccountRepository.findByAccountId(userJoinRequest.getAccountId()).ifPresent(it -> {
+        if (accountIdCheck(userJoinRequest.getAccountId())) {
             throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", userJoinRequest.getAccountId()));
-        });
+        }
 
         sellerAccountRepository.findByAccountId(userJoinRequest.getAccountId()).ifPresent(it -> {
             throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", userJoinRequest.getAccountId()));
@@ -60,7 +64,10 @@ public class AuthService {
                                                         .gender(userJoinRequest.getGender())
                                                         .nickname(StringUtils.isBlank(userJoinRequest.getNickname()) ? userJoinRequest.getAccountId() : userJoinRequest.getNickname()) // 닉네임이 없으면 아이디로 설정
                                                         .profileImage(userJoinRequest.getProfileImage())
+                                                        .profileName(StringUtils.isBlank(userJoinRequest.getProfileName()) ? userJoinRequest.getName() : userJoinRequest.getProfileName()) // 프로필 이름이 없으면 이름으로 대체
                                                         .profileText(userJoinRequest.getProfileText())
+                                                        .gender(userJoinRequest.getGender())
+                                                        .birthday(userJoinRequest.getBirthday())
                                                         .preferenceTypes(userJoinRequest.getPreferenceTypes())
                                                         .build());
 
@@ -68,9 +75,9 @@ public class AuthService {
     }
 
     public SellerAccountDto sellerJoin(SellerJoinRequest sellerJoinRequest) {
-        userAccountRepository.findByAccountId(sellerJoinRequest.getAccountId()).ifPresent(it -> {
+        if (accountIdCheck(sellerJoinRequest.getAccountId())) {
             throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", sellerJoinRequest.getAccountId()));
-        });
+        }
 
         sellerAccountRepository.findByAccountId(sellerJoinRequest.getAccountId()).ifPresent(it -> {
             throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", sellerJoinRequest.getAccountId()));
