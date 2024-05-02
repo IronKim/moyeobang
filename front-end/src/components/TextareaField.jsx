@@ -19,7 +19,7 @@ const Textarea = styled(TextField)`
 
     .MuiFormLabel-root.Mui-focused {
         color: black;
-        font-family: 'Pretendard-Regular',serif;
+        font-family: 'Pretendard-Regular';
     }
 
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -33,11 +33,11 @@ const Textarea = styled(TextField)`
     }
 
     .MuiFormLabel-root {
-        font-family: 'Pretendard-Regular',serif;
+        font-family: 'Pretendard-Regular';
     }
 
     .MuiInputBase-root {
-        font-family: 'Pretendard-Regular',serif;
+        font-family: 'Pretendard-Regular';
         background-color: #F4F1F1;
         border-radius: 15px;
     }

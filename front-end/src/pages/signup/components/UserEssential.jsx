@@ -34,7 +34,7 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
         email: '',
     });
 
-    const debounceQuery = useDebounce(inputuserData.accountId, 200);
+    const debounceQuery = useDebounce(inputuserData.accountId, 300);
 
     useEffect(() => {
         if(debounceQuery){
@@ -128,7 +128,7 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
         }
 
         onInput(e);
-        onInput({ target: { name: 'nickname', value: value } });
+        onInput({ target: { name: 'profileName', value: value } });
     }
 
     const handlePhoneNumberChange = (e) => {
@@ -272,7 +272,7 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
                 <InputField name='confirmPassword' error={confirmPasswordError} onChange={handlePasswordChange} type='password' label='비밀번호 확인' helperText={helperText.confirmPassword} />
                 <InputField name='name' error={nameError} value={inputuserData.name} onChange={handleNameChange} label='이름' helperText={helperText.name} />
                 <InputField name='phoneNumber' error={phoneNumberError} value={inputuserData.phoneNumber} onChange={handlePhoneNumberChange} label='휴대폰 번호(숫자만 입력)' helperText={helperText.phoneNumber} />
-                <InputField name='email' error={emailError} value={inputuserData.email} onChange={handleEmailChange} label='이메일' helperText={helperText.email} />
+                <InputField name='email' error={emailError} value={inputuserData.email} onChange={handleEmailChange} label='이메일' helperText={helperText.email} onKeyDown={handleNextPage} />
                 <NextButton onClick={handleNextPage} />
             </SignupInputDiv>
         </SignupDiv>

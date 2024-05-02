@@ -9,6 +9,6 @@ export const PREFERENCE = {
     MYSTERY : 'MYSTERY',
     CRIME : 'CRIME',
     ADVENTURE : 'ADVENTURE',
-    SF : 'SF',
+    SF : 'SCIENCE_FICTION',
     ETC : 'ETC'
 }

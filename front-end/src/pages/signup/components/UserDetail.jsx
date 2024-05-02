@@ -104,15 +104,17 @@ const SignupButton = styled.button`
 `
 
 const UserDetail = ({ inputuserData, onInput, Signup}) => {
-
     const [isSignup, setIsSignup] = useState(false);
 
     const handleFileChange = (blobUrl) => {
         onInput({ target: { name: 'profileImage', value: blobUrl } }); // profileImage 업데이트
     };
 
-    const handleNicknameChange = (e) => {
-        onInput(e);
+    const handleProfileNameChange = (e) => {
+        if (e.target.value.length > 20) {
+            return;
+        }
+            onInput(e);
     }
 
     const handleProfileTextChange = (e) => {
@@ -190,7 +192,7 @@ const UserDetail = ({ inputuserData, onInput, Signup}) => {
             <SignupInputDiv gap={'20px'} height={'100%'}>
                 <ProfileImage height={200} width={200} id='imageInput' onChange={handleFileChange} />
                 프로필 사진
-                <InputField name='nickname' value={inputuserData.nickname} onChange={handleNicknameChange} label='닉네임'/>
+                <InputField name='profileName' value={inputuserData.profileName} onChange={handleProfileNameChange} label='닉네임'/>
                 <TextareaField name='profileText' value={inputuserData.profileText} onChange={handleProfileTextChange} label={'프로필 소개글'} placeholder={'자기소개를 입력해주세요'} maxCount={100}/>
                 <span style={{fontSize: '28px'}}>성별</span>
                 <GenderDiv>

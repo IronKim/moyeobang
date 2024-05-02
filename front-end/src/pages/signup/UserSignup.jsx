@@ -27,7 +27,7 @@ const Signup = () => {
         year: '',
         month: '',
         day: '',
-        nickname: '',
+        profileName: '',
         profileImage: '',
         profileText: '',
         preferenceTypes: [],
@@ -73,7 +73,7 @@ const Signup = () => {
             email: inputuserData.email,
             gender: inputuserData.gender,
             birthday: (inputuserData.year && inputuserData.month && inputuserData.day) ? `${inputuserData.year}-${inputuserData.month}-${inputuserData.day}` : null,
-            nickname: inputuserData.nickname,
+            profileName: inputuserData.profileName,
             profileImage: null, // 프로필 이미지는 파일 업로드 후 URL을 받아서 설정
             profileText: inputuserData.profileText,
             preferenceTypes: inputuserData.preferenceTypes,
