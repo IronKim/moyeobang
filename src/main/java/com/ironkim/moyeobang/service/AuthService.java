@@ -7,11 +7,14 @@ import com.ironkim.moyeobang.dto.AccountDto;
 import com.ironkim.moyeobang.dto.SellerAccountDto;
 import com.ironkim.moyeobang.dto.UserAccountDto;
 import com.ironkim.moyeobang.dto.request.SellerJoinRequest;
+import com.ironkim.moyeobang.dto.request.SellerLoginRequest;
 import com.ironkim.moyeobang.dto.request.UserJoinRequest;
+import com.ironkim.moyeobang.dto.request.UserLoginRequest;
 import com.ironkim.moyeobang.exception.ErrorCode;
 import com.ironkim.moyeobang.exception.MoyeobangApplicationException;
 import com.ironkim.moyeobang.repository.SellerAccountRepository;
 import com.ironkim.moyeobang.repository.UserAccountRepository;
+import com.ironkim.moyeobang.util.JwtTokenUtils;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -85,5 +88,27 @@ public class AuthService {
                                                         .build());
 
         return SellerAccountDto.fromSellerAccount(sellerAccount);
+    }
+
+    public String userLogin(UserLoginRequest userLoginRequest) {
+        UserAccount userAccount = userAccountRepository.findByAccountId(userLoginRequest.getAccountId())
+                .orElseThrow(() -> new MoyeobangApplicationException(ErrorCode.ACCOUNT_NOT_FOUND, String.format("%s is not founded", userLoginRequest.getAccountId())));
+
+        if (!encoder.matches(userLoginRequest.getPassword(), userAccount.getPassword())) {
+            throw new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD, "Password is invalid");
+        }
+
+        return JwtTokenUtils.generateToken(userAccount.getAccountId(), RoleType.USER, userAccount.getName(), secretKey, expiredTimeMs);
+    }
+
+    public String sellerLogin(SellerLoginRequest sellerLoginRequest) {
+        SellerAccount sellerAccount = sellerAccountRepository.findByAccountId(sellerLoginRequest.getAccountId())
+                .orElseThrow(() -> new MoyeobangApplicationException(ErrorCode.ACCOUNT_NOT_FOUND, String.format("%s is not founded", sellerLoginRequest.getAccountId())));
+
+        if (!encoder.matches(sellerLoginRequest.getPassword(), sellerAccount.getPassword())) {
+            throw new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD, "Password is invalid");
+        }
+
+        return JwtTokenUtils.generateToken(sellerAccount.getAccountId(), RoleType.SELLER, sellerAccount.getName(), secretKey, expiredTimeMs);
     }
 }

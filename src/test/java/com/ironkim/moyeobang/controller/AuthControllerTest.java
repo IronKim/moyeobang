@@ -7,7 +7,9 @@ import com.ironkim.moyeobang.domain.constant.PreferenceType;
 import com.ironkim.moyeobang.dto.SellerAccountDto;
 import com.ironkim.moyeobang.dto.UserAccountDto;
 import com.ironkim.moyeobang.dto.request.SellerJoinRequest;
+import com.ironkim.moyeobang.dto.request.SellerLoginRequest;
 import com.ironkim.moyeobang.dto.request.UserJoinRequest;
+import com.ironkim.moyeobang.dto.request.UserLoginRequest;
 import com.ironkim.moyeobang.exception.ErrorCode;
 import com.ironkim.moyeobang.exception.MoyeobangApplicationException;
 import com.ironkim.moyeobang.service.AuthService;
@@ -189,5 +191,85 @@ public class AuthControllerTest {
                 ).andDo(print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value(ErrorCode.BAD_REQUEST.name()))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 유저회원로그인() throws Exception {
+        UserLoginRequest userLoginRequest = new UserLoginRequest("testId", "testPassw1!");
+        when(authService.userLogin(any(UserLoginRequest.class))).thenReturn("testToken");
+
+        mockMvc.perform(post("/api/v1/auth/user-login")
+                        .content(objectMapper.writeValueAsBytes(userLoginRequest)) // 요청 본문에 userJoinRequest를 JSON 형태로 변환해서 담아서 보내는 것을 의미
+                        .contentType(MediaType.APPLICATION_JSON) // 요청 헤더에 application/json을 담아서 보내는 것을 의미
+                ).andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.token").value("testToken"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void 유저회원로그인시_회원가입이_안된_아이디로_로그인하는경우_에러반환() throws Exception {
+        UserLoginRequest userLoginRequest = new UserLoginRequest("testId", "testPassw1!");
+        when(authService.userLogin(any(UserLoginRequest.class))).thenThrow(new MoyeobangApplicationException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        mockMvc.perform(post("/api/v1/auth/user-login")
+                        .content(objectMapper.writeValueAsBytes(userLoginRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value(ErrorCode.ACCOUNT_NOT_FOUND.name()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void 유저회원로그인시_비밀번호가_틀린경우_에러반환() throws Exception {
+        UserLoginRequest userLoginRequest = new UserLoginRequest("testId", "testPassw1!");
+        when(authService.userLogin(any(UserLoginRequest.class))).thenThrow(new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD));
+
+        mockMvc.perform(post("/api/v1/auth/user-login")
+                        .content(objectMapper.writeValueAsBytes(userLoginRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value(ErrorCode.INVALID_PASSWORD.name()))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void 판매자회원로그인() throws Exception {
+        SellerLoginRequest sellerLoginRequest = new SellerLoginRequest("testId", "testPassw1!");
+        when(authService.sellerLogin(any(SellerLoginRequest.class))).thenReturn("testToken");
+
+        mockMvc.perform(post("/api/v1/auth/seller-login")
+                        .content(objectMapper.writeValueAsBytes(sellerLoginRequest)) // 요청 본문에 userJoinRequest를 JSON 형태로 변환해서 담아서 보내는 것을 의미
+                        .contentType(MediaType.APPLICATION_JSON) // 요청 헤더에 application/json을 담아서 보내는 것을 의미
+                ).andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.token").value("testToken"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void 판매자회원로그인시_회원가입이_안된_아이디로_로그인하는경우_에러반환() throws Exception {
+        SellerLoginRequest sellerLoginRequest = new SellerLoginRequest("testId", "testPassw1!");
+        when(authService.sellerLogin(any(SellerLoginRequest.class))).thenThrow(new MoyeobangApplicationException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        mockMvc.perform(post("/api/v1/auth/seller-login")
+                        .content(objectMapper.writeValueAsBytes(sellerLoginRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value(ErrorCode.ACCOUNT_NOT_FOUND.name()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void 판매자회원로그인시_비밀번호가_틀린경우_에러반환() throws Exception {
+        SellerLoginRequest sellerLoginRequest = new SellerLoginRequest("testId", "testPassw1!");
+        when(authService.sellerLogin(any(SellerLoginRequest.class))).thenThrow(new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD));
+
+        mockMvc.perform(post("/api/v1/auth/seller-login")
+                        .content(objectMapper.writeValueAsBytes(sellerLoginRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value(ErrorCode.INVALID_PASSWORD.name()))
+                .andExpect(status().isUnauthorized());
     }
 }

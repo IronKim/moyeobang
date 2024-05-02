@@ -3,20 +3,25 @@ package com.ironkim.moyeobang.service;
 import com.ironkim.moyeobang.domain.SellerAccount;
 import com.ironkim.moyeobang.domain.UserAccount;
 import com.ironkim.moyeobang.domain.constant.PreferenceType;
+import com.ironkim.moyeobang.domain.constant.RoleType;
 import com.ironkim.moyeobang.dto.SellerAccountDto;
 import com.ironkim.moyeobang.dto.UserAccountDto;
 import com.ironkim.moyeobang.dto.request.SellerJoinRequest;
+import com.ironkim.moyeobang.dto.request.SellerLoginRequest;
 import com.ironkim.moyeobang.dto.request.UserJoinRequest;
+import com.ironkim.moyeobang.dto.request.UserLoginRequest;
 import com.ironkim.moyeobang.exception.ErrorCode;
 import com.ironkim.moyeobang.exception.MoyeobangApplicationException;
 import com.ironkim.moyeobang.fixture.SellerAccountFixture;
 import com.ironkim.moyeobang.fixture.UserAccountFixture;
 import com.ironkim.moyeobang.repository.SellerAccountRepository;
 import com.ironkim.moyeobang.repository.UserAccountRepository;
+import com.ironkim.moyeobang.util.JwtTokenUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -28,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -125,6 +131,88 @@ class AuthServiceTest {
         assertThat(e.getErrorCode()).isEqualTo(ErrorCode.DUPLICATED_ACCOUNT_ID);
     }
 
+    @Test
+    void 유저로그인이_정상적으로_동작하는_경우() {
+        try(MockedStatic<JwtTokenUtils> jwtTokenUtils = mockStatic(JwtTokenUtils.class)) {
+            UserLoginRequest userLoginRequest = createUserLoginRequest();
+            UserAccount fixture = UserAccountFixture.get();
+            when(userAccountRepository.findByAccountId(userLoginRequest.getAccountId())).thenReturn(Optional.of(fixture));
+            when(encoder.matches(userLoginRequest.getPassword(), fixture.getPassword())).thenReturn(true);
+            jwtTokenUtils.when(() -> JwtTokenUtils.generateToken(fixture.getAccountId(), RoleType.USER, fixture.getName(), "secretKey", 1000L * 60 * 60 * 24)).thenReturn("token");
+
+            String result = sut.userLogin(userLoginRequest);
+
+            then(userAccountRepository).should().findByAccountId(userLoginRequest.getAccountId());
+            then(encoder).should().matches(userLoginRequest.getPassword(), fixture.getPassword());
+        }
+    }
+
+    @Test
+    void 유저로그인시_존재하지_않는_아이디로_로그인을_하는_경우() {
+        UserLoginRequest userLoginRequest = createUserLoginRequest();
+        when(userAccountRepository.findByAccountId(userLoginRequest.getAccountId())).thenReturn(Optional.empty());
+
+        MoyeobangApplicationException e = assertThrows(MoyeobangApplicationException.class, () -> sut.userLogin(userLoginRequest));
+
+        then(userAccountRepository).should().findByAccountId(userLoginRequest.getAccountId());
+        assertThat(e.getErrorCode()).isEqualTo(ErrorCode.ACCOUNT_NOT_FOUND);
+    }
+
+    @Test
+    void 유저로그인시_비밀번호가_일치하지_않는_경우() {
+        UserLoginRequest userLoginRequest = createUserLoginRequest();
+        UserAccount fixture = UserAccountFixture.get();
+        when(userAccountRepository.findByAccountId(userLoginRequest.getAccountId())).thenReturn(Optional.of(fixture));
+        when(encoder.matches(userLoginRequest.getPassword(), fixture.getPassword())).thenReturn(false);
+
+        MoyeobangApplicationException e = assertThrows(MoyeobangApplicationException.class, () -> sut.userLogin(userLoginRequest));
+
+        then(userAccountRepository).should().findByAccountId(userLoginRequest.getAccountId());
+        then(encoder).should().matches(userLoginRequest.getPassword(), fixture.getPassword());
+        assertThat(e.getErrorCode()).isEqualTo(ErrorCode.INVALID_PASSWORD);
+    }
+
+    @Test
+    void 판매자로그인이_정상적으로_동작하는_경우() {
+        try(MockedStatic<JwtTokenUtils> jwtTokenUtils = mockStatic(JwtTokenUtils.class)) {
+            SellerLoginRequest sellerLoginRequest = createSellerLoginRequest();
+            SellerAccount fixture = SellerAccountFixture.get();
+            when(sellerAccountRepository.findByAccountId(sellerLoginRequest.getAccountId())).thenReturn(Optional.of(fixture));
+            when(encoder.matches(sellerLoginRequest.getPassword(), fixture.getPassword())).thenReturn(true);
+            jwtTokenUtils.when(() -> JwtTokenUtils.generateToken(fixture.getAccountId(), RoleType.SELLER, fixture.getName(), "secretKey", 1000L * 60 * 60 * 24)).thenReturn("token");
+
+            String result = sut.sellerLogin(sellerLoginRequest);
+
+            then(sellerAccountRepository).should().findByAccountId(sellerLoginRequest.getAccountId());
+            then(encoder).should().matches(sellerLoginRequest.getPassword(), fixture.getPassword());
+        }
+    }
+
+    @Test
+    void 판매자로그인시_존재하지_않는_아이디로_로그인을_하는_경우() {
+        SellerLoginRequest sellerLoginRequest = createSellerLoginRequest();
+        when(sellerAccountRepository.findByAccountId(sellerLoginRequest.getAccountId())).thenReturn(Optional.empty());
+
+        MoyeobangApplicationException e = assertThrows(MoyeobangApplicationException.class, () -> sut.sellerLogin(sellerLoginRequest));
+
+        then(sellerAccountRepository).should().findByAccountId(sellerLoginRequest.getAccountId());
+        assertThat(e.getErrorCode()).isEqualTo(ErrorCode.ACCOUNT_NOT_FOUND);
+    }
+
+    @Test
+    void 판매자로그인시_비밀번호가_일치하지_않는_경우() {
+        SellerLoginRequest sellerLoginRequest = createSellerLoginRequest();
+        SellerAccount fixture = SellerAccountFixture.get();
+        when(sellerAccountRepository.findByAccountId(sellerLoginRequest.getAccountId())).thenReturn(Optional.of(fixture));
+        when(encoder.matches(sellerLoginRequest.getPassword(), fixture.getPassword())).thenReturn(false);
+
+        MoyeobangApplicationException e = assertThrows(MoyeobangApplicationException.class, () -> sut.sellerLogin(sellerLoginRequest));
+
+        then(sellerAccountRepository).should().findByAccountId(sellerLoginRequest.getAccountId());
+        then(encoder).should().matches(sellerLoginRequest.getPassword(), fixture.getPassword());
+        assertThat(e.getErrorCode()).isEqualTo(ErrorCode.INVALID_PASSWORD);
+    }
+
 
 
 
@@ -153,6 +241,20 @@ class AuthServiceTest {
                 "test@naver.com",
                 "testBusinessName",
                 "1231212345"
+        );
+    }
+
+    private UserLoginRequest createUserLoginRequest() {
+        return new UserLoginRequest(
+                "testId",
+                "testPassw1!"
+        );
+    }
+
+    private SellerLoginRequest createSellerLoginRequest() {
+        return new SellerLoginRequest(
+                "testId",
+                "testPassw1!"
         );
     }
 }

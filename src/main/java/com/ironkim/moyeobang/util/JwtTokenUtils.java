@@ -1,5 +1,6 @@
 package com.ironkim.moyeobang.util;
 
+import com.ironkim.moyeobang.domain.constant.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -23,9 +24,11 @@ public class JwtTokenUtils {
         return Jwts.parserBuilder().setSigningKey(getKey(key)).build().parseClaimsJws(token).getBody();
     }
 
-    public static String generateToken(String userName, String key, long expiredTimeMs) {
+    public static String generateToken(String accountId, RoleType roleType, String name, String key, long expiredTimeMs) {
         Claims claims = Jwts.claims();
-        claims.put("AccountId", userName);
+        claims.put("AccountId", accountId);
+        claims.put("RoleType", roleType);
+        claims.put("Name", name);
 
         return Jwts.builder()
                 .setClaims(claims)

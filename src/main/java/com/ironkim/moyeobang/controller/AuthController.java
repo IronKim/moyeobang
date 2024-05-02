@@ -3,10 +3,10 @@ package com.ironkim.moyeobang.controller;
 import com.ironkim.moyeobang.dto.SellerAccountDto;
 import com.ironkim.moyeobang.dto.UserAccountDto;
 import com.ironkim.moyeobang.dto.request.SellerJoinRequest;
+import com.ironkim.moyeobang.dto.request.SellerLoginRequest;
 import com.ironkim.moyeobang.dto.request.UserJoinRequest;
-import com.ironkim.moyeobang.dto.response.Response;
-import com.ironkim.moyeobang.dto.response.SellerJoinResponse;
-import com.ironkim.moyeobang.dto.response.UserJoinResponse;
+import com.ironkim.moyeobang.dto.request.UserLoginRequest;
+import com.ironkim.moyeobang.dto.response.*;
 import com.ironkim.moyeobang.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +35,17 @@ public class AuthController {
     public Response<SellerJoinResponse> sellerJoin(@RequestBody @Valid SellerJoinRequest sellerJoinRequest) {
         SellerAccountDto sellerAccountDto = authService.sellerJoin(sellerJoinRequest);
         return Response.success(SellerJoinResponse.fromSellerAccountDto(sellerAccountDto));
+    }
+
+    @PostMapping("/user-login")
+    public Response<UserLoginResponse> userlogin(@RequestBody UserLoginRequest userLoginRequest) {
+        String token = authService.userLogin(userLoginRequest);
+        return Response.success(new UserLoginResponse(token));
+    }
+
+    @PostMapping("/seller-login")
+    public Response<SellerLoginResponse> sellerlogin(@RequestBody SellerLoginRequest sellerLoginRequest) {
+        String token = authService.sellerLogin(sellerLoginRequest);
+        return Response.success(new SellerLoginResponse(token));
     }
 }
