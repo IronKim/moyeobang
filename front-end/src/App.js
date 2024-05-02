@@ -1,15 +1,16 @@
 import View from './View';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import './css/default.css';
+import {RecoilRoot} from "recoil";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div>
+      <RecoilRoot>
         <View />
-      </div>
+      </RecoilRoot>
     </QueryClientProvider>
   );
 }
