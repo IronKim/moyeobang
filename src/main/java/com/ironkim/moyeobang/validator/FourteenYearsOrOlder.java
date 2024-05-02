@@ -13,6 +13,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @ReportAsSingleViolation
 public @interface FourteenYearsOrOlder {
+
+    boolean nullable() default false;
+
     String message() default "14세 이상만 가입 가능합니다.";
 
     Class<?>[] groups() default {};

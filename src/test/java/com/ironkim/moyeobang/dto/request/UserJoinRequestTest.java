@@ -164,7 +164,7 @@ class UserJoinRequestTest {
         assertThat(violations.size()).isEqualTo(1);
     }
 
-    @DisplayName("성별은 M 또는 F여야한다")
+    @DisplayName("성별은 M, F 또는 null이어야한다")
     @Test
     void gender_patternTest() {
         UserJoinRequest userJoinRequest = new UserJoinRequest(
@@ -184,7 +184,128 @@ class UserJoinRequestTest {
         Set<ConstraintViolation<UserJoinRequest>> violations = validator.validate(userJoinRequest);
         violations.forEach(i -> System.out.println(i.getMessage()));
         assertThat(violations.size()).isEqualTo(1);
+
+        userJoinRequest = new UserJoinRequest(
+                "testId",
+                "testPassw1!",
+                "testName",
+                "01012345678",
+                "test@naver.com",
+                "testProfileImage",
+                "testProfileName",
+                "testProfileText",
+                null,
+                LocalDate.of(1990, 1, 1),
+                Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
+        );
+
+        violations = validator.validate(userJoinRequest);
+        violations.forEach(i -> System.out.println(i.getMessage()));
+        assertThat(violations.size()).isEqualTo(0);
     }
+
+    @DisplayName("닉네임은 20자 이하여야한다")
+    @Test
+    void profileName_lengthTest() {
+        UserJoinRequest userJoinRequest = new UserJoinRequest(
+                "testId",
+                "testPassw1!",
+                "testName",
+                "01012345678",
+                "test@naver.com",
+                "testProfileImage",
+                "testProfilenametestProfilenametestProfilenametestProfilename",
+                "testProfileText",
+                "M",
+                LocalDate.of(1990, 1, 1),
+                Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
+        );
+
+        Set<ConstraintViolation<UserJoinRequest>> violations = validator.validate(userJoinRequest);
+        violations.forEach(i -> System.out.println(i.getMessage()));
+        assertThat(violations.size()).isEqualTo(1);
+    }
+
+    @DisplayName("소개글은 100자 이하여야한다")
+    @Test
+    void profileText_lengthTest() {
+        UserJoinRequest userJoinRequest = new UserJoinRequest(
+                "testId",
+                "testPassw1!",
+                "testName",
+                "01012345678",
+                "test@naver.com",
+                "testProfileImage",
+                "testProfilename",
+                "a".repeat(101),
+                "M",
+                LocalDate.of(1990, 1, 1),
+                Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
+        );
+
+        Set<ConstraintViolation<UserJoinRequest>> violations = validator.validate(userJoinRequest);
+        violations.forEach(i -> System.out.println(i.getMessage()));
+        assertThat(violations.size()).isEqualTo(1);
+    }
+
+    @DisplayName("생일은 14세 이상이거나 null이어야한다")
+    @Test
+    void birthday_patternTest() {
+        UserJoinRequest userJoinRequest = new UserJoinRequest( // 14세 미만
+                "testId",
+                "testPassw1!",
+                "testName",
+                "01012345678",
+                "test@naver.com",
+                "testProfileImage",
+                "testProfilename",
+                "testProfileText",
+                "M",
+                LocalDate.now().minusYears(14),
+                Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
+        );
+
+        UserJoinRequest userJoinRequest2 = new UserJoinRequest( // 14세 이상
+                "testId",
+                "testPassw1!",
+                "testName",
+                "01012345678",
+                "test@naver.com",
+                "testProfileImage",
+                "testProfilename",
+                "testProfileText",
+                "M",
+                LocalDate.now().minusYears(14).minusDays(1),
+                Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
+        );
+
+        UserJoinRequest userJoinRequest3 = new UserJoinRequest( // null
+                "testId",
+                "testPassw1!",
+                "testName",
+                "01012345678",
+                "test@naver.com",
+                "testProfileImage",
+                "testProfilename",
+                "testProfileText",
+                "M",
+                null,
+                Set.of(PreferenceType.ADVENTURE, PreferenceType.CRIME)
+        );
+
+        Set<ConstraintViolation<UserJoinRequest>> violations = validator.validate(userJoinRequest);
+        Set<ConstraintViolation<UserJoinRequest>> violations2 = validator.validate(userJoinRequest2);
+        Set<ConstraintViolation<UserJoinRequest>> violations3 = validator.validate(userJoinRequest3);
+
+        violations.forEach(i -> System.out.println(i.getMessage()));
+        violations2.forEach(i -> System.out.println(i.getMessage()));
+        violations3.forEach(i -> System.out.println(i.getMessage()));
+
+        assertThat(violations.size()).isEqualTo(1);
+        assertThat(violations2.size()).isEqualTo(0);
+        assertThat(violations3.size()).isEqualTo(0);
+    }
+
 
     static Stream<UserJoinRequest> userJoinRequest_nullTest() {
         return Stream.of(

@@ -7,9 +7,20 @@ import java.time.LocalDate;
 
 public class FourteenYearsOrOlderValidator implements ConstraintValidator<FourteenYearsOrOlder, LocalDate> {
 
+    private boolean nullable;
+
+    @Override
+    public void initialize(FourteenYearsOrOlder constraintAnnotation) {
+        this.nullable = constraintAnnotation.nullable();
+    }
+
     @Override
     public boolean isValid(LocalDate value, ConstraintValidatorContext context) {
-        if (value == null) {
+        if(nullable && (value == null)) {
+            return true;
+        }
+
+        if(value == null) {
             return false;
         }
 

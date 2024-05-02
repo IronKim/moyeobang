@@ -1,6 +1,7 @@
 package com.ironkim.moyeobang.dto.request;
 
 import com.ironkim.moyeobang.domain.constant.PreferenceType;
+import com.ironkim.moyeobang.validator.FourteenYearsOrOlder;
 import com.ironkim.moyeobang.validator.GenderCheck;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -32,10 +34,13 @@ public class UserJoinRequest {
     @Email
     private String email;
     private String profileImage;
+    @Length(max = 20)
     private String profileName;
+    @Length(max = 100)
     private String profileText;
     @GenderCheck
     private String gender;
+    @FourteenYearsOrOlder(nullable = true)
     private LocalDate birthday;
     private Set<PreferenceType> preferenceTypes;
 }
