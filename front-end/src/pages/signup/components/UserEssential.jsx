@@ -35,6 +35,7 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
     });
 
     const debounceQuery = useDebounce(inputuserData.accountId, 300);
+    const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
 
     useEffect(() => {
         if(debounceQuery){
@@ -172,91 +173,98 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
         onInput(e);
     }
 
-    const handleNextPage = () => {
+    const handleNextPage = async () => {
+        if(!isNextButtonClicked){
+            setIsNextButtonClicked(true);
 
-        let isValidation = true;
+            let isValidation = true;
 
-        accountIdCheck(debounceQuery)
-            .then((response) => {
-                if(response.data.result === true){
-                    setAccountIdError(true);
-                    setHelperText(prevState => ({
-                        ...prevState,
-                        accountId: '이미 사용중인 아이디입니다.'
-                    }));
-                    isValidation = false;
-                }
-            }).catch((error) => {
-            console.log(error);
-            isValidation = false;
-        });
+            //acountId가 6자리 이상인지 확인
+            if (inputuserData.accountId.length < 6) {
+                setAccountIdError(true);
+                setHelperText(prevState => ({
+                    ...prevState,
+                    accountId: '아이디는 6자리 이상이어야 합니다.'
+                }));
+                isValidation = false;
+            }else {
+                await accountIdCheck(debounceQuery)
+                    .then((response) => {
+                        if(response.data.result === true){
+                            setAccountIdError(true);
+                            setHelperText(prevState => ({
+                                ...prevState,
+                                accountId: '이미 사용중인 아이디입니다.'
+                            }));
+                            isValidation = false;
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                        isValidation = false;
+                    });
+            }
 
-        //acountId가 6자리 이상인지 확인
-        if (inputuserData.accountId.length < 6) {
-            setAccountIdError(true);
-            setHelperText(prevState => ({
-                ...prevState,
-                accountId: '아이디는 6자리 이상이어야 합니다.'
-            }));
-            isValidation = false;
-        }
+            //password가 8자리 이상인지 확인 && password와 confirmPassword이 같은지 확인 && password가 ^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$") 형식인지 확인
+            if (inputuserData.password.length < 8) {
+                setPasswordError(true);
+                setHelperText(prevState => ({
+                    ...prevState,
+                    password: '비밀번호는 8자리 이상이어야 합니다.'
+                }));
+                isValidation = false;
+            } else if (!/(?=.*[a-zA-Z])(?=.*[0-9])/.test(inputuserData.password)) {
+                setPasswordError(true);
+                setHelperText(prevState => ({
+                    ...prevState,
+                    password: '비밀번호는 영문, 숫자 조합이어야 합니다.'
+                }));
+                isValidation = false;
+            } else if(inputuserData.password !== inputuserData.confirmPassword){
+                setConfirmPasswordError(true);
+                setHelperText(prevState => ({
+                    ...prevState,
+                    confirmPassword: '비밀번호 확인이 일치하지 않습니다.'
+                }));
+                isValidation = false;
+            }
 
-        //password가 8자리 이상인지 확인 && password와 confirmPassword이 같은지 확인 && password가 ^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$") 형식인지 확인
-        if (inputuserData.password.length < 8) {
-            setPasswordError(true);
-            setHelperText(prevState => ({
-                ...prevState,
-                password: '비밀번호는 8자리 이상이어야 합니다.'
-            }));
-            isValidation = false;
-        } else if (!/(?=.*[a-zA-Z])(?=.*[0-9])/.test(inputuserData.password)) {
-            setPasswordError(true);
-            setHelperText(prevState => ({
-                ...prevState,
-                password: '비밀번호는 영문, 숫자 조합이어야 합니다.'
-            }));
-            isValidation = false;
-        } else if(inputuserData.password !== inputuserData.confirmPassword){
-            setConfirmPasswordError(true);
-            setHelperText(prevState => ({
-                ...prevState,
-                confirmPassword: '비밀번호 확인이 일치하지 않습니다.'
-            }));
-            isValidation = false;
-        }
+            //name이 2자리 이상인지 확인 && name이 한글, 영어로만 이루어졌는지 확인
+            if (inputuserData.name.length < 2 || !/^[가-힣a-zA-Z]*$/.test(inputuserData.name)) {
+                setNameError(true);
+                setHelperText(prevState => ({
+                    ...prevState,
+                    name: '올바르지않은 이름 형식입니다.'
+                }));
+                isValidation = false;
+            }
 
-        //name이 2자리 이상인지 확인 && name이 한글, 영어로만 이루어졌는지 확인
-        if (inputuserData.name.length < 2 || !/^[가-힣a-zA-Z]*$/.test(inputuserData.name)) {
-            setNameError(true);
-            setHelperText(prevState => ({
-                ...prevState,
-                name: '올바르지않은 이름 형식입니다.'
-            }));
-            isValidation = false;
-        }
+            //phoneNumber이 ^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$") 형식인지 확인
+            if (!/^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/.test(inputuserData.phoneNumber)) {
+                setPhoneNumberError(true);
+                setHelperText(prevState => ({
+                    ...prevState,
+                    phoneNumber: '올바르지 않은 휴대폰 번호 형식입니다.'
+                }));
+                isValidation = false;
+            }
 
-        //phoneNumber이 ^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}$") 형식인지 확인
-        if (!/^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/.test(inputuserData.phoneNumber)) {
-            setPhoneNumberError(true);
-            setHelperText(prevState => ({
-                ...prevState,
-                phoneNumber: '올바르지 않은 휴대폰 번호 형식입니다.'
-            }));
-            isValidation = false;
-        }
+            //email이 이메일 형식인지 확인
+            if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(inputuserData.email)) {
+                setEmailError(true);
+                setHelperText(prevState => ({
+                    ...prevState,
+                    email: '올바르지 않은 이메일 형식입니다.'
+                }));
+                isValidation = false;
+            }
 
-        //email이 이메일 형식인지 확인
-        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(inputuserData.email)) {
-            setEmailError(true);
-            setHelperText(prevState => ({
-                ...prevState,
-                email: '올바르지 않은 이메일 형식입니다.'
-            }));
-            isValidation = false;
-        }
+            if(isValidation){
+                nextPage();
+            }
 
-        if(isValidation){
-            nextPage();
+            setTimeout(() => {
+                setIsNextButtonClicked(false);
+            }, 1000);
         }
     }
 

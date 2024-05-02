@@ -41,7 +41,7 @@ const Input = styled(TextField)`
 const InputField = ({name, type, value, onChange, label, error, helperText, onKeyDown}) => {
 
     const handleKeyDown = (e) => {
-        if(e.key === 'Enter') {
+        if(e.key === 'Enter' && onKeyDown) {
             onKeyDown();
         }
     }

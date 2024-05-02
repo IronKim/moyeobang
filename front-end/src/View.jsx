@@ -4,6 +4,8 @@ import UserLogin from './pages/login/UserLogin';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import UserSignup from './pages/signup/UserSignup';
+import SellerLogin from "./pages/login/SellerLogin";
+import SellerSignup from "./pages/signup/SellerSignup";
 
 const View = () => {
     return (
@@ -13,9 +15,11 @@ const View = () => {
                 <Routes>
                     <Route path='login'>
                         <Route path='user' element={<UserLogin />} />
+                        <Route path='seller' element={<SellerLogin />} />
                     </Route>
                     <Route path='sign-up'>
                         <Route path='user' element={<UserSignup />} />
+                        <Route path='seller' element={<SellerSignup />} />
                     </Route>
                     <Route path="*" />
                 </Routes>
