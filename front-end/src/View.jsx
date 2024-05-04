@@ -1,13 +1,21 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import UserLogin from './pages/login/UserLogin';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import UserSignup from './pages/signup/UserSignup';
 import SellerLogin from "./pages/login/SellerLogin";
 import SellerSignup from "./pages/signup/SellerSignup";
+import {useSetupUserDataByToken} from "./hooks/useUser";
+import {ReactQueryDevtools} from "react-query/devtools";
 
 const View = () => {
+    const setupUserDataByToken = useSetupUserDataByToken();
+
+    useEffect(() => {
+        setupUserDataByToken();
+    }, [setupUserDataByToken]);
+
     return (
         <div>
             <BrowserRouter>
@@ -24,7 +32,7 @@ const View = () => {
                     <Route path="*" />
                 </Routes>
                 <Footer />
-
+                <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
             </BrowserRouter>
         </div>
     );

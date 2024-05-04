@@ -274,7 +274,7 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
     return (
         <SignupDiv>
             <SignupText>회원가입(필수)</SignupText>
-            <SignupInputDiv>
+            <SignupInputDiv height={'600px'}>
                 <InputField name='accountId' error={accountIdError} value={inputuserData.accountId} onChange={handleAccountChange} label='아이디(6~20자 영문, 숫자만 입력)' helperText={helperText.accountId} />
                 <InputField name='password' error={passwordError} value={inputuserData.password} onChange={handlePasswordChange} type='password' label='비밀번호(8~20자 영문, 숫자 조합)' helperText={helperText.password} />
                 <InputField name='confirmPassword' error={confirmPasswordError} onChange={handlePasswordChange} type='password' label='비밀번호 확인' helperText={helperText.confirmPassword} />

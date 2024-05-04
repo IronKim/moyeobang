@@ -2,12 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import logo from '../assets/images/Logo.png';
 import slogan from '../assets/images/Slogan.png';
+import logoWhite from '../assets/images/Logo(White).png';
+import sloganWhite from '../assets/images/Slogan(White).png';
 import {useNavigate} from "react-router-dom";
+import {ROLETYPE} from "../constants/ROLETYPE";
+import UserMenuButton from "./UserMenuButton";
+import {useRecoilValue} from "recoil";
+import {userState} from "../atoms/userState";
 
 const HeaderContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #D4EBFB;
+    background-color: ${props => props.$roleType === ROLETYPE.USER ? '#D4EBFB' : '#202166'};
     width: 100%;
     height: 38.7593vh;
     
@@ -19,9 +25,7 @@ const HeaderContainer = styled.div`
 `
 
 const HeaderNavContainer = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
+    width: 80%;
     height: 5.5555vh;
     
     @media (max-width: 1200px) {
@@ -31,16 +35,18 @@ const HeaderNavContainer = styled.div`
 
 const Navs = styled.div`
     display: flex;
+    flex-direction: row-reverse;
     gap: 20px;
     align-items: center;
-    width: 20%;
+    width: 100%;
     margin-top: 20px;
-    margin-right: 200px;
+    padding-right: 40px;
 `
 
 const NavButton = styled.h3`
     font-size: 20px;
     font-weight: bold;
+    color: ${props => props.$roleType === ROLETYPE.USER ? '#000000' : '#FFFFFF'};
     
     &:hover {
         cursor: pointer;
@@ -48,8 +54,8 @@ const NavButton = styled.h3`
 `
 
 const SloganLogoContainer = styled.div`
-    margin: 2.7777vw auto 0 auto;
-    height: 5.5555vh;
+    margin: 53px auto 0 auto;
+    height: 52px;
     
     &:hover {
         cursor: pointer;
@@ -79,26 +85,28 @@ const Logo = styled.img`
     }
 `
 
-
 const Header = () => {
     const navigate = useNavigate();
+    const userData = useRecoilValue(userState);
 
     const handleNavigate = (url) => {
         navigate(url);
     }
 
     return (
-        <HeaderContainer>
+        <HeaderContainer $roleType={userData.roleType}>
             <HeaderNavContainer>
                 <Navs>
-                    <NavButton onClick={() => handleNavigate('/login/user')}>로그인</NavButton>
-                    <NavButton onClick={() => handleNavigate('/sign-up/user')}>회원가입</NavButton>
-                    <NavButton onClick={() => handleNavigate('/')}>이벤트</NavButton>
+                    {
+                        userData.accountId === '' ? <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/login/user')}>로그인</NavButton> : <UserMenuButton />
+                    }
+                    <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/')}>이벤트</NavButton>
+                    <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/sign-up/user')}>고객센터</NavButton>
                 </Navs>
             </HeaderNavContainer>
             <SloganLogoContainer onClick={() => handleNavigate('/')}>
-                <Slogan src={slogan} />
-                <Logo src={logo} />
+                <Slogan src={userData.roleType === ROLETYPE.USER ? slogan : sloganWhite} />
+                <Logo src={userData.roleType === ROLETYPE.USER ? logo : logoWhite} />
             </SloganLogoContainer>
         </HeaderContainer>
     );
