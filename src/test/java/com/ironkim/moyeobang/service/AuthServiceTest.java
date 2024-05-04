@@ -138,7 +138,7 @@ class AuthServiceTest {
             UserAccount fixture = UserAccountFixture.get();
             when(userAccountRepository.findByAccountId(userLoginRequest.getAccountId())).thenReturn(Optional.of(fixture));
             when(encoder.matches(userLoginRequest.getPassword(), fixture.getPassword())).thenReturn(true);
-            jwtTokenUtils.when(() -> JwtTokenUtils.generateToken(fixture.getAccountId(), RoleType.USER, fixture.getName(), "secretKey", 1000L * 60 * 60 * 24)).thenReturn("token");
+            jwtTokenUtils.when(() -> JwtTokenUtils.generateToken(fixture.getAccountId(), RoleType.USER, fixture.getProfileImage(), fixture.getProfileName(), "secretKey", 1000L * 60 * 60 * 24)).thenReturn("token");
 
             String result = sut.userLogin(userLoginRequest);
 
@@ -179,7 +179,7 @@ class AuthServiceTest {
             SellerAccount fixture = SellerAccountFixture.get();
             when(sellerAccountRepository.findByAccountId(sellerLoginRequest.getAccountId())).thenReturn(Optional.of(fixture));
             when(encoder.matches(sellerLoginRequest.getPassword(), fixture.getPassword())).thenReturn(true);
-            jwtTokenUtils.when(() -> JwtTokenUtils.generateToken(fixture.getAccountId(), RoleType.SELLER, fixture.getName(), "secretKey", 1000L * 60 * 60 * 24)).thenReturn("token");
+            jwtTokenUtils.when(() -> JwtTokenUtils.generateToken(fixture.getAccountId(), RoleType.SELLER, fixture.getName(), fixture.getBusinessName(), fixture.getAuthStatus(), "secretKey", 1000L * 60 * 60 * 24)).thenReturn("token");
 
             String result = sut.sellerLogin(sellerLoginRequest);
 

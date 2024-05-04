@@ -24,11 +24,28 @@ public class JwtTokenUtils {
         return Jwts.parserBuilder().setSigningKey(getKey(key)).build().parseClaimsJws(token).getBody();
     }
 
-    public static String generateToken(String accountId, RoleType roleType, String name, String key, long expiredTimeMs) {
+    public static String generateToken(String accountId, RoleType roleType, String profileImage, String profileName, String key, long expiredTimeMs) {
+        Claims claims = Jwts.claims();
+        claims.put("AccountId", accountId);
+        claims.put("RoleType", roleType);
+        claims.put("ProfileImage", profileImage);
+        claims.put("ProfileName", profileName);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs))
+                .signWith(getKey(key), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public static String generateToken(String accountId, RoleType roleType, String name, String businessName, String authStatus, String key, long expiredTimeMs) {
         Claims claims = Jwts.claims();
         claims.put("AccountId", accountId);
         claims.put("RoleType", roleType);
         claims.put("Name", name);
+        claims.put("BusinessName", businessName);
+        claims.put("AuthStatus", authStatus);
 
         return Jwts.builder()
                 .setClaims(claims)

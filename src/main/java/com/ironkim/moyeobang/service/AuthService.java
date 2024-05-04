@@ -98,7 +98,7 @@ public class AuthService {
             throw new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD, "Password is invalid");
         }
 
-        return JwtTokenUtils.generateToken(userAccount.getAccountId(), RoleType.USER, userAccount.getName(), secretKey, expiredTimeMs);
+        return JwtTokenUtils.generateToken(userAccount.getAccountId(), RoleType.USER, userAccount.getProfileImage(), userAccount.getProfileName(), secretKey, expiredTimeMs);
     }
 
     public String sellerLogin(SellerLoginRequest sellerLoginRequest) {
@@ -109,6 +109,6 @@ public class AuthService {
             throw new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD, "Password is invalid");
         }
 
-        return JwtTokenUtils.generateToken(sellerAccount.getAccountId(), RoleType.SELLER, sellerAccount.getName(), secretKey, expiredTimeMs);
+        return JwtTokenUtils.generateToken(sellerAccount.getAccountId(), RoleType.SELLER, sellerAccount.getName(), sellerAccount.getBusinessName(), sellerAccount.getAuthStatus(), secretKey, expiredTimeMs);
     }
 }
