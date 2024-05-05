@@ -75,10 +75,13 @@ task installReact(type: Exec) {
     inputs.dir "$frontendDir"
     group = BasePlugin.BUILD_GROUP
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine "npm.cmd", "audit", "fix"
-        commandLine 'npm.cmd', 'install' }
-    else {
-        commandLine "npm", "audit", "fix" commandLine 'npm', 'install'
+
+        // --force 옵션을 사용
+        commandLine "npm.cmd", "audit", "fix", "--force"
+        commandLine 'npm.cmd', 'install', "--force"
+    } else {
+        commandLine "npm", "audit", "fix", "--force"
+        commandLine 'npm', 'install', "--force"
     }
 }
 
