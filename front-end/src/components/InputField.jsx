@@ -38,7 +38,7 @@ const Input = styled(TextField)`
             border-radius: 15px;
         }
     `
-const InputField = ({name, type, value, onChange, label, error, helperText, onKeyDown}) => {
+const InputField = ({name, type, value, onChange, label, max, error, helperText, onKeyDown}) => {
 
     const handleKeyDown = (e) => {
         if(e.key === 'Enter' && onKeyDown) {
@@ -46,8 +46,20 @@ const InputField = ({name, type, value, onChange, label, error, helperText, onKe
         }
     }
 
+    const handleOnInput = (e) => {
+        if(max) {
+            if(e.target.value.length > max) {
+                return;
+            }
+        }
+
+        if(onChange) {
+            onChange(e);
+        }
+    }
+
     return (
-        <Input name={name} type={type} value={value} variant='outlined' onChange={onChange} label={label} error={error} helperText={helperText} onKeyDown={handleKeyDown} />
+        <Input name={name} type={type} value={value} variant='outlined' onChange={handleOnInput} label={label} error={error} helperText={helperText} onKeyDown={handleKeyDown} />
     );
 };
 
