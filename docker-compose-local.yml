@@ -11,6 +11,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
     volumes:
       - ./database/config:/etc/mysql/conf.d
+      - ./database/init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
   moyeobang-app:
@@ -23,6 +24,11 @@ services:
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_TOKEN_EXPIRED_TIME_MS=${JWT_TOKEN_EXPIRED_TIME_MS}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
     ports:
       - "80:8080"
     restart: always

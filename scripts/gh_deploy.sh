@@ -18,5 +18,9 @@ chmod 400 /home/ec2-user/moyeobang/database/config/db.cnf
 echo "> 도커 컨네이터 내림" >> $DEPLOY_LOG_PATH
 docker-compose -f /home/ec2-user/moyeobang/docker-compose.yml down -v
 
+echo "> 도커 이미지 삭제" >> $DEPLOY_LOG_PATH
+docker rmi $(docker images | grep 'moyeobang-app' | awk '{print $3}')
+
+
 echo "> docker-compose 실행" >> $DEPLOY_LOG_PATH
 docker-compose -f /home/ec2-user/moyeobang/docker-compose.yml up -d

@@ -7,7 +7,7 @@ CREATE TABLE `user_account` (
   `name` varchar(20) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `role_type` varchar(20) NOT NULL,
+  `role_type` ENUM('ADMIN', 'SELLER', 'USER') NOT NULL,
   `profile_image` varchar(255) NULL,
   `profile_name` varchar(20) NOT NULL,
   `profile_text` varchar(100) NULL,

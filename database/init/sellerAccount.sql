@@ -7,7 +7,7 @@ CREATE TABLE `seller_account` (
   `name` varchar(20) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `role_type` varchar(20) NOT NULL,
+  `role_type` ENUM('ADMIN', 'SELLER', 'USER') NOT NULL,
   `business_name` varchar(20) NOT NULL,
   `business_number` varchar(10) NOT NULL,
   `auth_status` varchar(1) NOT NULL,
