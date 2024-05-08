@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +21,8 @@ public class FileUploadService {
     private final AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${cloud.aws.cloudfront.domain}")
+    private String cloudfrontDomain;
 
     public List<String> uploadFiles(List<MultipartFile> files) {
         return files.stream().map(file -> {
@@ -32,7 +33,7 @@ public class FileUploadService {
                 metadata.setContentLength(file.getSize());
 
                 amazonS3Client.putObject(bucket, randomFilename, file.getInputStream(), metadata);
-                return amazonS3Client.getUrl(bucket, randomFilename).toString();
+                return cloudfrontDomain + amazonS3Client.getUrl(bucket, randomFilename).getPath();
             } catch (IOException e) {
                 throw new MoyeobangApplicationException(ErrorCode.INTERNAL_SERVER_ERROR);
             }
