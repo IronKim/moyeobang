@@ -7,9 +7,9 @@ const Container = styled.div`
     height: ${props => props.height ? props.height : '100%'};
 `
 
-const MainContainer = ({ backgroundColor, width, height, children }) => {
+const MainContainer = ({ backgroundColor, width, height, style, children }) => {
     return (
-        <Container $backgroundColor={backgroundColor} width={width} height={height} >
+        <Container $backgroundColor={backgroundColor} width={width} height={height} style={style} >
             {children}
         </Container>
     );

@@ -1,15 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const FooterContainer = styled.div`
     display: flex;
-    background-color: #D4EBFB;
+    background-color: #202166;
     width: 100%;
     height: 9.2593vh;
     bottom: 0;
+
+    @media (max-width: 1200px) {
+        display: none;
+    }
 `
 
-const Footer = () => {
+const SellerFooter = () => {
     return (
         <FooterContainer>
             
@@ -17,4 +21,4 @@ const Footer = () => {
     );
 };
 
-export default Footer;
+export default SellerFooter;

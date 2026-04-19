@@ -1,13 +1,14 @@
-import React, {useEffect} from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import UserLogin from './pages/login/UserLogin';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import UserSignup from './pages/signup/UserSignup';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useSetupUserDataByToken } from "./hooks/useUser";
 import SellerLogin from "./pages/login/SellerLogin";
+import UserLogin from "./pages/login/UserLogin";
+import UserSignup from "./pages/signup/UserSignup";
 import SellerSignup from "./pages/signup/SellerSignup";
-import {useSetupUserDataByToken} from "./hooks/useUser";
-import {ReactQueryDevtools} from "react-query/devtools";
+import { ReactQueryDevtools } from "react-query/devtools";
+import UserDefaultLayout from "./components/layouts/UserDefaultLayout";
+import SellerDefaultLayout from "./components/layouts/SellerDefaultLayout";
+import Home from "./pages/root/Home";
 
 const View = () => {
     const setupUserDataByToken = useSetupUserDataByToken();
@@ -19,19 +20,36 @@ const View = () => {
     return (
         <div>
             <BrowserRouter>
-                <Header />
                 <Routes>
+                    <Route path='/' element={
+                        <Home />
+                    } />
                     <Route path='login'>
-                        <Route path='user' element={<UserLogin />} />
-                        <Route path='seller' element={<SellerLogin />} />
+                        <Route path='user' element={
+                            <UserDefaultLayout>
+                                <UserLogin />
+                            </UserDefaultLayout>
+                        } />
+                        <Route path='seller' element={
+                            <SellerDefaultLayout>
+                                <SellerLogin />
+                            </SellerDefaultLayout>
+                        } />
                     </Route>
                     <Route path='sign-up'>
-                        <Route path='user' element={<UserSignup />} />
-                        <Route path='seller' element={<SellerSignup />} />
+                        <Route path='user' element={
+                            <UserDefaultLayout>
+                                <UserSignup />
+                            </UserDefaultLayout>
+                        } />
+                        <Route path='seller' element={
+                            <SellerDefaultLayout>
+                                <SellerSignup />
+                            </SellerDefaultLayout>
+                        } />
                     </Route>
                     <Route path="*" />
                 </Routes>
-                <Footer />
                 <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
             </BrowserRouter>
         </div>

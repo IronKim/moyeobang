@@ -35,7 +35,7 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
     const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
 
     useEffect(() => {
-        debounceQuery && accountValidator(debounceQuery, true);
+        debounceQuery && accountValidator(debounceQuery);
     }, [debounceQuery]);
 
     const handleAccountIdChange = (e) => {
@@ -72,13 +72,15 @@ const UserEssential = ({inputuserData, onInput, nextPage}) => {
 
             let isValidation = true;
 
-            accountValidator(inputuserData.accountId);
-            passwordValidator(inputuserData.password, inputuserData.confirmPassword, false);
+            console.log(accountValidator(inputuserData.accountId));
+            passwordValidator(inputuserData.password, inputuserData.confirmPassword);
             nameValidator(inputuserData.name);
             phoneNumberValidator(inputuserData.phoneNumber);
             emailValidator(inputuserData.email);
 
-            if(accountError) {
+            console.log(accountError, passwordError, confirmPasswordError, nameError, phoneNumberError, emailError)
+
+            if(!accountValidator(inputuserData.accountId)) {
                 isValidation = false;
             } else if(passwordError || confirmPasswordError) {
                 isValidation = false;

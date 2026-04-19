@@ -3,6 +3,7 @@ import MainContainer from "../../components/MainContainer";
 import MainBox from "../../components/MainBox";
 import ImageCarousel from "./components/ImageCarousel";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
 
 const Title = styled.h1`
     font-size: 30px;
@@ -97,9 +98,12 @@ const ContentDiv = styled.div`
 `
 
 const UserHome = () => {
+
+    const navigate = useNavigate();
+
     return (
         <MainContainer>
-            <MainBox>
+            <MainBox height={'100%'}>
                 <Title>OOO님의 취향 맞춤 추천 테마 어떠세요?</Title>
                 <ImageCarousel />
                 <BoardContainer>

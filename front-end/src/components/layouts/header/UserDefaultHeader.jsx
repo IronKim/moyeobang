@@ -1,0 +1,112 @@
+import React from 'react';
+import styled from 'styled-components';
+import logo from '../../../assets/images/Logo.png';
+import slogan from '../../../assets/images/Slogan.png';
+import {useNavigate} from "react-router-dom";
+import UserMenuButton from "../../UserMenuButton";
+import {useRecoilValue} from "recoil";
+import {userState} from "../../../atoms/userState";
+
+const HeaderContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    background-color: #D4EBFB;
+    width: 100%;
+    height: 38.7593vh;
+    
+    @media (max-width: 1200px) {
+        display: flex;
+        flex-direction: row;
+        height: 6.5555vh;
+    }
+`
+
+const HeaderNavContainer = styled.div`
+    width: 80%;
+    height: 5.5555vh;
+    
+    @media (max-width: 1200px) {
+        display: none;
+    }
+`
+
+const Navs = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    padding-right: 40px;
+`
+
+const NavButton = styled.h3`
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+    
+    &:hover {
+        cursor: pointer;
+    }
+`
+
+const SloganLogoContainer = styled.div`
+    margin: 53px auto 0 auto;
+    height: 52px;
+    
+    &:hover {
+        cursor: pointer;
+    }
+    
+    @media (max-width: 1200px) {
+        margin: 0 auto;
+        height: 100%;
+    }
+`
+
+const Slogan = styled.img`
+    height: 100%;
+    margin-right: 50px;
+    
+    @media (max-width: 1200px) {
+        display: none;
+    }
+`
+
+const Logo = styled.img`
+    height: 100%;
+
+    @media (max-width: 1200px) {
+        margin-top: 4px;
+        height: 80%;
+    }
+`
+
+const UserDefaultHeader = () => {
+    const navigate = useNavigate();
+    const userData = useRecoilValue(userState);
+
+    const handleNavigate = (url) => {
+        navigate(url);
+    }
+
+    return (
+        <HeaderContainer>
+            <HeaderNavContainer>
+                <Navs>
+                    {
+                        userData.accountId === '' ? <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/login/user')}>로그인</NavButton> : <UserMenuButton />
+                    }
+                    <NavButton onClick={() => handleNavigate('/')}>이벤트</NavButton>
+                    <NavButton onClick={() => handleNavigate('/sign-up/user')}>고객센터</NavButton>
+                </Navs>
+            </HeaderNavContainer>
+            <SloganLogoContainer onClick={() => handleNavigate('/')}>
+                <Slogan src={ slogan } />
+                <Logo src={ logo } />
+            </SloganLogoContainer>
+        </HeaderContainer>
+    );
+};
+
+export default UserDefaultHeader;

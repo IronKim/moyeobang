@@ -14,12 +14,14 @@ const Box = styled.div`
         position: static;
         width: 100%;
         margin-bottom: 40px;
+        border-radius: 0;
+        height: 100%;
     }
 `
 
-const MainBox = ({ top, backgroundColor, width, height, children }) => {
+const MainBox = ({ top, backgroundColor, width, height, style, children }) => {
     return (
-        <Box top={top} backgroundColor={backgroundColor} width={width} height={height}>
+        <Box top={top} backgroundColor={backgroundColor} width={width} height={height} style={style}>
             {children}
         </Box>
     );

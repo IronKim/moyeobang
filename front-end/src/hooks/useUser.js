@@ -118,15 +118,19 @@ export const useCheckAccountValidation = (dupCheck = true) => {
         if(realtime) {
             setAccountError(false);
             setAccountMessage('');
+            return true;
         } else if (!/^[a-zA-Z0-9]*$/.test(account)) {
             setAccountError(true);
             setAccountMessage('아이디는 영문, 숫자만 입력 가능합니다.');
+            return false;
         } else if(account.length < 6) {
             setAccountError(true);
             setAccountMessage('아이디는 6자리 이상이어야 합니다.');
+            return false;
         } else if(account.length > 20) {
             setAccountError(true);
             setAccountMessage('아이디는 20자 이하로 입력해주세요.');
+            return false;
         }
 
         if(dupCheck) {
@@ -135,11 +139,14 @@ export const useCheckAccountValidation = (dupCheck = true) => {
                     if(response.data.result === true){
                         setAccountError(true);
                         setAccountMessage('이미 사용중인 아이디입니다.');
+                        return false;
                     }
                 }).catch(error => {
                     console.log(error);
+                    return false;
             });
         }
+        return true;
     }
 
     return { accountValidator, accountError, accountMessage };

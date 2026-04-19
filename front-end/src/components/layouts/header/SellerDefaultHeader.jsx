@@ -1,19 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import logo from '../assets/images/Logo.png';
-import slogan from '../assets/images/Slogan.png';
-import logoWhite from '../assets/images/Logo(White).png';
-import sloganWhite from '../assets/images/Slogan(White).png';
+import logoWhite from '../../../assets/images/Logo(White).png';
+import sloganWhite from '../../../assets/images/Slogan(White).png';
 import {useNavigate} from "react-router-dom";
-import {ROLETYPE} from "../constants/ROLETYPE";
-import UserMenuButton from "./UserMenuButton";
+import UserMenuButton from "../../UserMenuButton";
 import {useRecoilValue} from "recoil";
-import {userState} from "../atoms/userState";
+import {userState} from "../../../atoms/userState";
 
 const HeaderContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: ${props => props.$roleType === ROLETYPE.USER ? '#D4EBFB' : '#202166'};
+    background-color: #202166;
     width: 100%;
     height: 38.7593vh;
     
@@ -46,7 +43,7 @@ const Navs = styled.div`
 const NavButton = styled.h3`
     font-size: 20px;
     font-weight: bold;
-    color: ${props => props.$roleType === ROLETYPE.USER ? '#000000' : '#FFFFFF'};
+    color: #FFFFFF;
     
     &:hover {
         cursor: pointer;
@@ -80,12 +77,12 @@ const Logo = styled.img`
     height: 100%;
 
     @media (max-width: 1200px) {
-        width: 100%;
-        height: 100%;
+        margin-top: 4px;
+        height: 80%;
     }
 `
 
-const Header = () => {
+const DefaultHeader = () => {
     const navigate = useNavigate();
     const userData = useRecoilValue(userState);
 
@@ -94,22 +91,22 @@ const Header = () => {
     }
 
     return (
-        <HeaderContainer $roleType={userData.roleType}>
+        <HeaderContainer>
             <HeaderNavContainer>
                 <Navs>
                     {
                         userData.accountId === '' ? <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/login/user')}>로그인</NavButton> : <UserMenuButton />
                     }
-                    <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/')}>이벤트</NavButton>
-                    <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/sign-up/user')}>고객센터</NavButton>
+                    <NavButton onClick={() => handleNavigate('/')}>이벤트</NavButton>
+                    <NavButton onClick={() => handleNavigate('/sign-up/user')}>고객센터</NavButton>
                 </Navs>
             </HeaderNavContainer>
             <SloganLogoContainer onClick={() => handleNavigate('/')}>
-                <Slogan src={userData.roleType === ROLETYPE.USER ? slogan : sloganWhite} />
-                <Logo src={userData.roleType === ROLETYPE.USER ? logo : logoWhite} />
+                <Slogan src={sloganWhite} />
+                <Logo src={logoWhite} />
             </SloganLogoContainer>
         </HeaderContainer>
     );
 };
 
-export default Header;
+export default DefaultHeader;
