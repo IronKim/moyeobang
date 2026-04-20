@@ -3,7 +3,7 @@ import MainContainer from "../../components/MainContainer";
 import MainBox from "../../components/MainBox";
 import {Divider, Result, Table as AntDTable, Typography} from 'antd'
 import styled from "styled-components";
-import {useMediaQuery} from "@material-ui/core";
+import {useMediaQuery} from "@mui/material";
 import BoardMenu from "../../components/BoardMenu";
 
 const MoyeobangBoardContainer = styled.div`
@@ -18,7 +18,7 @@ const MoyeobangBoardContainer = styled.div`
 const Table = styled(AntDTable)`
   ${(props) => {
     const onRowImplementation = props.onRow && props.onRow({})
-      console.log('onRowImplementation', onRowImplementation)
+
     if (onRowImplementation?.onClick) {
         return `
         tbody tr:hover {
@@ -391,7 +391,7 @@ const MoyeobangBoard = () => {
     ];
 
     const onChange = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
+        
     };
 
     const [selectedRowIndex, setSelectedRowIndex] = useState(-1);

@@ -108,12 +108,10 @@ const Signup = () => {
                             afterSignup();
                         })
                         .catch((error) => {
-                            console.log(error);
                             errorSignup();
                         });
                 })
                 .catch((error) => {
-                    console.log(error);
                     errorSignup();
                 });
         } else {
@@ -123,7 +121,6 @@ const Signup = () => {
                     afterSignup();
                 })
                 .catch((error) => {
-                    console.log(error);
                     errorSignup();
                 });
         }

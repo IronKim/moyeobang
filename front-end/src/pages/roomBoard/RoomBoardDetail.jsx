@@ -4,7 +4,7 @@ import BoardMenu from "../../components/BoardMenu";
 import MainBox from "../../components/MainBox";
 import styled from "styled-components";
 import {Divider, Image, Rate, Typography} from "antd";
-import {Button} from "@material-ui/core"
+import {Button} from "@mui/material";
 import {TbGhost2} from "react-icons/tb";
 import {GiFootprint} from "react-icons/gi";
 import ImageCarousel from "../root/components/ImageCarousel";
