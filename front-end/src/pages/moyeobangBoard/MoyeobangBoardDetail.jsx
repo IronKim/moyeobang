@@ -4,7 +4,8 @@ import BoardMenu from "../../components/BoardMenu";
 import MainBox from "../../components/MainBox";
 import {Avatar, Button, Card, Divider, Typography} from "antd";
 import styled from "styled-components";
-import {useMediaQuery} from "@material-ui/core";
+import {useMediaQuery} from "@mui/material";
+import {useNavigate, useParams} from "react-router-dom";
 
 const Container = styled.div`
     display: flex;
@@ -35,15 +36,17 @@ const Detail = styled.div`
 
 const MoyeobangBoardDetail = () => {
     const isMobile = useMediaQuery('(max-width: 1200px)');
+    const navigate = useNavigate();
+    const { id } = useParams();
 
     return (
         <MainContainer>
             <BoardMenu defaultSelectedKeys={'moyeobang'} />
-            <MainBox>
+            <MainBox height={'auto'}>
                 <Container>
                     <div style={{display: "flex", width: '100%', justifyContent:'space-between'}}>
                         <Typography.Title level={2}>모여방</Typography.Title>
-                        <Button>목록</Button>
+                        <Button onClick={() => navigate('/moyeobang')}>목록</Button>
                     </div>
                     <Divider style={{marginBottom: isMobile && '60px'}} />
                     <Description>

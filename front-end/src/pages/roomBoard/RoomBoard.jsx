@@ -5,6 +5,7 @@ import MainBox from "../../components/MainBox";
 import styled from "styled-components";
 import {Card, Cascader, Col, Divider, Row, Typography} from "antd";
 import Meta from "antd/es/card/Meta";
+import {useNavigate} from "react-router-dom";
 
 const RoomBoardContainer = styled.div`
     display: flex;
@@ -16,6 +17,8 @@ const RoomBoardContainer = styled.div`
 `
 
 const RoomBoard = () => {
+    const navigate = useNavigate();
+
     const addressOptions = [
         {
             label: '서울시',
@@ -89,6 +92,7 @@ const RoomBoard = () => {
                                 justify={"start"}>
                                 <Col className="gutter-row">
                                     <Card hoverable
+                                                                                onClick={() => navigate('/room/detail/1')}
                                           style={{ width: 180, height: 330, margin: 'auto'}}
                                           cover={<img style={{width: 180, height: 240}} alt="example" src="https://zerohongdae.com/storage/NZSXGtMhy5Rod5fwRFqpP9edW6ggmNvFSAytmlDP.jpg" />}
                                     >
@@ -97,6 +101,7 @@ const RoomBoard = () => {
                                 </Col>
                                 <Col className="gutter-row" >
                                     <Card hoverable
+                                                                                onClick={() => navigate('/room/detail/2')}
                                           style={{ width: 180, height: 330, margin: '0 auto'}}
                                           cover={<img style={{width: 180, height: 240}} alt="example" src="https://zerohongdae.com/storage/NZSXGtMhy5Rod5fwRFqpP9edW6ggmNvFSAytmlDP.jpg" />}
                                     >
@@ -105,6 +110,7 @@ const RoomBoard = () => {
                                 </Col>
                                 <Col className="gutter-row" >
                                     <Card hoverable
+                                                                                onClick={() => navigate('/room/detail/3')}
                                           style={{ width: 180, height: 330, margin: '0 auto'}}
                                           cover={<img style={{width: 180, height: 240}} alt="example" src="https://zerohongdae.com/storage/NZSXGtMhy5Rod5fwRFqpP9edW6ggmNvFSAytmlDP.jpg" />}
                                     >
@@ -113,6 +119,7 @@ const RoomBoard = () => {
                                 </Col>
                                 <Col className="gutter-row" >
                                     <Card hoverable
+                                                                                onClick={() => navigate('/room/detail/4')}
                                           style={{ width: 180, height: 330, margin: '0 auto'}}
                                           cover={<img style={{width: 180, height: 240}} alt="example" src="https://zerohongdae.com/storage/NZSXGtMhy5Rod5fwRFqpP9edW6ggmNvFSAytmlDP.jpg" />}
                                     >
@@ -121,6 +128,7 @@ const RoomBoard = () => {
                                 </Col>
                                 <Col className="gutter-row" >
                                     <Card hoverable
+                                                                                onClick={() => navigate('/room/detail/5')}
                                           style={{ width: 180, height: 330, margin: '0 auto'}}
                                           cover={<img style={{width: 180, height: 240}} alt="example" src="https://zerohongdae.com/storage/NZSXGtMhy5Rod5fwRFqpP9edW6ggmNvFSAytmlDP.jpg" />}
                                     >
@@ -129,6 +137,7 @@ const RoomBoard = () => {
                                 </Col>
                                 <Col className="gutter-row" >
                                     <Card hoverable
+                                                                                onClick={() => navigate('/room/detail/6')}
                                           style={{ width: 180, height: 330, margin: '0 auto'}}
                                           cover={<img style={{width: 180, height: 240}} alt="example" src="https://zerohongdae.com/storage/NZSXGtMhy5Rod5fwRFqpP9edW6ggmNvFSAytmlDP.jpg" />}
                                     >

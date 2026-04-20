@@ -9,6 +9,10 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import UserDefaultLayout from "./components/layouts/UserDefaultLayout";
 import SellerDefaultLayout from "./components/layouts/SellerDefaultLayout";
 import Home from "./pages/root/Home";
+import MoyeobangBoard from "./pages/moyeobangBoard/MoyeobangBoard";
+import RoomBoard from "./pages/roomBoard/RoomBoard";
+import MoyeobangBoardDetail from "./pages/moyeobangBoard/MoyeobangBoardDetail";
+import RoomBoardDetail from "./pages/roomBoard/RoomBoardDetail";
 
 const View = () => {
     const setupUserDataByToken = useSetupUserDataByToken();
@@ -23,6 +27,26 @@ const View = () => {
                 <Routes>
                     <Route path='/' element={
                         <Home />
+                    } />
+                    <Route path='moyeobang' element={
+                        <UserDefaultLayout>
+                            <MoyeobangBoard />
+                        </UserDefaultLayout>
+                    } />
+                    <Route path='moyeobang/detail/:id' element={
+                        <UserDefaultLayout>
+                            <MoyeobangBoardDetail />
+                        </UserDefaultLayout>
+                    } />
+                    <Route path='room' element={
+                        <UserDefaultLayout>
+                            <RoomBoard />
+                        </UserDefaultLayout>
+                    } />
+                    <Route path='room/detail/:id' element={
+                        <UserDefaultLayout>
+                            <RoomBoardDetail />
+                        </UserDefaultLayout>
                     } />
                     <Route path='login'>
                         <Route path='user' element={

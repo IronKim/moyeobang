@@ -5,6 +5,7 @@ import {Divider, Result, Table as AntDTable, Typography} from 'antd'
 import styled from "styled-components";
 import {useMediaQuery} from "@mui/material";
 import BoardMenu from "../../components/BoardMenu";
+import {useNavigate} from "react-router-dom";
 
 const MoyeobangBoardContainer = styled.div`
     display: flex;
@@ -43,6 +44,7 @@ const Element = styled.div`
 
 const MoyeobangBoard = () => {
     const isMobileDevice = useMediaQuery('(max-width:1200px)');
+    const navigate = useNavigate();
 
     const columns = [
         {
@@ -430,6 +432,7 @@ const MoyeobangBoard = () => {
                                return {
                                    onClick: event => {
                                        clickRow(rowIndex);
+                                       navigate(`/moyeobang/detail/${record.key}`);
                                    },
                                };
                            }}

@@ -22,6 +22,7 @@ const BoardContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
     width: 80%;
     
     @media (max-width: 1200px) {
@@ -57,7 +58,26 @@ const RoomBoardContainer = styled.div`
 const SemiTitle = styled.h2`
     font-size: 20px;
     font-weight: bold;
+`
+
+const TitleRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
+`
+
+const MoreButton = styled.button`
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    color: #5C5C5C;
+
+    &:hover {
+        cursor: pointer;
+        color: #2F2F2F;
+    }
 `
 
 const ContentDiv = styled.div`
@@ -108,39 +128,45 @@ const UserHome = () => {
                 <ImageCarousel />
                 <BoardContainer>
                     <MoyeobangBoradContainer>
-                        <SemiTitle>실시간 모임방</SemiTitle>
-                        <ContentDiv>
+                        <TitleRow>
+                            <SemiTitle>실시간 모임방</SemiTitle>
+                            <MoreButton onClick={() => navigate('/moyeobang')}>더보기 +</MoreButton>
+                        </TitleRow>
+                        <ContentDiv onClick={() => navigate('/moyeobang/detail/1')}>
                             <h3>스머프 어쩌구 어쩌구 모임방</h3>
                             <h5>강남구</h5>
                         </ContentDiv>
-                        <ContentDiv>
+                        <ContentDiv onClick={() => navigate('/moyeobang/detail/2')}>
                             <h3>스머프 어쩌구 어쩌구 모임방</h3>
                             <h5>강남구</h5>
                         </ContentDiv>
-                        <ContentDiv>
+                        <ContentDiv onClick={() => navigate('/moyeobang/detail/3')}>
                             <h3>스머프 어쩌구 어쩌구 모임방</h3>
                             <h5>강남구</h5>
                         </ContentDiv>
-                        <ContentDiv>
+                        <ContentDiv onClick={() => navigate('/moyeobang/detail/4')}>
                             <h3>스머프 어쩌구 어쩌구 모임방</h3>
                             <h5>강남구</h5>
                         </ContentDiv>
                     </MoyeobangBoradContainer>
                     <RoomBoardContainer>
-                        <SemiTitle>새로 나왔어요!</SemiTitle>
-                        <ContentDiv>
+                        <TitleRow>
+                            <SemiTitle>새로 나왔어요!</SemiTitle>
+                            <MoreButton onClick={() => navigate('/room')}>더보기 +</MoreButton>
+                        </TitleRow>
+                        <ContentDiv onClick={() => navigate('/room/detail/1')}>
                             <h3>ALIVE</h3>
                             <h5>강남구</h5>
                         </ContentDiv>
-                        <ContentDiv>
+                        <ContentDiv onClick={() => navigate('/room/detail/2')}>
                             <h3>사랑...하는...감?</h3>
                             <h5>강남구</h5>
                         </ContentDiv>
-                        <ContentDiv>
+                        <ContentDiv onClick={() => navigate('/room/detail/3')}>
                             <h3>스머프 어쩌구 어쩌구 모임방</h3>
                             <h5>강남구</h5>
                         </ContentDiv>
-                        <ContentDiv>
+                        <ContentDiv onClick={() => navigate('/room/detail/4')}>
                             <h3>스머프 어쩌구 어쩌구 모임방</h3>
                             <h5>강남구</h5>
                         </ContentDiv>

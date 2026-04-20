@@ -8,6 +8,7 @@ import {Button} from "@mui/material";
 import {TbGhost2} from "react-icons/tb";
 import {GiFootprint} from "react-icons/gi";
 import ImageCarousel from "../root/components/ImageCarousel";
+import {useNavigate, useParams} from "react-router-dom";
 
 const RoomBoardDetailContainer = styled.div`
     display: flex;
@@ -30,12 +31,18 @@ const DetailContainer = styled.div`
 
 const RoomBoardDetail = () => {
     const [expanded, setExpanded] = React.useState(false);
+    const navigate = useNavigate();
+    const { id } = useParams();
+
     return (
         <MainContainer>
             <BoardMenu defaultSelectedKeys={'room'} />
-            <MainBox>
+            <MainBox height={'auto'}>
                 <RoomBoardDetailContainer>
-                    <Typography.Title level={2}>방탈출 찾아보기</Typography.Title>
+                    <div style={{display: "flex", width: '100%', justifyContent:'space-between', alignItems: 'center'}}>
+                        <Typography.Title level={2}>방탈출 찾아보기</Typography.Title>
+                        <Button variant="outlined" onClick={() => navigate('/room')}>목록</Button>
+                    </div>
                     <Divider />
                     <DetailContainer>
                         <Divider><Typography.Title level={3}>사랑...하는..감?</Typography.Title></Divider>
