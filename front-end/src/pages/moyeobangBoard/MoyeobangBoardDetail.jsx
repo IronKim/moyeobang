@@ -5,7 +5,7 @@ import MainBox from "../../components/MainBox";
 import {Avatar, Button, Card, Divider, Typography} from "antd";
 import styled from "styled-components";
 import {useMediaQuery} from "@mui/material";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`
     display: flex;
@@ -37,7 +37,6 @@ const Detail = styled.div`
 const MoyeobangBoardDetail = () => {
     const isMobile = useMediaQuery('(max-width: 1200px)');
     const navigate = useNavigate();
-    const { id } = useParams();
 
     return (
         <MainContainer>

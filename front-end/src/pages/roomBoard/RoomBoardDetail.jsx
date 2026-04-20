@@ -8,7 +8,7 @@ import {Button} from "@mui/material";
 import {TbGhost2} from "react-icons/tb";
 import {GiFootprint} from "react-icons/gi";
 import ImageCarousel from "../root/components/ImageCarousel";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const RoomBoardDetailContainer = styled.div`
     display: flex;
@@ -32,7 +32,6 @@ const DetailContainer = styled.div`
 const RoomBoardDetail = () => {
     const [expanded, setExpanded] = React.useState(false);
     const navigate = useNavigate();
-    const { id } = useParams();
 
     return (
         <MainContainer>

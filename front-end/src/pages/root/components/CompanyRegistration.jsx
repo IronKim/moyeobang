@@ -13,6 +13,7 @@ import {Container, FormContainer, ItemDiv, ParagraphDiv, RequiredSpan, TitleDiv}
 const {kakao} = window;
 
 const CompanyRegistration = () => {
+    const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [companyData, setCompanyData] = useState({
         companyName: "",
@@ -83,6 +84,7 @@ const CompanyRegistration = () => {
             latitude: lat,
             longitude: lng
         })
+        form.setFieldsValue({ address: data.address });
         setIsModalOpen(false);
     };
 
@@ -97,7 +99,7 @@ const CompanyRegistration = () => {
             <Title level={3}>업체 등록</Title>
             <Divider/>
             <div style={{display: 'flex', flexDirection: isMobile ? 'column' : 'row'}}>
-                <FormContainer>
+                <FormContainer form={form}>
                     <ParagraphDiv>
                         <TitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체명</TitleDiv>
                         <ItemDiv
@@ -149,7 +151,7 @@ const CompanyRegistration = () => {
                                     },
                                 ]}
                             >
-                                <Input placeholder="주소 검색" onClick={onToggleModal} />
+                                <Input placeholder="주소 검색" onClick={onToggleModal} readOnly />
                             </ItemDiv>
                             <ItemDiv
                                 name={'addressDetail'}
