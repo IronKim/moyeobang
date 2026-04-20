@@ -5,7 +5,7 @@ import DaumPostcode from 'react-daum-postcode';
 import {TbSquareMinusFilled} from "react-icons/tb";
 import TextArea from "antd/lib/input/TextArea";
 import styled from "styled-components";
-import {useMediaQuery} from "@material-ui/core";
+import {useMediaQuery} from "@mui/material";
 import {Map, MapMarker} from "react-kakao-maps-sdk";
 import addressImage from "../../../assets/images/Address.png";
 import {Container, FormContainer, ItemDiv, ParagraphDiv, RequiredSpan, TitleDiv} from "./SellerHomeComponents";

@@ -5,7 +5,7 @@ import DaumPostcode from 'react-daum-postcode';
 import {TbSquareMinusFilled} from "react-icons/tb";
 import TextArea from "antd/lib/input/TextArea";
 import styled from "styled-components";
-import {useMediaQuery} from "@material-ui/core";
+import {useMediaQuery} from "@mui/material";
 
 const InputGroup = styled.div`
     display: flex;

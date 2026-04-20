@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Title from "antd/lib/typography/Title";
 import {Divider, Input, Select} from "antd";
-import {useMediaQuery} from "@material-ui/core";
+import {useMediaQuery} from "@mui/material";
 import {
     Container,
     FormContainer,
