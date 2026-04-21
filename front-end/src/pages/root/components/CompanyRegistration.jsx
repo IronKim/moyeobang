@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Divider, Form, Input, Modal, Space, Typography} from "antd";
+import React, {useState} from 'react';
+import {Button, Divider, Form, Modal, Typography} from "antd";
 import DaumPostcode from 'react-daum-postcode';
 import {TbSquareMinusFilled} from "react-icons/tb";
 import styled from "styled-components";
