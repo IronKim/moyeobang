@@ -196,8 +196,7 @@ const EscapeRoomRegistration = () => {
                     <HeroBadge badgePadding={'8px 12px'}>Seller Studio</HeroBadge>
                     <HeroTitle>방탈출 테마 등록</HeroTitle>
                     <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
-                        테마 정보, 장르, 난이도와 플레이 조건을 한 번에 정리해 등록하세요. 오른쪽 카드에서
-                        현재 선택된 업체와 가격 정보를 바로 확인할 수 있습니다.
+                        테마 정보, 장르, 난이도와 플레이 조건을 한 번에 정리해 등록하세요.
                     </HeroDescription>
                 </HeroCard>
 

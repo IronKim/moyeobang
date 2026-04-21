@@ -295,8 +295,7 @@ const CompanyRegistration = () => {
                     <HeroBadge badgePadding={'8px 12px'}>Seller Studio</HeroBadge>
                     <HeroTitle>업체 등록</HeroTitle>
                     <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
-                        지점 정보, 주소, 가격 정책을 한 번에 정리해서 등록할 수 있습니다. 오른쪽 미리보기 패널을 보면서
-                        지도와 이용료 구성을 바로 확인해보세요.
+                        지점 정보, 주소, 가격 정책을 한 번에 정리해서 등록할 수 있습니다.
                     </HeroDescription>
                 </HeroCard>
 
@@ -311,7 +310,7 @@ const CompanyRegistration = () => {
                             <SectionHeader>
                                 <div>
                                     <SectionTitle>기본 정보</SectionTitle>
-                                    <SectionDescription>
+                                    <SectionDescription hintMarginTop={'6px'}>
                                         고객이 처음 보게 되는 핵심 정보입니다. 업체명과 주소는 명확하게 입력해 주세요.
                                     </SectionDescription>
                                 </div>
