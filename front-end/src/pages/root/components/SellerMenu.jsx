@@ -11,7 +11,7 @@ const Menu = styled.div`
     align-items: center;
     width: 255px;
     height: 760px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: 10px;
     border-radius: 25px;
     background-color: #202166;

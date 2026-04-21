@@ -1,15 +1,19 @@
 import React, {useRef, useState} from 'react';
 import styled from "styled-components";
 import basicPosterImg from "../../../assets/images/BasicPoster.png";
-import Swal from "sweetalert2";
-import basicProfileImg from "../../../assets/images/BasicProfileImg.png";
 import {Form} from "antd";
+import "../../../css/theme-colors.css";
 
 const PosterImageContainer = styled.div`
     width: 150px;
     height: 210px;
     cursor: pointer;
-    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.16);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--color-blue-060);
+    border: 1px solid var(--color-border-input);
+    box-shadow: 0 8px 16px var(--color-rgba-card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 
     &.custom-input-error {
         border: 1px solid #f5222d;
@@ -17,7 +21,9 @@ const PosterImageContainer = styled.div`
 
     &:hover {
         cursor: pointer;
-        filter: brightness(0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 20px var(--color-rgba-card-shadow);
+        filter: brightness(0.98);
     }
 
     @media (max-width: 1200px) {
@@ -29,21 +35,22 @@ const PosterImageContainer = styled.div`
     ${props => props.disabled && `
         pointer-events: none;
         filter: brightness(0.8);
-        border: 1px solid #ccc;
+        border: 1px solid #d1d5db;
+        box-shadow: none;
     `}
 `;
 
 const Image = styled.img`
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
 `;
 
 const PosterImage = ({value, onChange, disabled}) => {
     const inputRef = useRef(null);
     const [posterImage, setPosterImage] = useState(basicPosterImg);
     const [url, setUrl] = useState('');
-    const { status, errors } = Form.Item.useStatus();
+    const { status } = Form.Item.useStatus();
 
 
     const handleClick = () => {

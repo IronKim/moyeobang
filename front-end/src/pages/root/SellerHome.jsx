@@ -18,7 +18,7 @@ const SellerHome = () => {
 
     return (
         <MainContainer backgroundColor={'#D2D2D2'} height={'100%'} style={{minHeight: '800px'}}>
-            <MainBox width={'90%'} top={'-50px'} style={{display: 'flex', minHeight: '800px'}} height={'100%'} >
+            <MainBox width={'90%'} top={'-100px'} style={{display: 'flex', minHeight: '800px'}} height={'100%'} >
                 <SellerMenu setSelectedMenu={setSelectedMenu} />
                 <SellerMain>
                     {

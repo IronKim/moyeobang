@@ -1,129 +1,58 @@
 import React, {useEffect, useState} from 'react';
-import Title from "antd/lib/typography/Title";
 import {Button, Divider, Form, Input, Modal, Space, Typography} from "antd";
 import DaumPostcode from 'react-daum-postcode';
 import {TbSquareMinusFilled} from "react-icons/tb";
-import TextArea from "antd/lib/input/TextArea";
 import styled from "styled-components";
 import {useMediaQuery} from "@mui/material";
 import {AnimatePresence, motion} from "motion/react";
 import {Map, MapMarker} from "react-kakao-maps-sdk";
 import addressImage from "../../../assets/images/Address.png";
 import "../../../css/theme-colors.css";
-import {Container, FormContainer, ItemDiv, ParagraphDiv, RequiredSpan, TitleDiv} from "./SellerHomeComponents";
+import {
+    Container,
+    FieldHint,
+    FormInput,
+    GradientSubmitButton,
+    FormLabelTitle,
+    FormStack,
+    FormRow,
+    FormContainer,
+    GuideCard,
+    GuideDot,
+    GuideItem,
+    GuideList,
+    GuideText,
+    GuideTitle,
+    HeroBadge,
+    HeroCard,
+    HeroDescription,
+    HeroTitle,
+    InfoCard,
+    ItemDiv,
+    LayoutGrid,
+    FormTextArea,
+    PageShell,
+    PreviewLabel,
+    RequiredSpan,
+    SectionHeader,
+    SectionDescription,
+    StickySidebar,
+    SurfaceCard,
+    SectionTitle,
+} from "./SellerHomeComponents";
 import {phone} from "../../../utils/formatters";
 
 const {kakao} = window;
 
-const PageShell = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    padding: 8px 4px 32px;
-`;
+const RegistrationPageShell = PageShell;
 
-const HeroCard = styled.div`
-    position: relative;
-    overflow: hidden;
-    border-radius: 28px;
-    padding: 28px 32px;
-    background:
-        radial-gradient(circle at top right, var(--color-rgba-brand-radial), transparent 32%),
-        linear-gradient(135deg, var(--color-blue-100) 0%, var(--color-blue-070) 48%, var(--color-blue-100) 100%);
-    border: 1px solid var(--color-rgba-brand-border);
-    box-shadow: 0 18px 40px var(--color-rgba-brand-shadow);
+const ContentGrid = LayoutGrid;
 
-    @media (max-width: 1200px) {
-        padding: 24px 20px;
-        border-radius: 22px;
-    }
-`;
+const FormSurface = SurfaceCard;
 
-const HeroBadge = styled.div`
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 12px;
-    border-radius: 999px;
-    background: var(--color-rgba-badge-bg);
-    color: var(--color-blue-800);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-`;
+const PreviewSection = StickySidebar;
 
-const HeroTitle = styled.h2`
-    margin: 14px 0 8px;
-    font-size: 34px;
-    line-height: 1.15;
-    color: var(--color-gray-900);
-
-    @media (max-width: 1200px) {
-        font-size: 28px;
-    }
-`;
-
-const HeroDescription = styled.p`
-    max-width: 820px;
-    margin: 0;
-    color: var(--color-gray-700);
-    font-size: 15px;
-    line-height: 1.7;
-`;
-
-const ContentGrid = styled.div`
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) 420px;
-    gap: 28px;
-    align-items: start;
-
-    @media (max-width: 1200px) {
-        grid-template-columns: 1fr;
-    }
-`;
-
-const FormSurface = styled(motion.div)`
-    border-radius: 28px;
-    padding: 28px;
-    background: var(--color-white);
-    border: 1px solid var(--color-rgba-card-border);
-    box-shadow: 0 18px 40px var(--color-rgba-card-shadow);
-
-    @media (max-width: 1200px) {
-        padding: 20px 16px;
-        border-radius: 22px;
-    }
-`;
-
-const PreviewSection = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: sticky;
-    top: 24px;
-
-    @media (max-width: 1200px) {
-        position: static;
-    }
-`;
-
-const PreviewCard = styled(motion.div)`
-    border-radius: 24px;
-    padding: 20px;
-    background: var(--color-white);
-    border: 1px solid var(--color-rgba-card-border);
-    box-shadow: 0 16px 32px var(--color-rgba-card-shadow);
-`;
-
-const PreviewLabel = styled.div`
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    color: var(--color-gray-650);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-`;
+const PreviewCard = InfoCard;
 
 const PreviewTitle = styled.h3`
     margin: 0 0 16px;
@@ -138,66 +67,11 @@ const SectionBlock = styled.div`
     gap: 18px;
 `;
 
-const SectionHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--color-rgba-card-shadow);
+const FormGrid = FormStack;
 
-    @media (max-width: 1200px) {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-`;
+const ModernParagraph = FormRow;
 
-const SectionTitle = styled.h3`
-    margin: 0;
-    color: var(--color-gray-900);
-    font-size: 22px;
-`;
-
-const SectionDescription = styled.p`
-    margin: 0;
-    color: var(--color-gray-600);
-    font-size: 14px;
-    line-height: 1.6;
-`;
-
-const FormGrid = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding-right: 24px;
-
-    @media (max-width: 1200px) {
-        padding-right: 0;
-    }
-`;
-
-const ModernParagraph = styled(ParagraphDiv)`
-    align-items: flex-start;
-    gap: 12px;
-
-    @media (max-width: 1200px) {
-        gap: 8px;
-    }
-`;
-
-const ModernTitleDiv = styled(TitleDiv)`
-    width: 120px;
-    margin: 0;
-    padding-top: 10px;
-    flex-shrink: 0;
-    font-size: 17px;
-
-    @media (max-width: 1200px) {
-        width: 100%;
-        padding-top: 0;
-        text-align: left;
-    }
-`;
+const ModernTitleDiv = FormLabelTitle;
 
 const FieldColumn = styled.div`
     width: 100%;
@@ -206,39 +80,12 @@ const FieldColumn = styled.div`
     gap: 12px;
 `;
 
-const HintText = styled.div`
-    font-size: 12px;
-    color: var(--color-gray-500);
-    line-height: 1.5;
-`;
+const HintText = FieldHint;
 
-const ModernInput = styled(Input)`
-    height: 46px;
-    border-radius: 14px;
-    border-color: var(--color-border-input);
-    background: var(--color-blue-060);
+const ModernInput = FormInput;
 
-    &:hover,
-    &:focus,
-    &.ant-input-focused {
-        border-color: var(--color-blue-450);
-        box-shadow: 0 0 0 4px var(--color-rgba-focus-ring);
-        background: var(--color-white);
-    }
-`;
-
-const ModernTextArea = styled(TextArea)`
+const ModernTextArea = styled(FormTextArea)`
     border-radius: 16px;
-    border-color: var(--color-border-input);
-    background: var(--color-blue-060);
-
-    &:hover,
-    &:focus,
-    &.ant-input-focused {
-        border-color: var(--color-blue-450);
-        box-shadow: 0 0 0 4px var(--color-rgba-focus-ring);
-        background: var(--color-white);
-    }
 `;
 
 const AddressSearchInput = styled(ModernInput)`
@@ -306,69 +153,7 @@ const SubmitArea = styled.div`
     padding-top: 8px;
 `;
 
-const SubmitButton = styled(Button)`
-    && {
-        min-width: 150px;
-        height: 50px;
-        border-radius: 999px;
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--color-blue-650) 0%, var(--color-blue-500) 100%);
-        box-shadow: 0 14px 28px var(--color-rgba-submit-shadow);
-        border: none;
-        color: var(--color-white);
-    }
-
-    &&:hover,
-    &&:focus {
-        background: linear-gradient(135deg, var(--color-blue-900) 0%, var(--color-blue-600) 100%) !important;
-        border: none;
-        color: var(--color-white);
-    }
-`;
-
-const HelperCard = styled.div`
-    border-radius: 20px;
-    padding: 18px 18px 16px;
-    background: linear-gradient(135deg, var(--color-blue-900) 0%, var(--color-blue-700) 100%);
-    color: var(--color-white);
-`;
-
-const HelperTitle = styled.div`
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 8px;
-`;
-
-const HelperText = styled.p`
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.7;
-    color: var(--color-rgba-helper-text);
-`;
-
-const HelperList = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 14px;
-`;
-
-const HelperItem = styled.div`
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    font-size: 13px;
-    line-height: 1.5;
-`;
-
-const HelperDot = styled.div`
-    width: 8px;
-    height: 8px;
-    margin-top: 6px;
-    border-radius: 50%;
-    background: var(--color-white);
-    flex-shrink: 0;
-`;
+const SubmitButton = GradientSubmitButton;
 
 const MapFrame = styled.div`
     overflow: hidden;
@@ -500,21 +285,27 @@ const CompanyRegistration = () => {
 
     return (
         <Container>
-            <PageShell>
-                <HeroCard>
-                    <HeroBadge>Seller Studio</HeroBadge>
+            <RegistrationPageShell shellGap={'28px'} shellPadding={'0 4px 32px'}>
+                <HeroCard
+                    heroPadding={'26px 30px'}
+                    heroMobilePadding={'22px 18px'}
+                    radialFade={'34%'}
+                    gradientMiddle={'50%'}
+                >
+                    <HeroBadge badgePadding={'8px 12px'}>Seller Studio</HeroBadge>
                     <HeroTitle>업체 등록</HeroTitle>
-                    <HeroDescription>
+                    <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
                         지점 정보, 주소, 가격 정책을 한 번에 정리해서 등록할 수 있습니다. 오른쪽 미리보기 패널을 보면서
                         지도와 이용료 구성을 바로 확인해보세요.
                     </HeroDescription>
                 </HeroCard>
 
-                <ContentGrid>
+                <ContentGrid columns={'minmax(0, 1.1fr) 420px'} gridGap={'28px'}>
                     <FormSurface
-                        initial={{opacity: 0, y: 18}}
-                        animate={{opacity: 1, y: 0}}
-                        transition={{duration: 0.35, ease: "easeOut"}}
+                        cardRadius={'28px'}
+                        cardPadding={'28px'}
+                        cardMobilePadding={'20px 16px'}
+                        cardMobileRadius={'22px'}
                     >
                         <SectionBlock>
                             <SectionHeader>
@@ -527,9 +318,9 @@ const CompanyRegistration = () => {
                             </SectionHeader>
 
                             <FormContainer form={form}>
-                                <FormGrid>
+                                <FormGrid stackGap={'18px'} paddingRight={'24px'}>
                                     <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
+                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'name'}
@@ -557,7 +348,7 @@ const CompanyRegistration = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</ModernTitleDiv>
+                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv name={'branchName'} width={'100%'}>
                                                 <ModernInput placeholder="예: 강남점, 성수 플래그십" />
@@ -566,7 +357,7 @@ const CompanyRegistration = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>주소</ModernTitleDiv>
+                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>주소</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'address'}
@@ -605,7 +396,7 @@ const CompanyRegistration = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>연락처</ModernTitleDiv>
+                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>연락처</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'contact'}
@@ -714,7 +505,7 @@ const CompanyRegistration = () => {
                             </Form>
 
                             <ModernParagraph>
-                                <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>안내 사항</ModernTitleDiv>
+                                <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>안내 사항</ModernTitleDiv>
                                 <FieldColumn>
                                     <ModernTextArea
                                         name='costInfo'
@@ -728,30 +519,37 @@ const CompanyRegistration = () => {
                             </ModernParagraph>
 
                             <SubmitArea>
-                                <SubmitButton type="primary">등록하기</SubmitButton>
+                                <SubmitButton
+                                    type="primary"
+                                    $buttonMinWidth={'150px'}
+                                    $buttonHeight={'50px'}
+                                    $buttonShadow={'0 14px 28px var(--color-rgba-submit-shadow)'}
+                                >
+                                    등록하기
+                                </SubmitButton>
                             </SubmitArea>
                         </SectionBlock>
                     </FormSurface>
 
                     {isMobile && <Divider />}
 
-                    <PreviewSection>
-                        <HelperCard>
-                            <HelperTitle>등록 가이드</HelperTitle>
-                            <HelperText>
+                    <PreviewSection sidebarGap={'20px'}>
+                        <GuideCard cardPadding={'18px 18px 16px'}>
+                            <GuideTitle>등록 가이드</GuideTitle>
+                            <GuideText lineHeight={'1.7'}>
                                 기본 정보와 가격 구성을 먼저 잡아두면 이후 수정 작업이 훨씬 쉬워집니다.
-                            </HelperText>
-                            <HelperList>
-                                <HelperItem><HelperDot />업체명은 검색에 보이는 기준 이름으로 입력</HelperItem>
-                                <HelperItem><HelperDot />주소를 선택하면 지도 위치가 함께 반영</HelperItem>
-                                <HelperItem><HelperDot />가격 항목은 인원 단위로 나누면 비교가 쉬움</HelperItem>
-                            </HelperList>
-                        </HelperCard>
+                            </GuideText>
+                            <GuideList as={'div'} listMargin={'14px 0 0'} listPaddingLeft={'0'} listGap={'10px'}>
+                                <GuideItem><GuideDot />업체명은 검색에 보이는 기준 이름으로 입력</GuideItem>
+                                <GuideItem><GuideDot />주소를 선택하면 지도 위치가 함께 반영</GuideItem>
+                                <GuideItem><GuideDot />가격 항목은 인원 단위로 나누면 비교가 쉬움</GuideItem>
+                            </GuideList>
+                        </GuideCard>
 
                         <PreviewCard
-                            initial={{opacity: 0, x: 16}}
-                            animate={{opacity: 1, x: 0}}
-                            transition={{duration: 0.35, delay: 0.05, ease: "easeOut"}}
+                            cardRadius={'24px'}
+                            cardPadding={'20px'}
+                            cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}
                         >
                             <PreviewLabel>Live Preview</PreviewLabel>
                             <PreviewTitle>지도</PreviewTitle>
@@ -782,9 +580,9 @@ const CompanyRegistration = () => {
                         </PreviewCard>
 
                         <PreviewCard
-                            initial={{opacity: 0, x: 16}}
-                            animate={{opacity: 1, x: 0}}
-                            transition={{duration: 0.35, delay: 0.1, ease: "easeOut"}}
+                            cardRadius={'24px'}
+                            cardPadding={'20px'}
+                            cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}
                         >
                             <PreviewLabel>Live Preview</PreviewLabel>
                             <PreviewTitle>이용료 안내</PreviewTitle>
@@ -827,7 +625,7 @@ const CompanyRegistration = () => {
                         </PreviewCard>
                     </PreviewSection>
                 </ContentGrid>
-            </PageShell>
+            </RegistrationPageShell>
 
             <Modal title="주소 검색" open={isModalOpen} onOk={onToggleModal} onCancel={onToggleModal} maskClosable={false}
                    width={760} cancelButtonProps={{style: {display: 'none'}}} okButtonProps={{style: {display: 'none'}}}

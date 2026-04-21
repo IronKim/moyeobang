@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import {Form} from "antd";
+import "../../../css/theme-colors.css";
 
 const Container = styled.div`
     &.custom-input-error {
         border: 1px solid #f5222d;
         border-radius: 6px;
+        padding: 6px;
     }
     
     @media (max-width: 1200px) {
@@ -14,32 +16,42 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-    padding: 10px 15px;
+    min-width: 54px;
+    height: 44px;
+    padding: 8px 12px;
     margin: 5px;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
-    background-color: ${props => (props.selected ? '#007BFF' : '#f8f8f8')};
-    color: ${props => (props.selected ? '#fff' : '#000')};
-    border: none;
-    border-radius: 4px;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
+    background: ${props => (props.selected
+        ? 'linear-gradient(135deg, var(--color-blue-650) 0%, var(--color-blue-500) 100%)'
+        : 'var(--color-blue-060)')};
+    color: ${props => (props.selected ? 'var(--color-white)' : 'var(--color-gray-900)')};
+    border: 1px solid ${props => (props.selected ? 'transparent' : 'var(--color-border-input)')};
+    border-radius: 10px;
+    box-shadow: 0 4px 10px var(--color-rgba-card-shadow);
+    transition: all 0.2s;
 
     &:hover {
-        background-color: ${props => (props.selected ? '#0056b3' : '#e0e0e0')};
+        background: ${props => (props.selected
+        ? 'linear-gradient(135deg, var(--color-blue-900) 0%, var(--color-blue-600) 100%)'
+        : 'var(--color-blue-090)')};
+        border-color: ${props => (props.selected ? 'transparent' : 'var(--color-blue-450)')};
     }
     
     &:disabled {
-        background-color: #ccc;
+        background-color: #d1d5db;
+        color: var(--color-gray-700);
         box-shadow: none;
         cursor: not-allowed;
+        border-color: transparent;
     }
 `;
 
 const RangeSelector = ({value, length, disable, onChange}) => {
     const [selectedRange, setSelectedRange] = useState(value ? value : []);
     const [firstSelected, setFirstSelected] = useState(null);
-    const { status, errors } = Form.Item.useStatus();
+    const { status } = Form.Item.useStatus();
 
     const handleButtonClick = (number) => {
         if (firstSelected === null) {
