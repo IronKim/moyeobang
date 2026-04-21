@@ -316,7 +316,14 @@ const CompanyRegistration = () => {
                                 </div>
                             </SectionHeader>
 
-                            <FormContainer form={form}>
+                            <FormContainer
+                                form={form}
+                                scrollToFirstError={true}
+                                onFinish={(values) => console.log(values)}
+                                initialValues={{
+                                    cost: companyData.cost,
+                                }}
+                            >
                                 <FormGrid stackGap={'18px'} paddingRight={'24px'}>
                                     <ModernParagraph>
                                         <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
@@ -331,6 +338,10 @@ const CompanyRegistration = () => {
                                                     },
                                                     {
                                                         validator: (rule, value) => {
+                                                            if (!value) {
+                                                                return Promise.resolve()
+                                                            }
+
                                                             if (value.startsWith(" ")) {
                                                                 return Promise.reject('공백으로 시작할 수 없습니다.')
                                                             } else {
@@ -380,6 +391,10 @@ const CompanyRegistration = () => {
                                                     },
                                                     {
                                                         validator: (rule, value) => {
+                                                            if (!value) {
+                                                                return Promise.resolve()
+                                                            }
+
                                                             if (value.startsWith(" ")) {
                                                                 return Promise.reject('공백으로 시작할 수 없습니다.')
                                                             } else {
@@ -422,22 +437,18 @@ const CompanyRegistration = () => {
                                         </FieldColumn>
                                     </ModernParagraph>
                                 </FormGrid>
-                            </FormContainer>
-                        </SectionBlock>
+                            <Divider style={{margin: '28px 0'}} />
 
-                        <Divider style={{margin: '28px 0'}} />
+                            <SectionBlock>
+                                <SectionHeader>
+                                    <div>
+                                        <SectionTitle>가격 정보</SectionTitle>
+                                        <SectionDescription>
+                                            이용 인원별 가격을 등록하면 오른쪽 카드에서 바로 확인할 수 있습니다.
+                                        </SectionDescription>
+                                    </div>
+                                </SectionHeader>
 
-                        <SectionBlock>
-                            <SectionHeader>
-                                <div>
-                                    <SectionTitle>가격 정보</SectionTitle>
-                                    <SectionDescription>
-                                        이용 인원별 가격을 등록하면 오른쪽 카드에서 바로 확인할 수 있습니다.
-                                    </SectionDescription>
-                                </div>
-                            </SectionHeader>
-
-                            <Form>
                                 <Form.List name="cost" initialValue={companyData.cost}>
                                     {(fields, {add, remove}) => (
                                         <CostListWrap>
@@ -501,32 +512,34 @@ const CompanyRegistration = () => {
                                         </CostListWrap>
                                     )}
                                 </Form.List>
-                            </Form>
 
-                            <ModernParagraph>
-                                <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>안내 사항</ModernTitleDiv>
-                                <FieldColumn>
-                                    <ModernTextArea
-                                        name='costInfo'
-                                        rows={4}
-                                        placeholder={example}
-                                        autoSize={true}
-                                        value={companyData.costInfo}
-                                        onChange={onInput}
-                                    />
-                                </FieldColumn>
-                            </ModernParagraph>
+                                <ModernParagraph>
+                                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>안내 사항</ModernTitleDiv>
+                                    <FieldColumn>
+                                        <ModernTextArea
+                                            name='costInfo'
+                                            rows={4}
+                                            placeholder={example}
+                                            autoSize={true}
+                                            value={companyData.costInfo}
+                                            onChange={onInput}
+                                        />
+                                    </FieldColumn>
+                                </ModernParagraph>
 
-                            <SubmitArea>
-                                <SubmitButton
-                                    type="primary"
-                                    $buttonMinWidth={'150px'}
-                                    $buttonHeight={'50px'}
-                                    $buttonShadow={'0 14px 28px var(--color-rgba-submit-shadow)'}
-                                >
-                                    등록하기
-                                </SubmitButton>
-                            </SubmitArea>
+                                <SubmitArea>
+                                    <SubmitButton
+                                        htmlType={'submit'}
+                                        type="primary"
+                                        $buttonMinWidth={'150px'}
+                                        $buttonHeight={'50px'}
+                                        $buttonShadow={'0 14px 28px var(--color-rgba-submit-shadow)'}
+                                    >
+                                        등록하기
+                                    </SubmitButton>
+                                </SubmitArea>
+                            </SectionBlock>
+                            </FormContainer>
                         </SectionBlock>
                     </FormSurface>
 
