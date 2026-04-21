@@ -178,9 +178,11 @@ const MinuteSelector = ({value, onChange, disabled}) => {
     const presets = [45, 60, 75, 90];
 
     useEffect(() => {
-        if (typeof value === 'number' && value !== minutes) {
-            setMinutes(value);
+        if (typeof value !== 'number') {
+            return;
         }
+
+        setMinutes((prev) => (prev !== value ? value : prev));
     }, [value]);
 
     const incrementMinutes = () => {

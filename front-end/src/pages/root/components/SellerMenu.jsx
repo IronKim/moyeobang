@@ -10,9 +10,11 @@ const Menu = styled.div`
     gap: 20px;
     align-items: center;
     width: 255px;
-    height: 760px;
+    height: auto;
+    align-self: stretch;
     margin-top: 10px;
     margin-left: 10px;
+    margin-bottom: 10px;
     border-radius: 25px;
     background-color: #202166;
     color: white;
@@ -25,13 +27,25 @@ const Menu = styled.div`
 const MainMenuContainer = styled.div`
     margin: 10px 0 10px 8px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     cursor: pointer;
 `;
 
 const MainMenuLabel = styled.span`
-    font-weight: bolder;
-    color: white;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: ${({ $isActive }) => ($isActive ? '#F3F4FF' : '#FFFFFF')};
+    transition: color 0.2s ease;
+`;
+
+const ArrowIconWrap = styled.span`
+    display: inline-flex;
+    align-items: center;
+    color: ${({ $isActive }) => ($isActive ? '#D7DBFF' : '#FFFFFF')};
+    transition: color 0.2s ease;
 `;
 
 const SubMenuContainer = styled.div`
@@ -42,21 +56,29 @@ const SubMenuContainer = styled.div`
 
 const SubMenuItem = styled.div`
     margin: 0 0 10px 16px;
+    padding-left: 4px;
     cursor: pointer;
-    font-weight: ${({ $isActive }) => ($isActive ? 'bold' : 'normal')};
-    color: ${({ $isActive }) => ($isActive ? '#868CDA' : 'white')};
-    text-decoration: ${({ $isActive }) => ($isActive ? 'underline' : 'none')};
+    font-size: 17px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    font-weight: ${({ $isActive }) => ($isActive ? '700' : '500')};
+    color: ${({ $isActive }) => ($isActive ? '#B9BEFF' : '#FFFFFF')};
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+
     &:hover {
-        font-weight: bold;
-        text-decoration: underline;
+        color: #C9CDFF;
+        transform: translateX(1px);
     }
 `;
 
 // MainMenu 컴포넌트
 const MainMenu = ({ onClick, label, isActive}) => (
     <MainMenuContainer onClick={onClick} >
-        <MainMenuLabel>{label}</MainMenuLabel>
-        {isActive ? <RiArrowUpSLine fontSize={'20px'} /> : <RiArrowDownSLine fontSize={'20px'} />}
+        <MainMenuLabel $isActive={isActive}>{label}</MainMenuLabel>
+        <ArrowIconWrap $isActive={isActive}>
+            {isActive ? <RiArrowUpSLine fontSize={'24px'} /> : <RiArrowDownSLine fontSize={'24px'} />}
+        </ArrowIconWrap>
     </MainMenuContainer>
 );
 
@@ -127,7 +149,7 @@ const SellerMenu = ({setSelectedMenu}) => {
     return (
         <Menu>
             <div style={{width: '90%'}}>
-                <div style={{marginTop: '18px', marginLeft: '8px', marginBottom: '10px'}}>
+                <div style={{marginTop: '18px', marginLeft: '4px', marginBottom: '6px'}}>
                     <IoMdHome fontSize={'32px'}/>
                 </div>
                 <div style={{border: '1px solid white'}}></div>
