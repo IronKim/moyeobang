@@ -42,10 +42,14 @@ ParagraphDiv.propTypes = {
 }
 
 export const RequiredSpan = styled.span`
+    display: inline-block;
+    width: 14px;
     color: red;
-    margin-right: 5px;
+    margin-right: 4px;
     font-size: 14px;
     font-weight: normal;
+    text-align: center;
+    flex-shrink: 0;
 `
 
 export const TitleDiv = styled(Title)`

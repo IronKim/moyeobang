@@ -1,0 +1,82 @@
+:root {
+    --color-white: #ffffff;
+    --color-gray-900: #111827;
+    --color-gray-700: #5b6477;
+    --color-gray-650: #5f6b85;
+    --color-gray-600: #6b7280;
+    --color-gray-550: #6e778b;
+    --color-gray-500: #8a93a6;
+    --color-gray-400: #98a2b3;
+    --color-gray-800: #1f2937;
+
+    --color-blue-900: #1f2b6d;
+    --color-blue-850: #2341a0;
+    --color-blue-800: #2a2f78;
+    --color-blue-750: #2d4b9b;
+    --color-blue-700: #3046b6;
+    --color-blue-650: #3147b8;
+    --color-blue-600: #5572f6;
+    --color-blue-500: #5e7cff;
+    --color-blue-450: #6e86ff;
+    --color-blue-200: #c9d5f7;
+    --color-blue-100: #f8fbff;
+    --color-blue-090: #f4f7ff;
+    --color-blue-080: #f2f6ff;
+    --color-blue-070: #eef4ff;
+    --color-blue-060: #fbfcff;
+
+    --color-border-input: #d8e0ef;
+
+    --color-rgba-brand-radial: rgba(79, 129, 255, 0.22);
+    --color-rgba-brand-border: rgba(114, 146, 255, 0.18);
+    --color-rgba-brand-shadow: rgba(35, 52, 108, 0.08);
+    --color-rgba-badge-bg: rgba(33, 43, 127, 0.08);
+    --color-rgba-card-border: rgba(15, 23, 42, 0.06);
+    --color-rgba-card-shadow: rgba(15, 23, 42, 0.08);
+    --color-rgba-focus-ring: rgba(110, 134, 255, 0.14);
+    --color-rgba-helper-text: rgba(255, 255, 255, 0.82);
+    --color-rgba-submit-shadow: rgba(72, 98, 214, 0.28);
+}
+
+/*
+    Dark mode is opt-in.
+    Later, enable it by setting data-theme="dark" on html or body.
+*/
+[data-theme="dark"] {
+        --color-gray-900: #e5e7eb;
+        --color-gray-800: #f3f4f6;
+        --color-gray-700: #cbd5e1;
+        --color-gray-650: #b6c2d9;
+        --color-gray-600: #a8b3c7;
+        --color-gray-550: #94a3b8;
+        --color-gray-500: #8b9bb4;
+        --color-gray-400: #7c8aa4;
+
+        --color-blue-900: #1d2554;
+        --color-blue-850: #3b5bd1;
+        --color-blue-800: #8ea5ff;
+        --color-blue-750: #7c97ff;
+        --color-blue-700: #2a3d9c;
+        --color-blue-650: #3a53c8;
+        --color-blue-600: #6f8bff;
+        --color-blue-500: #8aa3ff;
+        --color-blue-450: #89a2ff;
+        --color-blue-200: #3b4770;
+        --color-blue-100: #131b2d;
+        --color-blue-090: #1a2438;
+        --color-blue-080: #182033;
+        --color-blue-070: #111a2b;
+        --color-blue-060: #0f172a;
+
+        --color-border-input: #334155;
+
+        --color-rgba-brand-radial: rgba(95, 130, 255, 0.28);
+        --color-rgba-brand-border: rgba(120, 151, 255, 0.32);
+        --color-rgba-brand-shadow: rgba(2, 6, 23, 0.5);
+        --color-rgba-badge-bg: rgba(125, 150, 255, 0.18);
+        --color-rgba-card-border: rgba(148, 163, 184, 0.2);
+        --color-rgba-card-shadow: rgba(2, 6, 23, 0.45);
+        --color-rgba-focus-ring: rgba(137, 162, 255, 0.24);
+        --color-rgba-helper-text: rgba(226, 232, 240, 0.88);
+        --color-rgba-submit-shadow: rgba(37, 60, 161, 0.42);
+}
