@@ -2,6 +2,12 @@ import React, {useEffect, useState} from 'react';
 import Swal from 'sweetalert2';
 import {Button, Divider, Form} from "antd";
 import {useMediaQuery} from "@mui/material";
+import '../../../css/theme-colors.css';
+import PosterImage from "./PosterImage";
+import RangeSelector from "./RangeSelector";
+import MinuteSelector from "./MinuteSelector";
+import TagSelector from "./TagSelector";
+import styled from "styled-components";
 import {TbGhost2Filled, TbMoodHappyFilled} from "react-icons/tb";
 import {GoHeartFill} from "react-icons/go";
 import {FaRunning} from "react-icons/fa";
@@ -10,7 +16,6 @@ import {RiKnifeBloodFill, RiMagicFill, RiPhoneFindFill} from "react-icons/ri";
 import {GiCrimeSceneTape, GiFootprint, GiWaterDrop} from "react-icons/gi";
 import {FaRedhat, FaSquarePlus} from "react-icons/fa6";
 import {SiMicrogenetics} from "react-icons/si";
-import styled from "styled-components";
 import {
     Container,
     FieldHint,
@@ -46,38 +51,20 @@ import {
     StickySidebar,
     SurfaceCard,
 } from "./SellerHomeComponents";
-import PosterImage from "./PosterImage";
-import RangeSelector from "./RangeSelector";
-import MinuteSelector from "./MinuteSelector";
-import TagSelector from "./TagSelector";
-import "../../../css/theme-colors.css";
 
 const RegistrationPageShell = PageShell;
-
 const ContentGrid = LayoutGrid;
-
 const FormSurface = SurfaceCard;
-
 const Sidebar = StickySidebar;
-
 const SideCard = InfoCard;
-
 const FormGrid = FormStack;
-
 const ModernParagraph = FormRow;
-
 const ModernTitleDiv = FormLabelTitle;
-
 const HintText = FieldHint;
-
 const ModernInput = FormInput;
-
 const ModernSelect = FormSelect;
-
 const ModernTextArea = FormTextArea;
-
 const ActionRow = FormActionRow;
-
 const SaveButton = GradientSubmitButton;
 
 const FieldColumn = styled.div`
@@ -282,16 +269,15 @@ const EscapeRoomModification = () => {
                 <HeroCard>
                     <HeroBadge>Seller Studio</HeroBadge>
                     <HeroTitle>방탈출 테마 수정 및 삭제</HeroTitle>
-                    <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
+                    <HeroDescription>
                         기존 등록 테마를 선택해 정보를 수정하거나 삭제할 수 있습니다.
                     </HeroDescription>
                 </HeroCard>
 
-                <ContentGrid columns={'minmax(0, 1.1fr) 420px'} gridGap={'28px'}>
+                <ContentGrid>
                     <FormSurface>
                         <FormContainer
                             form={form}
-                            marginLeft={'0'}
                             scrollToFirstError={true}
                             onFinish={(values) => console.log('update theme', values)}
                             initialValues={{
@@ -362,7 +348,7 @@ const EscapeRoomModification = () => {
                                                     notFoundContent={'등록된 테마가 없습니다.'}
                                                 />
                                             </ItemDiv>
-                                            <HintText>선택한 테마의 현재 정보가 아래 입력사에 자동으로 채워집니다.</HintText>
+                                            <HintText>선택한 테마의 현재 정보가 아래 입력창에 자동으로 채워집니다.</HintText>
                                         </FieldColumn>
                                     </ModernParagraph>
                                 </FormGrid>

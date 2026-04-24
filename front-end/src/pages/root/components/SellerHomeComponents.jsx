@@ -28,7 +28,7 @@ PageShell.propTypes = {
 }
 
 export const FormContainer = styled(Form)`
-    margin-left: ${props => props.marginLeft ? props.marginLeft : '20px'};
+    margin-left: ${props => props.marginLeft ? props.marginLeft : '0px'};
     display: flex;
     flex-direction: column;
     gap: 20px;

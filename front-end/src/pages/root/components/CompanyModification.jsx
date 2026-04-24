@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import Swal from 'sweetalert2';
 import {Button, Divider, Form, Modal} from "antd";
 import DaumPostcode from 'react-daum-postcode';
-import {TbTrash} from "react-icons/tb";
+import styled from "styled-components";
+import {useMediaQuery} from "@mui/material";
+import '../../../css/theme-colors.css';
 import CostFields from './CostFields';
 import CostPreview from './CostPreview';
 import MapPreview from './MapPreview';
-import styled from "styled-components";
-import {useMediaQuery} from "@mui/material";
 import {
     Container,
     FieldHint,
@@ -18,7 +18,6 @@ import {
     FormRow,
     FormSelect,
     FormStack,
-    FormTextArea,
     GradientSubmitButton,
     GuideCard,
     GuideDot,
@@ -30,7 +29,6 @@ import {
     HeroCard,
     HeroDescription,
     HeroTitle,
-    InfoCard,
     ItemDiv,
     LayoutGrid,
     PageShell,
@@ -42,49 +40,33 @@ import {
     SurfaceCard,
 } from "./SellerHomeComponents";
 import {phone} from "../../../utils/formatters";
-import "../../../css/theme-colors.css";
 
 const {kakao} = window;
 
 const RegistrationPageShell = PageShell;
-
 const ContentGrid = LayoutGrid;
-
 const FormSurface = SurfaceCard;
-
 const Sidebar = StickySidebar;
-
-const SideCard = InfoCard;
-
 const FormGrid = FormStack;
-
 const ModernParagraph = FormRow;
-
 const ModernTitleDiv = FormLabelTitle;
-
 const HintText = FieldHint;
-
 const ModernInput = FormInput;
-
 const ModernSelect = FormSelect;
-
-const ModernTextArea = FormTextArea;
-
 const ActionRow = FormActionRow;
-
 const SaveButton = GradientSubmitButton;
+
+const SectionBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+`;
 
 const FieldColumn = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 12px;
-`;
-
-const SectionBlock = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
 `;
 
 const DeleteButton = styled(Button)`
@@ -255,13 +237,11 @@ const CompanyModification = () => {
                             }}
                         >
                             <SectionBlock>
-                                <SectionHeader>
-                                    <div>
-                                        <SectionTitle>업체 선택 및 기본 정보</SectionTitle>
-                                        <SectionDescription>
-                                            수정할 업체를 먼저 선택하고, 변경할 항목을 입력해 주세요.
-                                        </SectionDescription>
-                                    </div>
+                                <SectionHeader column marginBottom={'8px'}>
+                                    <SectionTitle>업체 선택 및 기본 정보</SectionTitle>
+                                    <SectionDescription>
+                                        수정할 업체를 먼저 선택하고, 변경할 항목을 입력해 주세요.
+                                    </SectionDescription>
                                 </SectionHeader>
 
                                 <FormGrid>
@@ -286,7 +266,7 @@ const CompanyModification = () => {
                                                     style={{width: '100%'}}
                                                 />
                                             </ItemDiv>
-                                            <HintText>선택한 업체의 현재 정보가 아래 입력사에 자동으로 채워집니다.</HintText>
+                                            <HintText>선택한 업체의 현재 정보가 아래 입력창에 자동으로 채워집니다.</HintText>
                                         </FieldColumn>
                                     </ModernParagraph>
 
@@ -362,13 +342,11 @@ const CompanyModification = () => {
                             <Divider style={{margin: '28px 0'}} />
 
                             <SectionBlock>
-                                <SectionHeader>
-                                    <div>
-                                        <SectionTitle>가격 정보</SectionTitle>
-                                        <SectionDescription>
-                                            이용 인원별 가격과 안내문구를 수정할 수 있습니다.
-                                        </SectionDescription>
-                                    </div>
+                                <SectionHeader column marginBottom={'8px'}>
+                                    <SectionTitle>가격 정보</SectionTitle>
+                                    <SectionDescription>
+                                        이용 인원별 가격과 안내문구를 수정할 수 있습니다.
+                                    </SectionDescription>
                                 </SectionHeader>
 
                                 <CostFields />
