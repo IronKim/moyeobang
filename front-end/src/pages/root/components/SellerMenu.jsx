@@ -9,7 +9,7 @@ const Menu = styled.div`
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    width: 255px;
+    width: 280px;
     height: auto;
     align-self: stretch;
     margin-top: 10px;

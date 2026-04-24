@@ -24,8 +24,6 @@ import {
     FormTextArea,
     GradientSubmitButton,
     GuideCard,
-    GuideDot,
-    GuideItem,
     GuideList,
     GuideText,
     GuideTitle,
@@ -301,6 +299,7 @@ const EscapeRoomModification = () => {
                     >
                         <FormContainer
                             form={form}
+                            marginLeft={'0'}
                             scrollToFirstError={true}
                             onFinish={(values) => console.log('update theme', values)}
                             initialValues={{
@@ -313,13 +312,11 @@ const EscapeRoomModification = () => {
                             }}
                         >
                             <SectionBlock>
-                                <SectionHeader>
-                                    <div>
-                                        <SectionTitle>업체 및 테마 선택</SectionTitle>
-                                        <SectionDescription>
-                                            수정할 업체와 테마를 순서대로 선택해 주세요.
-                                        </SectionDescription>
-                                    </div>
+                                <SectionHeader column marginBottom={'8px'}>
+                                    <SectionTitle>업체 및 테마 선택</SectionTitle>
+                                    <SectionDescription>
+                                        수정할 업체와 테마를 순서대로 선택해 주세요.
+                                    </SectionDescription>
                                 </SectionHeader>
 
                                 <FormGrid stackGap={'18px'} paddingRight={'24px'}>
@@ -382,13 +379,11 @@ const EscapeRoomModification = () => {
                             <Divider style={{margin: '28px 0'}} />
 
                             <SectionBlock>
-                                <SectionHeader>
-                                    <div>
-                                        <SectionTitle>테마 정보 수정</SectionTitle>
-                                        <SectionDescription>
-                                            테마 이름, 이미지, 소개 및 플레이 조건을 수정할 수 있습니다.
-                                        </SectionDescription>
-                                    </div>
+                                <SectionHeader column marginBottom={'8px'}>
+                                    <SectionTitle>테마 정보 수정</SectionTitle>
+                                    <SectionDescription>
+                                        테마 이름, 이미지, 소개 및 플레이 조건을 수정할 수 있습니다.
+                                    </SectionDescription>
                                 </SectionHeader>
 
                                 <FormGrid stackGap={'18px'} paddingRight={'24px'}>
@@ -539,8 +534,8 @@ const EscapeRoomModification = () => {
                                         htmlType={'submit'}
                                         type={'primary'}
                                         disabled={isDisabled}
-                                        $buttonMinWidth={'112px'}
-                                        $buttonHeight={'46px'}
+                                        $buttonMinWidth={'120px'}
+                                        $buttonHeight={'44px'}
                                     >
                                         수정
                                     </SaveButton>
@@ -554,13 +549,11 @@ const EscapeRoomModification = () => {
                     <Sidebar sidebarGap={'20px'}>
                         <GuideCard cardPadding={'18px 18px 16px'}>
                             <GuideTitle>수정 가이드</GuideTitle>
-                            <GuideText lineHeight={'1.7'}>
-                                변경 후에는 실제 고객 노출 정보를 꼭 한 번 더 확인해 주세요.
-                            </GuideText>
-                            <GuideList as={'div'} listMargin={'14px 0 0'} listPaddingLeft={'0'} listGap={'10px'}>
-                                <GuideItem><GuideDot />업체 선택 후 테마를 선택하면 정보가 자동으로 채워짐</GuideItem>
-                                <GuideItem><GuideDot />난이도/공포도/활동성은 체감에 맞게 조정</GuideItem>
-                                <GuideItem><GuideDot />테마 선택 후 수정/삭제 버튼이 활성화됩니다</GuideItem>
+                            <GuideText>변경 후에는 실제 고객 노출 정보를 꼭 한 번 더 확인해 주세요.</GuideText>
+                            <GuideList>
+                                <li>업체 선택 후 테마를 선택하면 정보가 자동으로 채워짐</li>
+                                <li>난이도/공포도/활동성은 체감에 맞게 조정</li>
+                                <li>테마 선택 후 수정/삭제 버튼이 활성화됩니다</li>
                             </GuideList>
                         </GuideCard>
 
