@@ -136,32 +136,22 @@ const CompanyRegistration = () => {
 
     return (
         <Container>
-            <RegistrationPageShell shellGap={'28px'} shellPadding={'0 4px 32px'}>
-                <HeroCard
-                    heroPadding={'26px 30px'}
-                    heroMobilePadding={'22px 18px'}
-                    radialFade={'34%'}
-                    gradientMiddle={'50%'}
-                >
-                    <HeroBadge badgePadding={'8px 12px'}>Seller Studio</HeroBadge>
+            <RegistrationPageShell>
+                <HeroCard>
+                    <HeroBadge>Seller Studio</HeroBadge>
                     <HeroTitle>업체 등록</HeroTitle>
-                    <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
+                    <HeroDescription>
                         지점 정보, 주소, 가격 정책을 한 번에 정리해서 등록할 수 있습니다.
                     </HeroDescription>
                 </HeroCard>
 
-                <ContentGrid columns={'minmax(0, 1.1fr) 420px'} gridGap={'28px'}>
-                    <FormSurface
-                        cardRadius={'28px'}
-                        cardPadding={'28px'}
-                        cardMobilePadding={'20px 16px'}
-                        cardMobileRadius={'22px'}
-                    >
+                <ContentGrid>
+                    <FormSurface>
                         <SectionBlock>
                             <SectionHeader>
                                 <div>
                                     <SectionTitle>기본 정보</SectionTitle>
-                                    <SectionDescription hintMarginTop={'6px'}>
+                                    <SectionDescription>
                                         고객이 처음 보게 되는 핵심 정보입니다. 업체명과 주소는 명확하게 입력해 주세요.
                                     </SectionDescription>
                                 </div>
@@ -176,9 +166,9 @@ const CompanyRegistration = () => {
                                     costInfo: '',
                                 }}
                             >
-                                <FormGrid stackGap={'18px'} paddingRight={'24px'}>
+                                <FormGrid>
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'name'}
@@ -210,7 +200,7 @@ const CompanyRegistration = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv name={'branchName'} width={'100%'}>
                                                 <ModernInput placeholder="예: 강남점, 성수 플래그십" />
@@ -219,7 +209,7 @@ const CompanyRegistration = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>주소</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>주소</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'address'}
@@ -262,7 +252,7 @@ const CompanyRegistration = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>연락처</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>연락처</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'contact'}
@@ -321,13 +311,13 @@ const CompanyRegistration = () => {
 
                     {isMobile && <Divider />}
 
-                    <PreviewSection sidebarGap={'20px'}>
-                        <GuideCard cardPadding={'18px 18px 16px'}>
+                    <PreviewSection>
+                        <GuideCard>
                             <GuideTitle>등록 가이드</GuideTitle>
                             <GuideText lineHeight={'1.7'}>
                                 기본 정보와 가격 구성을 먼저 잡아두면 이후 수정 작업이 훨씬 쉬워집니다.
                             </GuideText>
-                            <GuideList as={'div'} listMargin={'14px 0 0'} listPaddingLeft={'0'} listGap={'10px'}>
+                            <GuideList>
                                 <GuideItem><GuideDot />업체명은 검색에 보이는 기준 이름으로 입력</GuideItem>
                                 <GuideItem><GuideDot />주소를 선택하면 지도 위치가 함께 반영</GuideItem>
                                 <GuideItem><GuideDot />가격 항목은 인원 단위로 나누면 비교가 쉬움</GuideItem>

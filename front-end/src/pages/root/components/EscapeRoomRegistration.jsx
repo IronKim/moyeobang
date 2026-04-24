@@ -13,6 +13,8 @@ import {
     FormRow,
     FormContainer,
     GuideCard,
+    GuideDot,
+    GuideItem,
     GuideList,
     GuideText,
     GuideTitle,
@@ -187,13 +189,8 @@ const EscapeRoomRegistration = () => {
     return (
         <Container>
             <RegistrationPageShell shellGap={'28px'} shellPadding={'0 4px 32px'}>
-                <HeroCard
-                    heroPadding={'26px 30px'}
-                    heroMobilePadding={'22px 18px'}
-                    radialFade={'34%'}
-                    gradientMiddle={'50%'}
-                >
-                    <HeroBadge badgePadding={'8px 12px'}>Seller Studio</HeroBadge>
+                <HeroCard>
+                    <HeroBadge>Seller Studio</HeroBadge>
                     <HeroTitle>방탈출 테마 등록</HeroTitle>
                     <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
                         테마 정보, 장르, 난이도와 플레이 조건을 한 번에 정리해 등록하세요.
@@ -201,12 +198,7 @@ const EscapeRoomRegistration = () => {
                 </HeroCard>
 
                 <ContentGrid columns={'minmax(0, 1.1fr) 420px'} gridGap={'28px'}>
-                    <FormSurface
-                        cardRadius={'28px'}
-                        cardPadding={'28px'}
-                        cardMobilePadding={'20px 16px'}
-                        cardMobileRadius={'22px'}
-                    >
+                    <FormSurface>
                         <SectionHeader column marginBottom={'8px'}>
                             <SectionTitle>테마 기본 정보</SectionTitle>
                             <SectionDescription>
@@ -231,9 +223,9 @@ const EscapeRoomRegistration = () => {
                 scrollToFirstError={true}
                 onFinish={(values) => console.log(values)}
             >
-                                <FormGrid stackGap={'18px'} paddingRight={'24px'}>
+                                <FormGrid>
                 <ModernParagraph>
-                            <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>업체 선택</ModernTitleDiv>
+                            <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체 선택</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv name={'company'} placeholder="업체를 선택해주세요" width={'100%'}
                         rules={[{required: true, message: '업체를 선택해주세요.'}]}
@@ -248,11 +240,11 @@ const EscapeRoomRegistration = () => {
                                 style={{width: '100%'}}
                         />
                     </ItemDiv>
-                        <HintText hintMarginTop={'6px'}>등록할 지점을 먼저 선택해야 나머지 입력이 활성화됩니다.</HintText>
+                        <HintText>등록할 지점을 먼저 선택해야 나머지 입력이 활성화됩니다.</HintText>
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>테마 이름</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 이름</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'themename'}
@@ -290,7 +282,7 @@ const EscapeRoomRegistration = () => {
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>테마 소개</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 소개</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'themeintro'}
@@ -314,7 +306,7 @@ const EscapeRoomRegistration = () => {
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>장르</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>장르</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'genre'}
@@ -333,7 +325,7 @@ const EscapeRoomRegistration = () => {
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>적정 인원</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>적정 인원</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'people'}
@@ -349,7 +341,7 @@ const EscapeRoomRegistration = () => {
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>난이도</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>난이도</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'difficulty'}
@@ -369,7 +361,7 @@ const EscapeRoomRegistration = () => {
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>공포도</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>공포도</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'horror'}
@@ -384,7 +376,7 @@ const EscapeRoomRegistration = () => {
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>활동성</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>활동성</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'activity'}
@@ -399,7 +391,7 @@ const EscapeRoomRegistration = () => {
                     </FieldColumn>
                 </ModernParagraph>
                 <ModernParagraph>
-                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>제한 시간</ModernTitleDiv>
+                    <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>제한 시간</ModernTitleDiv>
                     <FieldColumn>
                     <ItemDiv
                         name={'time'}
@@ -430,22 +422,18 @@ const EscapeRoomRegistration = () => {
 
                     {isMobile && <Divider style={{margin: 0}} />}
 
-                    <Sidebar sidebarGap={'20px'}>
-                        <GuideCard cardPadding={'18px 18px 16px'}>
+                    <Sidebar>
+                        <GuideCard>
                             <GuideTitle>등록 가이드</GuideTitle>
                             <GuideText>입력 완성도를 높이면 검색 노출과 예약 전환에 도움이 됩니다.</GuideText>
                             <GuideList>
-                                <li>스토리는 2~3문장으로 핵심 분위기를 전달</li>
-                                <li>난이도/공포도/활동성은 체감에 맞게 입력</li>
-                                <li>업체 선택 후 등록 버튼이 활성화됩니다</li>
+                                <GuideItem><GuideDot />스토리는 2~3문장으로 핵심 분위기를 전달</GuideItem>
+                                <GuideItem><GuideDot />난이도/공포도/활동성은 체감에 맞게 입력</GuideItem>
+                                <GuideItem><GuideDot />업체 선택 후 등록 버튼이 활성화됩니다</GuideItem>
                             </GuideList>
                         </GuideCard>
 
-                        <SideCard
-                            cardRadius={'24px'}
-                            cardPadding={'20px'}
-                            cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}
-                        >
+                        <SideCard>
                             <PreviewLabel>Selected Company</PreviewLabel>
                             <PreviewTitle>
                                 {selectedCompany ? `${selectedCompany.companyName} ${selectedCompany.branchName}` : '업체를 선택해주세요'}

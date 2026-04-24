@@ -229,27 +229,17 @@ const CompanyModification = () => {
 
     return (
         <Container>
-            <RegistrationPageShell shellGap={'28px'} shellPadding={'0 4px 32px'}>
-                <HeroCard
-                    heroPadding={'26px 30px'}
-                    heroMobilePadding={'22px 18px'}
-                    radialFade={'34%'}
-                    gradientMiddle={'50%'}
-                >
-                    <HeroBadge badgePadding={'8px 12px'}>Seller Studio</HeroBadge>
+            <RegistrationPageShell>
+                <HeroCard>
+                    <HeroBadge>Seller Studio</HeroBadge>
                     <HeroTitle>업체 수정 및 삭제</HeroTitle>
-                    <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
+                    <HeroDescription>
                         기존 등록 업체를 선택해 정보와 가격 정책을 수정하거나 삭제할 수 있습니다.
                     </HeroDescription>
                 </HeroCard>
 
-                <ContentGrid columns={'minmax(0, 1.1fr) 420px'} gridGap={'28px'}>
-                    <FormSurface
-                        cardRadius={'28px'}
-                        cardPadding={'28px'}
-                        cardMobilePadding={'20px 16px'}
-                        cardMobileRadius={'22px'}
-                    >
+                <ContentGrid>
+                    <FormSurface>
                         <FormContainer
                             form={form}
                             scrollToFirstError={true}
@@ -274,9 +264,9 @@ const CompanyModification = () => {
                                     </div>
                                 </SectionHeader>
 
-                                <FormGrid stackGap={'18px'} paddingRight={'24px'}>
+                                <FormGrid>
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>수정 대상</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>수정 대상</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv width={'100%'}>
                                                 <ModernSelect
@@ -296,12 +286,12 @@ const CompanyModification = () => {
                                                     style={{width: '100%'}}
                                                 />
                                             </ItemDiv>
-                                            <HintText hintMarginTop={'6px'}>선택한 업체의 현재 정보가 아래 입력창에 자동으로 채워집니다.</HintText>
+                                            <HintText>선택한 업체의 현재 정보가 아래 입력사에 자동으로 채워집니다.</HintText>
                                         </FieldColumn>
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'companyName'}
@@ -316,7 +306,7 @@ const CompanyModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv name={'branchName'} width={'100%'}>
                                                 <ModernInput placeholder="예: 강남점, 성수 플래그십" />
@@ -325,7 +315,7 @@ const CompanyModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>주소</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>주소</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'address'}
@@ -349,7 +339,7 @@ const CompanyModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>연락처</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>연락처</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'contact'}
@@ -400,13 +390,13 @@ const CompanyModification = () => {
 
                     {isMobile && <Divider style={{margin: 0}} />}
 
-                    <Sidebar sidebarGap={'20px'}>
-                        <GuideCard cardPadding={'18px 18px 16px'}>
+                    <Sidebar>
+                        <GuideCard>
                             <GuideTitle>수정 가이드</GuideTitle>
                             <GuideText lineHeight={'1.7'}>
                                 변경 후에는 실제 고객 노출 정보를 꼭 한 번 더 확인해 주세요.
                             </GuideText>
-                            <GuideList as={'div'} listMargin={'14px 0 0'} listPaddingLeft={'0'} listGap={'10px'}>
+                            <GuideList>
                                 <GuideItem><GuideDot />업체 선택 후 각 필드를 필요한 값으로 수정</GuideItem>
                                 <GuideItem><GuideDot />주소 변경 시 도로명/상세주소를 함께 확인</GuideItem>
                                 <GuideItem><GuideDot />가격 항목은 인원 단위로 명확히 구분</GuideItem>

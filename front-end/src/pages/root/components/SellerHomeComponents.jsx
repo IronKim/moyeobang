@@ -18,8 +18,8 @@ export const PageShell = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: ${props => props.shellGap ? props.shellGap : '24px'};
-    padding: ${props => props.shellPadding ? props.shellPadding : '0'};
+    gap: ${props => props.shellGap ? props.shellGap : '28px'};
+    padding: ${props => props.shellPadding ? props.shellPadding : '0 4px 32px'};
 `
 
 PageShell.propTypes = {
@@ -82,7 +82,7 @@ TitleDiv.propTypes = {
 export const HeroBadge = styled.div`
     display: inline-flex;
     align-items: center;
-    padding: ${props => props.badgePadding ? props.badgePadding : '7px 12px'};
+    padding: ${props => props.badgePadding ? props.badgePadding : '8px 12px'};
     border-radius: 999px;
     background: var(--color-rgba-badge-bg);
     color: var(--color-blue-800);
@@ -141,11 +141,11 @@ export const HeroTitle = styled.h2`
 `
 
 export const HeroDescription = styled.p`
-    max-width: ${props => props.maxWidth ? props.maxWidth : 'none'};
+    max-width: ${props => props.maxWidth ? props.maxWidth : '820px'};
     margin: 0;
     color: var(--color-gray-700);
     line-height: 1.7;
-    font-size: ${props => props.fontSize ? props.fontSize : '14px'};
+    font-size: ${props => props.fontSize ? props.fontSize : '15px'};
 `
 
 HeroDescription.propTypes = {
@@ -154,15 +154,15 @@ HeroDescription.propTypes = {
 }
 
 export const SurfaceCard = styled.div`
-    border-radius: ${props => props.cardRadius ? props.cardRadius : '24px'};
-    padding: ${props => props.cardPadding ? props.cardPadding : '24px'};
+    border-radius: ${props => props.cardRadius ? props.cardRadius : '28px'};
+    padding: ${props => props.cardPadding ? props.cardPadding : '28px'};
     background: var(--color-white);
     border: 1px solid var(--color-rgba-card-border);
     box-shadow: ${props => props.cardShadow ? props.cardShadow : '0 18px 40px var(--color-rgba-card-shadow)'};
 
     @media (max-width: 1200px) {
-        padding: ${props => props.cardMobilePadding ? props.cardMobilePadding : '18px 14px'};
-        border-radius: ${props => props.cardMobileRadius ? props.cardMobileRadius : '20px'};
+        padding: ${props => props.cardMobilePadding ? props.cardMobilePadding : '20px 16px'};
+        border-radius: ${props => props.cardMobileRadius ? props.cardMobileRadius : '22px'};
     }
 `
 
@@ -177,7 +177,7 @@ SurfaceCard.propTypes = {
 export const StickySidebar = styled.div`
     display: flex;
     flex-direction: column;
-    gap: ${props => props.sidebarGap ? props.sidebarGap : '16px'};
+    gap: ${props => props.sidebarGap ? props.sidebarGap : '20px'};
     position: sticky;
     top: ${props => props.sidebarTop ? props.sidebarTop : '24px'};
 
@@ -192,11 +192,11 @@ StickySidebar.propTypes = {
 }
 
 export const InfoCard = styled.div`
-    border-radius: ${props => props.cardRadius ? props.cardRadius : '20px'};
-    padding: ${props => props.cardPadding ? props.cardPadding : '18px'};
+    border-radius: ${props => props.cardRadius ? props.cardRadius : '24px'};
+    padding: ${props => props.cardPadding ? props.cardPadding : '20px'};
     background: var(--color-white);
     border: 1px solid var(--color-rgba-card-border);
-    box-shadow: ${props => props.cardShadow ? props.cardShadow : '0 14px 28px var(--color-rgba-card-shadow)'};
+    box-shadow: ${props => props.cardShadow ? props.cardShadow : '0 16px 32px var(--color-rgba-card-shadow)'};
 `
 
 InfoCard.propTypes = {
@@ -250,7 +250,7 @@ export const FormRow = styled(ParagraphDiv)`
 `
 
 export const FormLabelTitle = styled(TitleDiv)`
-    width: ${props => props.labelWidth ? props.labelWidth : '126px'};
+    width: ${props => props.labelWidth ? props.labelWidth : '120px'};
     margin: 0;
     padding-top: 10px;
     flex-shrink: 0;
@@ -270,7 +270,7 @@ FormLabelTitle.propTypes = {
 export const FieldHint = styled.div`
     color: var(--color-gray-500);
     font-size: 12px;
-    margin-top: ${props => props.hintMarginTop ? props.hintMarginTop : '0'};
+    margin-top: ${props => props.hintMarginTop ? props.hintMarginTop : '6px'};
     line-height: 1.5;
 `
 
@@ -336,7 +336,7 @@ export const PreviewLabel = styled.div`
 
 export const GuideCard = styled.div`
     border-radius: ${props => props.cardRadius ? props.cardRadius : '20px'};
-    padding: ${props => props.cardPadding ? props.cardPadding : '18px'};
+    padding: ${props => props.cardPadding ? props.cardPadding : '18px 18px 16px'};
     background: linear-gradient(135deg, var(--color-blue-900) 0%, var(--color-blue-700) 100%);
     color: var(--color-white);
 `
@@ -363,12 +363,12 @@ GuideText.propTypes = {
     lineHeight: PropTypes.string,
 }
 
-export const GuideList = styled.ul`
-    margin: ${props => props.listMargin ? props.listMargin : '12px 0 0'};
-    padding-left: ${props => props.listPaddingLeft ? props.listPaddingLeft : '18px'};
+export const GuideList = styled.div`
+    margin: ${props => props.listMargin ? props.listMargin : '14px 0 0'};
+    padding-left: ${props => props.listPaddingLeft ? props.listPaddingLeft : '0'};
     display: flex;
     flex-direction: column;
-    gap: ${props => props.listGap ? props.listGap : '6px'};
+    gap: ${props => props.listGap ? props.listGap : '10px'};
     font-size: 13px;
 `
 
@@ -397,8 +397,8 @@ export const GuideDot = styled.div`
 
 export const LayoutGrid = styled.div`
     display: grid;
-    grid-template-columns: ${props => props.columns ? props.columns : 'minmax(0, 1fr)'};
-    gap: ${props => props.gridGap ? props.gridGap : '24px'};
+    grid-template-columns: ${props => props.columns ? props.columns : 'minmax(0, 1.1fr) 420px'};
+    gap: ${props => props.gridGap ? props.gridGap : '28px'};
     align-items: ${props => props.alignItems ? props.alignItems : 'start'};
 
     @media (max-width: 1200px) {
@@ -415,8 +415,8 @@ LayoutGrid.propTypes = {
 export const FormStack = styled.div`
     display: flex;
     flex-direction: column;
-    gap: ${props => props.stackGap ? props.stackGap : '16px'};
-    padding-right: ${props => props.paddingRight ? props.paddingRight : '0'};
+    gap: ${props => props.stackGap ? props.stackGap : '18px'};
+    padding-right: ${props => props.paddingRight ? props.paddingRight : '24px'};
 
     @media (max-width: 1200px) {
         padding-right: 0;

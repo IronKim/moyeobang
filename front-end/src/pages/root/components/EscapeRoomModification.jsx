@@ -24,6 +24,8 @@ import {
     FormTextArea,
     GradientSubmitButton,
     GuideCard,
+    GuideDot,
+    GuideItem,
     GuideList,
     GuideText,
     GuideTitle,
@@ -276,14 +278,9 @@ const EscapeRoomModification = () => {
 
     return (
         <Container>
-            <RegistrationPageShell shellGap={'28px'} shellPadding={'0 4px 32px'}>
-                <HeroCard
-                    heroPadding={'26px 30px'}
-                    heroMobilePadding={'22px 18px'}
-                    radialFade={'34%'}
-                    gradientMiddle={'50%'}
-                >
-                    <HeroBadge badgePadding={'8px 12px'}>Seller Studio</HeroBadge>
+            <RegistrationPageShell>
+                <HeroCard>
+                    <HeroBadge>Seller Studio</HeroBadge>
                     <HeroTitle>방탈출 테마 수정 및 삭제</HeroTitle>
                     <HeroDescription maxWidth={'820px'} fontSize={'15px'}>
                         기존 등록 테마를 선택해 정보를 수정하거나 삭제할 수 있습니다.
@@ -291,12 +288,7 @@ const EscapeRoomModification = () => {
                 </HeroCard>
 
                 <ContentGrid columns={'minmax(0, 1.1fr) 420px'} gridGap={'28px'}>
-                    <FormSurface
-                        cardRadius={'28px'}
-                        cardPadding={'28px'}
-                        cardMobilePadding={'20px 16px'}
-                        cardMobileRadius={'22px'}
-                    >
+                    <FormSurface>
                         <FormContainer
                             form={form}
                             marginLeft={'0'}
@@ -319,9 +311,9 @@ const EscapeRoomModification = () => {
                                     </SectionDescription>
                                 </SectionHeader>
 
-                                <FormGrid stackGap={'18px'} paddingRight={'24px'}>
+                                <FormGrid>
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>업체 선택</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체 선택</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv width={'100%'}>
                                                 <ModernSelect
@@ -354,7 +346,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>테마 선택</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 선택</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv width={'100%'}>
                                                 <ModernSelect
@@ -370,7 +362,7 @@ const EscapeRoomModification = () => {
                                                     notFoundContent={'등록된 테마가 없습니다.'}
                                                 />
                                             </ItemDiv>
-                                            <HintText hintMarginTop={'6px'}>선택한 테마의 현재 정보가 아래 입력창에 자동으로 채워집니다.</HintText>
+                                            <HintText>선택한 테마의 현재 정보가 아래 입력사에 자동으로 채워집니다.</HintText>
                                         </FieldColumn>
                                     </ModernParagraph>
                                 </FormGrid>
@@ -386,9 +378,9 @@ const EscapeRoomModification = () => {
                                     </SectionDescription>
                                 </SectionHeader>
 
-                                <FormGrid stackGap={'18px'} paddingRight={'24px'}>
+                                <FormGrid>
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>테마 이름</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 이름</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'themeName'}
@@ -419,7 +411,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>테마 소개</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 소개</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'themeIntro'}
@@ -441,7 +433,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>장르</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>장르</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'genre'}
@@ -460,7 +452,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>적정 인원</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>적정 인원</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'people'}
@@ -475,7 +467,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>*</RequiredSpan>난이도</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>난이도</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'difficulty'}
@@ -489,7 +481,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>공포도</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>공포도</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv name={'horror'}>
                                                 <RateDiv
@@ -503,7 +495,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>활동성</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>활동성</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv name={'activity'}>
                                                 <RateDiv
@@ -517,7 +509,7 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
 
                                     <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>제한 시간</ModernTitleDiv>
+                                        <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>제한 시간</ModernTitleDiv>
                                         <FieldColumn>
                                             <ItemDiv name={'time'} width={'260px'}>
                                                 <MinuteSelector disabled={isDisabled} />
@@ -546,22 +538,18 @@ const EscapeRoomModification = () => {
 
                     {isMobile && <Divider style={{margin: 0}} />}
 
-                    <Sidebar sidebarGap={'20px'}>
-                        <GuideCard cardPadding={'18px 18px 16px'}>
+                    <Sidebar>
+                        <GuideCard>
                             <GuideTitle>수정 가이드</GuideTitle>
                             <GuideText>변경 후에는 실제 고객 노출 정보를 꼭 한 번 더 확인해 주세요.</GuideText>
                             <GuideList>
-                                <li>업체 선택 후 테마를 선택하면 정보가 자동으로 채워짐</li>
-                                <li>난이도/공포도/활동성은 체감에 맞게 조정</li>
-                                <li>테마 선택 후 수정/삭제 버튼이 활성화됩니다</li>
+                                <GuideItem><GuideDot />업체 선택 후 테마를 선택하면 정보가 자동으로 채워집</GuideItem>
+                                <GuideItem><GuideDot />난이도/공포도/활동성은 체감에 맞게 조정</GuideItem>
+                                <GuideItem><GuideDot />테마 선택 후 수정/삭제 버튼이 활성화됩니다</GuideItem>
                             </GuideList>
                         </GuideCard>
 
-                        <SideCard
-                            cardRadius={'24px'}
-                            cardPadding={'20px'}
-                            cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}
-                        >
+                        <SideCard>
                             <PreviewLabel>Selected Company</PreviewLabel>
                             <PreviewTitle>
                                 {selectedCompany
