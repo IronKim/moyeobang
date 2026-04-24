@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {AnimatePresence, motion} from 'motion/react';
 import Swal from 'sweetalert2';
-import {Button, Divider, Form, Modal, Typography} from "antd";
+import {Button, Divider, Form, Modal} from "antd";
 import DaumPostcode from 'react-daum-postcode';
-import {TbSquareMinusFilled} from "react-icons/tb";
+import {TbTrash} from "react-icons/tb";
+import CostFields from './CostFields';
+import CostPreview from './CostPreview';
+import MapPreview from './MapPreview';
 import styled from "styled-components";
 import {useMediaQuery} from "@mui/material";
-import {Map, MapMarker} from "react-kakao-maps-sdk";
 import {
     Container,
     FieldHint,
@@ -33,7 +34,6 @@ import {
     ItemDiv,
     LayoutGrid,
     PageShell,
-    PreviewLabel,
     RequiredSpan,
     SectionDescription,
     SectionHeader,
@@ -43,7 +43,6 @@ import {
 } from "./SellerHomeComponents";
 import {phone} from "../../../utils/formatters";
 import "../../../css/theme-colors.css";
-import addressImage from "../../../assets/images/Address.png";
 
 const {kakao} = window;
 
@@ -88,61 +87,6 @@ const SectionBlock = styled.div`
     gap: 18px;
 `;
 
-const CostListWrap = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-`;
-
-const CostRow = styled(motion.div)`
-    width: 100%;
-`;
-
-const CostRowInner = styled.div`
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 24px;
-    gap: 12px;
-    align-items: center;
-
-    @media (max-width: 1200px) {
-        grid-template-columns: 1fr;
-    }
-`;
-
-const RemoveButton = styled(TbSquareMinusFilled)`
-    font-size: 18px;
-    color: var(--color-gray-550);
-    cursor: pointer;
-    transition: color 0.2s ease, transform 0.2s ease;
-
-    &:hover {
-        color: var(--color-gray-800);
-        transform: scale(1.08);
-    }
-
-    @media (max-width: 1200px) {
-        justify-self: end;
-    }
-`;
-
-const AddRowButton = styled(Button)`
-    height: 46px;
-    border-radius: 14px;
-    border-style: dashed;
-    border-color: var(--color-blue-200);
-    color: var(--color-blue-750);
-    background: linear-gradient(180deg, var(--color-blue-100) 0%, var(--color-blue-080) 100%);
-    font-weight: 700;
-
-    &:hover,
-    &:focus {
-        border-color: var(--color-blue-450);
-        color: var(--color-blue-850);
-        background: var(--color-blue-090);
-    }
-`;
-
 const DeleteButton = styled(Button)`
     && {
         min-width: 112px;
@@ -160,62 +104,6 @@ const DeleteButton = styled(Button)`
         border-color: #dc2626 !important;
         background: #fff !important;
     }
-`;
-
-const PreviewTitle = styled.h4`
-    margin: 0 0 8px;
-    color: var(--color-gray-900);
-    font-size: 20px;
-`;
-
-const PricePreviewCard = styled.div`
-    overflow: hidden;
-    border-radius: 20px;
-    background: linear-gradient(180deg, var(--color-white) 0%, var(--color-blue-100) 100%);
-    box-shadow: inset 0 0 0 1px var(--color-rgba-card-border);
-`;
-
-const PricePreviewHeader = styled.div`
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid var(--color-rgba-card-border);
-`;
-
-const PricePreviewBody = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 18px 20px 16px;
-    min-height: 110px;
-`;
-
-const EmptyPriceText = styled.div`
-    color: var(--color-gray-400);
-    font-size: 13px;
-    line-height: 1.6;
-`;
-
-const PricePreviewFooter = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 0 20px 18px;
-`;
-
-const NoticeLine = styled(Typography.Paragraph)`
-    && {
-        margin-bottom: 0;
-        font-size: 12px;
-        line-height: 1.5;
-        text-align: right;
-        color: var(--color-gray-600);
-    }
-`;
-
-const MapFrame = styled.div`
-    overflow: hidden;
-    border-radius: 18px;
-    background: var(--color-blue-100);
-    box-shadow: inset 0 0 0 1px var(--color-rgba-card-border);
 `;
 
 const CompanyModification = () => {
@@ -320,8 +208,6 @@ const CompanyModification = () => {
 
         setIsModalOpen(false);
     };
-
-    const example = "ex) 1인은 2인 금액으로 책정됩니다.\n 5인 이상은 별도 문의 바랍니다."
 
     const onDelete = () => {
         const selected = companyData[selectedCompanyIndex];
@@ -495,53 +381,7 @@ const CompanyModification = () => {
                                     </div>
                                 </SectionHeader>
 
-                                <Form.List name="cost">
-                                    {(fields, {add, remove}) => (
-                                        <CostListWrap>
-                                            <AnimatePresence initial={false}>
-                                                {fields.map(({key, name, ...restField}) => (
-                                                    <CostRow
-                                                        key={key}
-                                                        initial={{x: -40, opacity: 0}}
-                                                        animate={{x: 0, opacity: 1}}
-                                                        exit={{x: 40, opacity: 0}}
-                                                        transition={{duration: 0.28, ease: 'easeOut'}}
-                                                    >
-                                                        <CostRowInner>
-                                                            <Form.Item
-                                                                {...restField}
-                                                                name={[name, 'count']}
-                                                                style={{margin: 0}}
-                                                            >
-                                                                <ModernInput placeholder="예: 2인, 3인, 4인" />
-                                                            </Form.Item>
-                                                            <Form.Item
-                                                                {...restField}
-                                                                name={[name, 'cost']}
-                                                                style={{margin: 0}}
-                                                            >
-                                                                <ModernInput placeholder="예: 30,000원" />
-                                                            </Form.Item>
-                                                            <RemoveButton onClick={() => remove(name)} />
-                                                        </CostRowInner>
-                                                    </CostRow>
-                                                ))}
-                                            </AnimatePresence>
-                                            <Form.Item style={{margin: 0}}>
-                                                <AddRowButton type="dashed" onClick={() => add()} block icon={<div />}>가격 행 추가하기</AddRowButton>
-                                            </Form.Item>
-                                        </CostListWrap>
-                                    )}
-                                </Form.List>
-
-                                <ModernParagraph>
-                                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>안내 사항</ModernTitleDiv>
-                                    <FieldColumn>
-                                        <ItemDiv name={'costInfo'} width={'100%'}>
-                                            <ModernTextArea rows={4} placeholder={example} autoSize={true} />
-                                        </ItemDiv>
-                                    </FieldColumn>
-                                </ModernParagraph>
+                                <CostFields />
 
                                 <ActionRow justifyContent={'space-between'} paddingTop={'8px'}>
                                     <DeleteButton type={'default'} onClick={onDelete}>삭제</DeleteButton>
@@ -573,74 +413,9 @@ const CompanyModification = () => {
                             </GuideList>
                         </GuideCard>
 
-                        <SideCard cardRadius={'24px'} cardPadding={'20px'} cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}>
-                            <PreviewLabel>Live Preview</PreviewLabel>
-                            <PreviewTitle>지도</PreviewTitle>
-                            <MapFrame>
-                                {mapPosition?.lat && mapPosition?.lng ? (
-                                    <Map
-                                        center={{lat: mapPosition.lat, lng: mapPosition.lng}}
-                                        style={{
-                                            width: '100%',
-                                            height: '360px',
-                                        }}
-                                        draggable={false}
-                                    >
-                                        <MapMarker position={{lat: mapPosition.lat, lng: mapPosition.lng}} />
-                                    </Map>
-                                ) : (
-                                    <img
-                                        src={addressImage}
-                                        alt="address"
-                                        style={{
-                                            display: 'block',
-                                            width: '100%',
-                                            height: '360px',
-                                            objectFit: 'cover',
-                                        }}
-                                    />
-                                )}
-                            </MapFrame>
-                        </SideCard>
+                        <MapPreview latitude={mapPosition?.lat} longitude={mapPosition?.lng} />
 
-                        <SideCard cardRadius={'24px'} cardPadding={'20px'} cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}>
-                            <PreviewLabel>Live Preview</PreviewLabel>
-                            <PreviewTitle>이용료 안내</PreviewTitle>
-                            <PricePreviewCard>
-                                <PricePreviewHeader>
-                                    <Typography.Title style={{margin: 0, textAlign: 'center'}} level={3}>이용료</Typography.Title>
-                                </PricePreviewHeader>
-                                <PricePreviewBody>
-                                    <AnimatePresence initial={false} mode="popLayout">
-                                        {
-                                            watchedCost.some((cost) => cost?.count || cost?.cost) ? (
-                                                watchedCost.map((cost, index) => (
-                                                    <motion.div
-                                                        key={index}
-                                                        layout
-                                                        initial={{x: -24, opacity: 0}}
-                                                        animate={{x: 0, opacity: 1}}
-                                                        exit={{x: 24, opacity: 0}}
-                                                        transition={{duration: 0.24, ease: 'easeOut'}}
-                                                    >
-                                                        <Typography.Paragraph style={{fontSize: '16px', marginBottom: 0, textAlign: 'center'}}>
-                                                            {cost?.count} {cost?.cost}
-                                                        </Typography.Paragraph>
-                                                    </motion.div>
-                                                ))
-                                            ) : (
-                                                <EmptyPriceText>가격을 입력하면 이 영역에 즉시 반영됩니다.</EmptyPriceText>
-                                            )
-                                        }
-                                    </AnimatePresence>
-                                </PricePreviewBody>
-                                <PricePreviewFooter>
-                                    {(watchedCostInfo || example).split('\n').map((line, index) => (
-                                        <NoticeLine key={index}>{line}</NoticeLine>
-                                    ))}
-                                </PricePreviewFooter>
-                            </PricePreviewCard>
-                        </SideCard>
+                        <CostPreview cost={watchedCost} costInfo={watchedCostInfo} />
                     </Sidebar>
                 </ContentGrid>
             </RegistrationPageShell>

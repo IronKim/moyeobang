@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
-import {Button, Divider, Form, Modal, Typography} from "antd";
+import {Divider, Form, Modal} from "antd";
 import DaumPostcode from 'react-daum-postcode';
-import {TbSquareMinusFilled} from "react-icons/tb";
 import styled from "styled-components";
 import {useMediaQuery} from "@mui/material";
-import {AnimatePresence, motion} from "motion/react";
-import {Map, MapMarker} from "react-kakao-maps-sdk";
-import addressImage from "../../../assets/images/Address.png";
-import "../../../css/theme-colors.css";
+import '../../../css/theme-colors.css';
+import CostFields from './CostFields';
+import CostPreview from './CostPreview';
+import MapPreview from './MapPreview';
 import {
     Container,
     FieldHint,
@@ -27,12 +26,10 @@ import {
     HeroCard,
     HeroDescription,
     HeroTitle,
-    InfoCard,
     ItemDiv,
     LayoutGrid,
     FormTextArea,
     PageShell,
-    PreviewLabel,
     RequiredSpan,
     SectionHeader,
     SectionDescription,
@@ -51,15 +48,6 @@ const ContentGrid = LayoutGrid;
 const FormSurface = SurfaceCard;
 
 const PreviewSection = StickySidebar;
-
-const PreviewCard = InfoCard;
-
-const PreviewTitle = styled.h3`
-    margin: 0 0 16px;
-    color: var(--color-gray-900);
-    font-size: 26px;
-    line-height: 1.2;
-`;
 
 const SectionBlock = styled.div`
     display: flex;
@@ -84,67 +72,8 @@ const HintText = FieldHint;
 
 const ModernInput = FormInput;
 
-const ModernTextArea = styled(FormTextArea)`
-    border-radius: 16px;
-`;
-
 const AddressSearchInput = styled(ModernInput)`
     cursor: pointer;
-`;
-
-const CostListWrap = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-`;
-
-const CostRow = styled(motion.div)`
-    width: 100%;
-`;
-
-const CostRowInner = styled.div`
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 24px;
-    gap: 12px;
-    align-items: center;
-
-    @media (max-width: 1200px) {
-        grid-template-columns: 1fr;
-    }
-`;
-
-const RemoveButton = styled(TbSquareMinusFilled)`
-    font-size: 18px;
-    color: var(--color-gray-550);
-    cursor: pointer;
-    transition: color 0.2s ease, transform 0.2s ease;
-
-    &:hover {
-        color: var(--color-gray-800);
-        transform: scale(1.08);
-    }
-
-    @media (max-width: 1200px) {
-        justify-self: end;
-    }
-`;
-
-const AddRowButton = styled(Button)`
-    height: 46px;
-    border-radius: 14px;
-    border-style: dashed;
-    border-color: var(--color-blue-200);
-    color: var(--color-blue-750);
-    background: linear-gradient(180deg, var(--color-blue-100) 0%, var(--color-blue-080) 100%);
-    font-weight: 700;
-
-    &:hover,
-    &:focus {
-        border-color: var(--color-blue-450);
-        color: var(--color-blue-850);
-        background: var(--color-blue-090);
-    }
 `;
 
 const SubmitArea = styled.div`
@@ -154,56 +83,6 @@ const SubmitArea = styled.div`
 `;
 
 const SubmitButton = GradientSubmitButton;
-
-const MapFrame = styled.div`
-    overflow: hidden;
-    border-radius: 18px;
-    background: var(--color-blue-100);
-    box-shadow: inset 0 0 0 1px var(--color-rgba-card-border);
-`;
-
-const PricePreviewCard = styled.div`
-    overflow: hidden;
-    border-radius: 20px;
-    background: linear-gradient(180deg, var(--color-white) 0%, var(--color-blue-100) 100%);
-    box-shadow: inset 0 0 0 1px var(--color-rgba-card-border);
-`;
-
-const PricePreviewHeader = styled.div`
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid var(--color-rgba-card-border);
-`;
-
-const PricePreviewBody = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 18px 20px 16px;
-    min-height: 110px;
-`;
-
-const EmptyPriceText = styled.div`
-    color: var(--color-gray-400);
-    font-size: 13px;
-    line-height: 1.6;
-`;
-
-const PricePreviewFooter = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 0 20px 18px;
-`;
-
-const NoticeLine = styled(Typography.Paragraph)`
-    && {
-        margin-bottom: 0;
-        font-size: 12px;
-        line-height: 1.5;
-        text-align: right;
-        color: var(--color-gray-600);
-    }
-`;
 
 const CompanyRegistration = () => {
     const [form] = Form.useForm();
@@ -216,36 +95,10 @@ const CompanyRegistration = () => {
         latitude: "",
         longitude: "",
         contact: "",
-        cost: [
-            {
-                count: "",
-                cost: ""
-            }
-        ],
-        costInfo: "1인은 2인 금액으로 책정됩니다.\n 5인 이상은 별도 문의 바랍니다."
     });
 
-    const onInput = (e) => {
-        if(e.target.id.startsWith("cost")){
-
-            const index = e.target.id.split("_")[1]
-            const value = e.target.value;
-            const key = e.target.id.split("_")[2]
-            console.log(key)
-
-
-            companyData.cost[index][key] = value
-            setCompanyData({
-                ...companyData,
-                cost: companyData.cost
-            })
-            return
-        }
-        setCompanyData({
-            ...companyData,
-            [e.target.name]: e.target.value
-        });
-    }
+    const watchedCost = Form.useWatch('cost', form) || [];
+    const watchedCostInfo = Form.useWatch('costInfo', form) || '';
 
     const isMobile = useMediaQuery('(max-width:1200px)');
     const geocoder = new kakao.maps.services.Geocoder();
@@ -280,8 +133,6 @@ const CompanyRegistration = () => {
         form.setFieldsValue({ address: data.address });
         setIsModalOpen(false);
     };
-
-    const example = "ex) 1인은 2인 금액으로 책정됩니다.\n 5인 이상은 별도 문의 바랍니다."
 
     return (
         <Container>
@@ -321,7 +172,8 @@ const CompanyRegistration = () => {
                                 scrollToFirstError={true}
                                 onFinish={(values) => console.log(values)}
                                 initialValues={{
-                                    cost: companyData.cost,
+                                    cost: [{count: '', cost: ''}],
+                                    costInfo: '',
                                 }}
                             >
                                 <FormGrid stackGap={'18px'} paddingRight={'24px'}>
@@ -449,83 +301,7 @@ const CompanyRegistration = () => {
                                     </div>
                                 </SectionHeader>
 
-                                <Form.List name="cost" initialValue={companyData.cost}>
-                                    {(fields, {add, remove}) => (
-                                        <CostListWrap>
-                                            <AnimatePresence initial={false}>
-                                                {fields.map(({key, name, ...restField}) => (
-                                                    <CostRow
-                                                        key={key}
-                                                        initial={{x: -40, opacity: 0}}
-                                                        animate={{x: 0, opacity: 1}}
-                                                        exit={{x: 40, opacity: 0}}
-                                                        transition={{duration: 0.28, ease: "easeOut"}}
-                                                    >
-                                                        <CostRowInner>
-                                                            <Form.Item
-                                                                {...restField}
-                                                                name={[name, 'count']}
-                                                                onChange={onInput}
-                                                                style={{margin: 0}}
-                                                            >
-                                                                <ModernInput placeholder="예: 2인, 3인, 4인" />
-                                                            </Form.Item>
-                                                            <Form.Item
-                                                                {...restField}
-                                                                name={[name, 'cost']}
-                                                                onChange={onInput}
-                                                                style={{margin: 0}}
-                                                            >
-                                                                <ModernInput placeholder="예: 30,000원" />
-                                                            </Form.Item>
-                                                            <RemoveButton
-                                                                onClick={() => {
-                                                                    remove(name)
-                                                                    companyData.cost.splice(name, 1)
-                                                                    setCompanyData({
-                                                                        ...companyData,
-                                                                        cost: companyData.cost
-                                                                    })
-                                                                }}
-                                                            />
-                                                        </CostRowInner>
-                                                    </CostRow>
-                                                ))}
-                                            </AnimatePresence>
-                                            <Form.Item style={{margin: 0}}>
-                                                <AddRowButton
-                                                    type="dashed"
-                                                    onClick={() => {
-                                                        add()
-                                                        companyData.cost.push({ count: "", cost: "" })
-                                                        setCompanyData({
-                                                            ...companyData,
-                                                            cost: companyData.cost
-                                                        })
-                                                    }}
-                                                    block
-                                                    icon={<div />}
-                                                >
-                                                    가격 행 추가하기
-                                                </AddRowButton>
-                                            </Form.Item>
-                                        </CostListWrap>
-                                    )}
-                                </Form.List>
-
-                                <ModernParagraph>
-                                    <ModernTitleDiv labelWidth={'120px'} level={4}><RequiredSpan>&nbsp;</RequiredSpan>안내 사항</ModernTitleDiv>
-                                    <FieldColumn>
-                                        <ModernTextArea
-                                            name='costInfo'
-                                            rows={4}
-                                            placeholder={example}
-                                            autoSize={true}
-                                            value={companyData.costInfo}
-                                            onChange={onInput}
-                                        />
-                                    </FieldColumn>
-                                </ModernParagraph>
+                                <CostFields />
 
                                 <SubmitArea>
                                     <SubmitButton
@@ -558,83 +334,9 @@ const CompanyRegistration = () => {
                             </GuideList>
                         </GuideCard>
 
-                        <PreviewCard
-                            cardRadius={'24px'}
-                            cardPadding={'20px'}
-                            cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}
-                        >
-                            <PreviewLabel>Live Preview</PreviewLabel>
-                            <PreviewTitle>지도</PreviewTitle>
-                            <MapFrame>
-                                {
-                                    companyData.latitude && companyData.longitude ? <Map
-                                            center={{lat: companyData.latitude, lng: companyData.longitude}}
-                                            style={{
-                                                width: '100%',
-                                                height: "360px"
-                                            }}
-                                            draggable={false}
-                                        >
-                                            {
-                                                companyData.latitude && companyData.longitude &&
-                                                <MapMarker position={{lat: companyData.latitude, lng: companyData.longitude}}>
-                                                </MapMarker>
-                                            }
-                                        </Map> :
-                                        <img src={addressImage} alt="address" style={{
-                                            display: 'block',
-                                            width: '100%',
-                                            height: "360px",
-                                            objectFit: 'cover'
-                                        }}/>
-                                }
-                            </MapFrame>
-                        </PreviewCard>
+                        <MapPreview latitude={companyData.latitude} longitude={companyData.longitude} />
 
-                        <PreviewCard
-                            cardRadius={'24px'}
-                            cardPadding={'20px'}
-                            cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}
-                        >
-                            <PreviewLabel>Live Preview</PreviewLabel>
-                            <PreviewTitle>이용료 안내</PreviewTitle>
-                            <PricePreviewCard>
-                                <PricePreviewHeader>
-                                    <Typography.Title style={{margin: 0, textAlign: 'center'}} level={3}>이용료</Typography.Title>
-                                </PricePreviewHeader>
-                                <PricePreviewBody>
-                                    <AnimatePresence initial={false} mode="popLayout">
-                                        {
-                                            companyData.cost.some((cost) => cost.count || cost.cost) ? (
-                                                companyData.cost.map((cost, index) => (
-                                                    <motion.div
-                                                        key={index}
-                                                        layout
-                                                        initial={{x: -24, opacity: 0}}
-                                                        animate={{x: 0, opacity: 1}}
-                                                        exit={{x: 24, opacity: 0}}
-                                                        transition={{duration: 0.24, ease: "easeOut"}}
-                                                    >
-                                                        <Typography.Paragraph style={{fontSize: '16px', marginBottom: 0, textAlign: 'center'}}>
-                                                            {cost.count} {cost.cost}
-                                                        </Typography.Paragraph>
-                                                    </motion.div>
-                                                ))
-                                            ) : (
-                                                <EmptyPriceText>가격을 입력하면 이 영역에 즉시 반영됩니다.</EmptyPriceText>
-                                            )
-                                        }
-                                    </AnimatePresence>
-                                </PricePreviewBody>
-                                <PricePreviewFooter>
-                                    {
-                                        companyData.costInfo.split('\n').map((line, index) => (
-                                            <NoticeLine key={index}>{line}</NoticeLine>
-                                        ))
-                                    }
-                                </PricePreviewFooter>
-                            </PricePreviewCard>
-                        </PreviewCard>
+                        <CostPreview cost={watchedCost} costInfo={watchedCostInfo} />
                     </PreviewSection>
                 </ContentGrid>
             </RegistrationPageShell>
