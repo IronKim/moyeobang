@@ -7,6 +7,7 @@ import {SELLERMENU} from "../../constants/SELLERMENU";
 import CompanyRegistration from "./components/CompanyRegistration";
 import CompanyModification from "./components/CompanyModification";
 import EscapeRoomRegistration from "./components/EscapeRoomRegistration";
+import EscapeRoomModification from "./components/EscapeRoomModification";
 
 const SellerMain = styled.div`
     padding: 20px;
@@ -32,6 +33,9 @@ const SellerHome = () => {
                     }
                     {
                         selectedMenu === SELLERMENU.ESCAPE_ROOM_REGISTRATION && <EscapeRoomRegistration />
+                    }
+                    {
+                        selectedMenu === SELLERMENU.ESCAPE_ROOM_MODIFICATION && <EscapeRoomModification />
                     }
                 </SellerMain>
             </MainBox>
