@@ -23,14 +23,17 @@ spring:
     activate:
       on-profile: common
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: validate
   servlet:
     multipart:
       max-file-size: 5MB # Max file size.
@@ -40,20 +43,13 @@ jwt:
   secret-key: ${JWT_SECRET_KEY}
   expired-time-ms: ${JWT_TOKEN_EXPIRED_TIME_MS}
 
-cloud:
-  aws:
-    s3:
-      bucket: ${AWS_S3_BUCKET}
-    credentials:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
-    region:
-      static: ap-northeast-2
-      auto: false
-    stack:
-      auto: false
-    cloudfront:
-      domain: ${AWS_CLOUDFRONT_DOMAIN}
+supabase:
+  bucket: ${SUPABASE_BUCKET}
+  endpoint: ${SUPABASE_ENDPOINT}
+  region: ${SUPABASE_REGION}
+  access-key: ${SUPABASE_ACCESS_KEY}
+  secret-key: ${SUPABASE_SECRET_KEY}
+  public-domain: ${SUPABASE_PUBLIC_DOMAIN}
 ---
 spring:
   config:

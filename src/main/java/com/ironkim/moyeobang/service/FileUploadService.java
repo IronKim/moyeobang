@@ -1,13 +1,14 @@
 package com.ironkim.moyeobang.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.ironkim.moyeobang.exception.ErrorCode;
 import com.ironkim.moyeobang.exception.MoyeobangApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,22 +19,30 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileUploadService {
 
-    private final AmazonS3Client amazonS3Client;
-    @Value("${cloud.aws.s3.bucket}")
+    private final S3Client s3Client;
+    @Value("${supabase.bucket}")
     private String bucket;
-    @Value("${cloud.aws.cloudfront.domain}")
-    private String cloudfrontDomain;
+    @Value("${supabase.public-domain}")
+    private String publicDomain;
 
     public List<String> uploadFiles(List<MultipartFile> files) {
         return files.stream().map(file -> {
             try {
                 String randomFilename = generateRandomFilename(file);
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentType(file.getContentType());
-                metadata.setContentLength(file.getSize());
 
-                amazonS3Client.putObject(bucket, randomFilename, file.getInputStream(), metadata);
-                return cloudfrontDomain + amazonS3Client.getUrl(bucket, randomFilename).getPath();
+                PutObjectRequest request = PutObjectRequest.builder()
+                        .bucket(bucket)
+                        .key(randomFilename)
+                        .contentType(file.getContentType())
+                        .build();
+
+                s3Client.putObject(
+                        request,
+                        RequestBody.fromInputStream(file.getInputStream(), file.getSize())
+                );
+
+                return publicDomain + "/" + bucket + "/" + randomFilename;
+
             } catch (IOException e) {
                 throw new MoyeobangApplicationException(ErrorCode.INTERNAL_SERVER_ERROR);
             }
@@ -41,22 +50,31 @@ public class FileUploadService {
     }
 
     public void deleteFile(String fileUrl) {
-        String[] urlParts = fileUrl.split("/");
-        String fileBucket = urlParts[2].split("\\.")[0];
+        String objectKey = fileUrl.replace(publicDomain, "").replaceFirst("^/+", "");
 
-        if (!fileBucket.equals(bucket)) {
-            throw new MoyeobangApplicationException(ErrorCode.BAD_REQUEST);
-        }
-
-        String objectKey = String.join("/", Arrays.copyOfRange(urlParts, 3, urlParts.length));
-
-        if (!amazonS3Client.doesObjectExist(bucket, objectKey)) {
-            throw new MoyeobangApplicationException(ErrorCode.BAD_REQUEST);
-        }
-
+        // 1. 존재 여부 체크
         try {
-            amazonS3Client.deleteObject(bucket, objectKey);
-        } catch (Exception e) {
+            s3Client.headObject(
+                    HeadObjectRequest.builder()
+                            .bucket(bucket)
+                            .key(objectKey)
+                            .build()
+            );
+        } catch (NoSuchKeyException e) {
+            throw new MoyeobangApplicationException(ErrorCode.BAD_REQUEST);
+        } catch (S3Exception e) {
+            throw new MoyeobangApplicationException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        // 2. 삭제
+        try {
+            s3Client.deleteObject(
+                    DeleteObjectRequest.builder()
+                            .bucket(bucket)
+                            .key(objectKey)
+                            .build()
+            );
+        } catch (S3Exception e) {
             throw new MoyeobangApplicationException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
