@@ -77,10 +77,8 @@ task installReact(type: Exec) {
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
 
         // --force 옵션을 사용
-        commandLine "npm.cmd", "audit", "fix", "--force"
         commandLine 'npm.cmd', 'install', "--force"
     } else {
-        commandLine "npm", "audit", "fix", "--force"
         commandLine 'npm', 'install', "--force"
     }
 }

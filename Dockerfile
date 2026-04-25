@@ -1,6 +1,10 @@
 # Build stage
 FROM gradle:8.5-jdk17-alpine AS build
 WORKDIR /app
+
+# Node.js 설치
+RUN apk add --no-cache nodejs npm
+
 COPY . .
 RUN chmod +x ./gradlew
 RUN ./gradlew clean build -x test
