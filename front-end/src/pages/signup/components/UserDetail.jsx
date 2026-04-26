@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import InputField from "../../../components/InputField";
-import {useBeforeunload} from "react-beforeunload";
+import { useBeforeunload } from "react-beforeunload";
 import ProfileImage from "./ProfileImage";
 import { Select } from 'antd';
-import {PREFERENCE} from "../../../constants/PREFERENCE";
+import { PREFERENCE } from "../../../constants/PREFERENCE";
 import SignupDiv from "./SignupDiv";
 import SignupText from "./SignupText";
 import SignupInputDiv from "./SignupInputDiv";
@@ -80,11 +80,11 @@ const PreferenceSelect = styled(Select)`
     }
 
     .ant-select-selector:hover {
-        border: 1px solid black; !important;
+        border: 1px solid black !important;
     }
 
     .ant-select-selector:focus {
-        border: 1px solid black; !important;
+        border: 1px solid black !important;
     }
 `
 
@@ -103,7 +103,7 @@ const SignupButton = styled.button`
     }
 `
 
-const UserDetail = ({ inputuserData, onInput, Signup}) => {
+const UserDetail = ({ inputuserData, onInput, Signup }) => {
     const [isSignup, setIsSignup] = useState(false);
 
     const handleFileChange = (blobUrl) => {
@@ -114,7 +114,7 @@ const UserDetail = ({ inputuserData, onInput, Signup}) => {
         if (e.target.value.length > 20) {
             return;
         }
-            onInput(e);
+        onInput(e);
     }
 
     const handleProfileTextChange = (e) => {
@@ -137,8 +137,8 @@ const UserDetail = ({ inputuserData, onInput, Signup}) => {
     const [month, setMonth] = useState('');
 
     const currentYear = new Date().getFullYear();
-    const years = Array.from({length: 87}, (_, i) => currentYear - i - 14);
-    const months = Array.from({length: 12}, (_, i) => (i + 1).toString().padStart(2, '0'));
+    const years = Array.from({ length: 87 }, (_, i) => currentYear - i - 14);
+    const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
 
     // 기본적으로 1일부터 31일까지 설정
     let days = Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, '0'));
@@ -192,9 +192,9 @@ const UserDetail = ({ inputuserData, onInput, Signup}) => {
             <SignupInputDiv gap={'20px'} height={'100%'}>
                 <ProfileImage height={200} width={200} id='imageInput' onChange={handleFileChange} />
                 프로필 사진
-                <InputField name='profileName' value={inputuserData.profileName} onChange={handleProfileNameChange} label='닉네임'/>
-                <TextareaField name='profileText' value={inputuserData.profileText} onChange={handleProfileTextChange} label={'프로필 소개글'} placeholder={'자기소개를 입력해주세요'} maxCount={100}/>
-                <span style={{fontSize: '28px'}}>성별</span>
+                <InputField name='profileName' value={inputuserData.profileName} onChange={handleProfileNameChange} label='닉네임' />
+                <TextareaField name='profileText' value={inputuserData.profileText} onChange={handleProfileTextChange} label={'프로필 소개글'} placeholder={'자기소개를 입력해주세요'} maxCount={100} />
+                <span style={{ fontSize: '28px' }}>성별</span>
                 <GenderDiv>
                     <GenderButton
                         $active={gender === 'M'}
@@ -212,7 +212,7 @@ const UserDetail = ({ inputuserData, onInput, Signup}) => {
                         여자
                     </GenderButton>
                 </GenderDiv>
-                <span style={{fontSize: '28px', marginBottom: '-10px'}}>생년월일</span>
+                <span style={{ fontSize: '28px', marginBottom: '-10px' }}>생년월일</span>
                 <BirthdayDiv>
                     <BirthdaySelect name='year' onChange={handleBirthChange}>
                         <option value=''>년</option>
@@ -228,7 +228,7 @@ const UserDetail = ({ inputuserData, onInput, Signup}) => {
                     </BirthdaySelect>
                 </BirthdayDiv>
                 <PreferenceSelect mode='multiple' placeholder='선호하는 테마를 선택해주세요.'
-                        onChange={(value) => onInput({ target: { name: 'preferenceTypes', value: value }})} options={options} allowClear variant={"borderless"} />
+                    onChange={(value) => onInput({ target: { name: 'preferenceTypes', value: value } })} options={options} allowClear variant={"borderless"} />
                 <SignupButton disabled={isSignup} onClick={handleSignup}>회원가입</SignupButton>
             </SignupInputDiv>
         </SignupDiv>

@@ -1,19 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import InputField from "../../../components/InputField";
-import {useBeforeunload} from "react-beforeunload";
-import {BsArrowRightCircleFill} from "react-icons/bs";
+import { useBeforeunload } from "react-beforeunload";
+import { BsArrowRightCircleFill } from "react-icons/bs";
 import SignupDiv from "./SignupDiv";
 import SignupText from "./SignupText";
 import SignupInputDiv from "./SignupInputDiv";
 import useDebounce from "../../../hooks/useDebounce";
 import {
-    useCheckAccountValidation,
-    useCheckEmailValidation,
-    useCheckNameValidation,
-    useCheckPasswordValidation,
-    useCheckPhoneNumberValidation
-} from "../../../hooks/useUser";
+    validateAccount,
+    validatePassword,
+    validateName,
+    validatePhoneNumber,
+    validateEmail,
+    checkAccountDup,
+} from "../../../utils/validation";
 
 const NextButton = styled(BsArrowRightCircleFill)`
     font-size: 36pt;
@@ -24,75 +25,112 @@ const NextButton = styled(BsArrowRightCircleFill)`
     }
 `
 
-const UserEssential = ({inputuserData, onInput, nextPage}) => {
-    const {accountValidator, accountError, accountMessage} = useCheckAccountValidation();
-    const {passwordValidator, passwordError, confirmPasswordError, passwordMessage, confirmPasswordMessage } = useCheckPasswordValidation();
-    const {nameValidator, nameError, nameMessage} = useCheckNameValidation();
-    const {phoneNumberValidator, phoneNumberError, phoneNumberMessage} = useCheckPhoneNumberValidation();
-    const {emailValidator, emailError, emailMessage} = useCheckEmailValidation();
+const UserEssential = ({ inputuserData, onInput, nextPage }) => {
+    const [accountError, setAccountError] = useState(false);
+    const [accountMessage, setAccountMessage] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+    const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+    const [passwordMessage, setPasswordMessage] = useState('');
+    const [confirmPasswordMessage, setConfirmPasswordMessage] = useState('');
+    const [nameError, setNameError] = useState(false);
+    const [nameMessage, setNameMessage] = useState('');
+    const [phoneNumberError, setPhoneNumberError] = useState(false);
+    const [phoneNumberMessage, setPhoneNumberMessage] = useState('');
+    const [emailError, setEmailError] = useState(false);
+    const [emailMessage, setEmailMessage] = useState('');
 
     const debounceQuery = useDebounce(inputuserData.accountId, 300);
     const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
 
     useEffect(() => {
-        debounceQuery && accountValidator(debounceQuery);
+        if (!debounceQuery) return;
+        const result = validateAccount(debounceQuery);
+        if (!result.isValid) {
+            setAccountError(true);
+            setAccountMessage(result.message);
+            return;
+        }
+        checkAccountDup(debounceQuery)
+            .then(response => {
+                if (response.data.result === true) {
+                    setAccountError(true);
+                    setAccountMessage('이미 사용중인 아이디입니다.');
+                } else {
+                    setAccountError(false);
+                    setAccountMessage('');
+                }
+            })
+            .catch(error => console.log(error));
     }, [debounceQuery]);
 
     const handleAccountIdChange = (e) => {
+        if (e.target.value.length > 20) return;
+        if (!/^[a-zA-Z0-9]*$/.test(e.target.value)) return;
+        setAccountError(false);
+        setAccountMessage('');
         onInput(e);
     }
 
     const handlePasswordChange = (e) => {
-        passwordValidator(inputuserData.password, inputuserData.confirmPassword, true);
+        if (e.target.value.length > 20) return;
+        setPasswordError(false);
+        setConfirmPasswordError(false);
+        setPasswordMessage('');
+        setConfirmPasswordMessage('');
         onInput(e);
     }
 
     const handleNameChange = (e) => {
-        nameValidator(inputuserData.name, true);
+        if (e.target.value.length > 20) return;
+        if (!/^[가-힣ㄱ-ㅎa-zA-Z]*$/.test(e.target.value)) return;
+        setNameError(false);
+        setNameMessage('');
         onInput(e);
         onInput({ target: { name: 'profileName', value: e.target.value } });
     }
 
     const handlePhoneNumberChange = (e) => {
-        if (!/^[0-9]*$/.test(e.target.value)) {
-            return;
-        }
-        phoneNumberValidator(inputuserData.phoneNumber, true);
+        if (e.target.value.length > 11) return;
+        if (!/^[0-9]*$/.test(e.target.value)) return;
+        setPhoneNumberError(false);
+        setPhoneNumberMessage('');
         onInput(e);
     }
 
     const handleEmailChange = (e) => {
-        emailValidator(inputuserData.email, true);
+        if (e.target.value.length > 50) return;
+        setEmailError(false);
+        setEmailMessage('');
         onInput(e);
     }
 
     const handleNextPage = async () => {
-        if(!isNextButtonClicked){
+        if (!isNextButtonClicked) {
             setIsNextButtonClicked(true);
 
-            let isValidation = true;
+            const accountResult = validateAccount(inputuserData.accountId);
+            setAccountError(!accountResult.isValid);
+            setAccountMessage(accountResult.message);
 
-            console.log(accountValidator(inputuserData.accountId));
-            passwordValidator(inputuserData.password, inputuserData.confirmPassword);
-            nameValidator(inputuserData.name);
-            phoneNumberValidator(inputuserData.phoneNumber);
-            emailValidator(inputuserData.email);
+            const passwordResult = validatePassword(inputuserData.password, inputuserData.confirmPassword);
+            setPasswordError(!passwordResult.isValid && passwordResult.field === 'password');
+            setPasswordMessage(!passwordResult.isValid && passwordResult.field === 'password' ? passwordResult.message : '');
+            setConfirmPasswordError(!passwordResult.isValid && passwordResult.field === 'confirmPassword');
+            setConfirmPasswordMessage(!passwordResult.isValid && passwordResult.field === 'confirmPassword' ? passwordResult.message : '');
 
-            console.log(accountError, passwordError, confirmPasswordError, nameError, phoneNumberError, emailError)
+            const nameResult = validateName(inputuserData.name);
+            setNameError(!nameResult.isValid);
+            setNameMessage(nameResult.message);
 
-            if(!accountValidator(inputuserData.accountId)) {
-                isValidation = false;
-            } else if(passwordError || confirmPasswordError) {
-                isValidation = false;
-            } else if(nameError) {
-                isValidation = false;
-            } else if(phoneNumberError) {
-                isValidation = false;
-            } else if(emailError) {
-                isValidation = false;
-            }
+            const phoneResult = validatePhoneNumber(inputuserData.phoneNumber);
+            setPhoneNumberError(!phoneResult.isValid);
+            setPhoneNumberMessage(phoneResult.message);
 
-            if(isValidation){
+            const emailResult = validateEmail(inputuserData.email);
+            setEmailError(!emailResult.isValid);
+            setEmailMessage(emailResult.message);
+
+            if (accountResult.isValid && passwordResult.isValid && nameResult.isValid && phoneResult.isValid && emailResult.isValid) {
                 nextPage();
             }
 

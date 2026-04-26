@@ -72,7 +72,9 @@ processResources { dependsOn "copyReactBuildFiles" }
 
 task installReact(type: Exec) {
     workingDir "$frontendDir"
-    inputs.dir "$frontendDir"
+    // package.json, package-lock.json이 바뀔 때만 재실행
+    inputs.files "$frontendDir/package.json", "$frontendDir/package-lock.json"
+    outputs.dir "$frontendDir/node_modules"
     group = BasePlugin.BUILD_GROUP
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
 
@@ -86,7 +88,8 @@ task installReact(type: Exec) {
 task buildReact(type: Exec) {
     dependsOn "installReact"
     workingDir "$frontendDir"
-    inputs.dir "$frontendDir"
+    inputs.dir "$frontendDir/src"
+    outputs.dir "$frontendDir/build"
     group = BasePlugin.BUILD_GROUP
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         environment "CI", "false"
