@@ -7,13 +7,13 @@ services:
       context: ./database
     image: ashfe26/moyeobang-database
     environment:
-      - MYSQL_DATABASE=moyeobang
-      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - POSTGRES_DB=moyeobang
+      - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
     volumes:
-      - ./database/config:/etc/mysql/conf.d
       - ./database/init:/docker-entrypoint-initdb.d
     ports:
-      - "3306:3306"
+      - "5432:5432"
   moyeobang-app:
     container_name: moyeobang-app
     build: .
@@ -26,10 +26,12 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - JWT_TOKEN_EXPIRED_TIME_MS=${JWT_TOKEN_EXPIRED_TIME_MS}
-      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
-      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
-      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
-      - AWS_CLOUDFRONT_DOMAIN=${AWS_CLOUDFRONT_DOMAIN}
+      - SUPABASE_BUCKET=${SUPABASE_BUCKET}
+      - SUPABASE_ENDPOINT=${SUPABASE_ENDPOINT}
+      - SUPABASE_REGION=${SUPABASE_REGION}
+      - SUPABASE_ACCESS_KEY=${SUPABASE_ACCESS_KEY}
+      - SUPABASE_SECRET_KEY=${SUPABASE_SECRET_KEY}
+      - SUPABASE_PUBLIC_DOMAIN=${SUPABASE_PUBLIC_DOMAIN}
     ports:
       - "80:8080"
     restart: always

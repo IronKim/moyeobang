@@ -1,3 +1,3 @@
-FROM mysql:latest
+FROM postgres:latest
 
 ENV TZ=Asia/Seoul
