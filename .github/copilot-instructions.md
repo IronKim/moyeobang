@@ -4,7 +4,7 @@
 
 ### 스택 유지
 
-- React 18 + CRA 구조를 유지한다.
+- React 18 + Vite 구조를 유지한다.
 - UI는 styled-components와 AntD를 기본으로 사용한다.
 - 기존에 사용 중인 motion, MUI 훅, react-kakao-maps-sdk 패턴을 따른다.
 
