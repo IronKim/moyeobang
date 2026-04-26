@@ -133,6 +133,10 @@ export const useCheckAccountValidation = (dupCheck = true) => {
             return false;
         }
 
+        // 형식 검증 통과 시 에러 초기화
+        setAccountError(false);
+        setAccountMessage('');
+
         if(dupCheck) {
             accountIdCheck(account)
                 .then(response => {
