@@ -549,7 +549,7 @@ const EscapeRoomModification = () => {
                             <GuideTitle>수정 가이드</GuideTitle>
                             <GuideText>변경 후에는 실제 고객 노출 정보를 꼭 한 번 더 확인해 주세요.</GuideText>
                             <GuideList>
-                                <GuideItem><GuideDot />업체 선택 후 테마를 선택하면 정보가 자동으로 채워집</GuideItem>
+                                <GuideItem><GuideDot />업체 선택 후 테마를 선택하면 정보가 자동으로 채워집니다</GuideItem>
                                 <GuideItem><GuideDot />난이도/공포도/활동성은 체감에 맞게 조정</GuideItem>
                                 <GuideItem><GuideDot />테마 선택 후 수정/삭제 버튼이 활성화됩니다</GuideItem>
                             </GuideList>
