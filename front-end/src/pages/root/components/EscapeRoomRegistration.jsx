@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import {Divider} from "antd";
+import {Divider, Form} from "antd";
 import {useMediaQuery} from "@mui/material";
 import '../../../css/theme-colors.css';
 import PosterImage from "./PosterImage";
 import RangeSelector from "./RangeSelector";
 import MinuteSelector from "./MinuteSelector";
 import TagSelector from "./TagSelector";
+import CostFields from "./CostFields";
+import CostPreview from "./CostPreview";
 import styled from "styled-components";
 import {TbGhost2Filled, TbMoodHappyFilled} from "react-icons/tb";
 import {GoHeartFill} from "react-icons/go";
@@ -19,6 +21,7 @@ import {
     Container,
     FieldHint,
     FormActionRow,
+    FormColumns,
     FormContainer,
     FormInput,
     FormLabelTitle,
@@ -63,6 +66,7 @@ const HintText = FieldHint;
 const ModernInput = FormInput;
 const ModernSelect = FormSelect;
 const ModernTextArea = FormTextArea;
+const DoubleColumn = FormColumns;
 const ActionRow = FormActionRow;
 const ModernSubmitButton = GradientSubmitButton;
 
@@ -105,8 +109,12 @@ const PreviewCostRow = styled.div`
 `;
 
 const EscapeRoomRegistration = () => {
+    const [form] = Form.useForm();
     const isMobile = useMediaQuery('(max-width:1200px)');
     const [selectedCompanyIndex, setSelectedCompanyIndex] = useState(null);
+
+    const watchedCost = Form.useWatch('cost', form) || [];
+    const watchedCostInfo = Form.useWatch('costInfo', form);
 
     const companyData = [
         {
@@ -173,6 +181,7 @@ const EscapeRoomRegistration = () => {
                         </SectionHeader>
 
                         <FormContainer
+                            form={form}
                             scrollToFirstError={true}
                             onFinish={(values) => console.log(values)}
                             initialValues={{
@@ -186,6 +195,8 @@ const EscapeRoomRegistration = () => {
                                 horror: 0,
                                 activity: 0,
                                 time: 60,
+                                cost: [],
+                                costInfo: '',
                             }}
                         >
                             <FormGrid>
@@ -228,9 +239,9 @@ const EscapeRoomRegistration = () => {
                                     </FieldColumn>
                                 </ModernParagraph>
 
-                                <ModernParagraph>
-                                    <ModernTitleDiv labelWidth={'130px'} level={4}><RequiredSpan>*</RequiredSpan>테마 이미지</ModernTitleDiv>
+                                <DoubleColumn>
                                     <FieldColumn>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 이미지</ModernTitleDiv>
                                         <ItemDiv
                                             name={'themeimage'}
                                             width={'150px'}
@@ -239,11 +250,9 @@ const EscapeRoomRegistration = () => {
                                             <PosterImage disabled={isDisabled} />
                                         </ItemDiv>
                                     </FieldColumn>
-                                </ModernParagraph>
 
-                                <ModernParagraph>
-                                    <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 소개</ModernTitleDiv>
                                     <FieldColumn>
+                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 소개</ModernTitleDiv>
                                         <ItemDiv
                                             name={'themeintro'}
                                             width={'100%'}
@@ -252,14 +261,14 @@ const EscapeRoomRegistration = () => {
                                             <ModernTextArea
                                                 count={{show: true, max: 500}}
                                                 maxLength={500}
-                                                rows={6}
+                                                rows={9}
                                                 placeholder="스토리..."
                                                 style={{resize: 'none'}}
                                                 disabled={isDisabled}
                                             />
                                         </ItemDiv>
                                     </FieldColumn>
-                                </ModernParagraph>
+                                </DoubleColumn>
 
                                 <ModernParagraph>
                                     <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>장르</ModernTitleDiv>
@@ -331,6 +340,17 @@ const EscapeRoomRegistration = () => {
                                 </ModernParagraph>
                             </FormGrid>
 
+                            <Divider style={{margin: '8px 0'}} />
+
+                            <SectionHeader column marginBottom={'8px'}>
+                                <SectionTitle>별도 가격정보</SectionTitle>
+                                <SectionDescription>
+                                    업체 기본 가격과 다를 경우, 이 테마에만 적용되는 별도 인원별 가격을 입력해 주세요.
+                                </SectionDescription>
+                            </SectionHeader>
+
+                            <CostFields />
+
                             <Divider style={{margin: '8px 0 0'}} />
 
                             <ActionRow justifyContent={isMobile ? 'center' : 'flex-end'}>
@@ -388,6 +408,13 @@ const EscapeRoomRegistration = () => {
                                 </>
                             )}
                         </SideCard>
+
+                        <CostPreview
+                            cost={watchedCost}
+                            costInfo={watchedCostInfo}
+                            defaultCost={selectedCompany?.cost || []}
+                            defaultCostInfo={selectedCompany?.costInfo || ''}
+                        />
                     </Sidebar>
                 </ContentGrid>
             </RegistrationPageShell>

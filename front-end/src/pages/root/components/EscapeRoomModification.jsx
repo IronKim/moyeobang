@@ -7,6 +7,8 @@ import PosterImage from "./PosterImage";
 import RangeSelector from "./RangeSelector";
 import MinuteSelector from "./MinuteSelector";
 import TagSelector from "./TagSelector";
+import CostFields from "./CostFields";
+import CostPreview from "./CostPreview";
 import styled from "styled-components";
 import {TbGhost2Filled, TbMoodHappyFilled} from "react-icons/tb";
 import {GoHeartFill} from "react-icons/go";
@@ -20,7 +22,9 @@ import {
     Container,
     FieldHint,
     FormActionRow,
+    FormColumns,
     FormContainer,
+    FormFieldLabel,
     FormInput,
     FormLabelTitle,
     FormRow,
@@ -64,6 +68,8 @@ const HintText = FieldHint;
 const ModernInput = FormInput;
 const ModernSelect = FormSelect;
 const ModernTextArea = FormTextArea;
+const DoubleColumn = FormColumns;
+const ColumnLabel = FormFieldLabel;
 const ActionRow = FormActionRow;
 const SaveButton = GradientSubmitButton;
 
@@ -207,6 +213,9 @@ const EscapeRoomModification = () => {
     const selectedCompany = selectedCompanyIndex !== null ? companyData[selectedCompanyIndex] : null;
     const isDisabled = selectedThemeIndex === null;
 
+    const watchedCost = Form.useWatch('cost', form) || [];
+    const watchedCostInfo = Form.useWatch('costInfo', form);
+
     useEffect(() => {
         if (selectedThemeIndex === null) return;
         const theme = themeData[selectedThemeIndex];
@@ -221,6 +230,8 @@ const EscapeRoomModification = () => {
             horror: theme.horror,
             activity: theme.activity,
             time: theme.time,
+            cost: theme.cost || [],
+            costInfo: theme.costInfo || '',
         });
     }, [form, selectedThemeIndex]);
 
@@ -381,9 +392,9 @@ const EscapeRoomModification = () => {
                                         </FieldColumn>
                                     </ModernParagraph>
 
-                                    <ModernParagraph>
-                                        <ModernTitleDiv labelWidth={'130px'} level={4}><RequiredSpan>*</RequiredSpan>테마 이미지</ModernTitleDiv>
+                                    <DoubleColumn>
                                         <FieldColumn>
+                                            <ColumnLabel><RequiredSpan>*</RequiredSpan>테마 이미지</ColumnLabel>
                                             <ItemDiv
                                                 name={'themeImage'}
                                                 width={'150px'}
@@ -394,11 +405,9 @@ const EscapeRoomModification = () => {
                                                 <PosterImage disabled={isDisabled} />
                                             </ItemDiv>
                                         </FieldColumn>
-                                    </ModernParagraph>
 
-                                    <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>테마 소개</ModernTitleDiv>
                                         <FieldColumn>
+                                            <ColumnLabel><RequiredSpan>*</RequiredSpan>테마 소개</ColumnLabel>
                                             <ItemDiv
                                                 name={'themeIntro'}
                                                 width={'100%'}
@@ -409,14 +418,14 @@ const EscapeRoomModification = () => {
                                                 <ModernTextArea
                                                     count={{show: true, max: 500}}
                                                     maxLength={500}
-                                                    rows={6}
+                                                    rows={9}
                                                     placeholder="스토리..."
                                                     style={{resize: 'none'}}
                                                     disabled={isDisabled}
                                                 />
                                             </ItemDiv>
                                         </FieldColumn>
-                                    </ModernParagraph>
+                                    </DoubleColumn>
 
                                     <ModernParagraph>
                                         <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>장르</ModernTitleDiv>
@@ -504,6 +513,17 @@ const EscapeRoomModification = () => {
                                     </ModernParagraph>
                                 </FormGrid>
 
+                                <Divider style={{margin: '8px 0'}} />
+
+                                <SectionHeader column marginBottom={'8px'}>
+                                    <SectionTitle>별도 가격정보</SectionTitle>
+                                    <SectionDescription>
+                                        업체 기본 가격과 다를 경우, 이 테마에만 적용되는 별도 인원별 가격을 수정할 수 있습니다.
+                                    </SectionDescription>
+                                </SectionHeader>
+
+                                <CostFields />
+
                                 <Divider style={{margin: '8px 0 0'}} />
 
                                 <ActionRow justifyContent={'space-between'} paddingTop={'8px'}>
@@ -561,6 +581,13 @@ const EscapeRoomModification = () => {
                                 </>
                             )}
                         </SideCard>
+
+                        <CostPreview
+                            cost={watchedCost}
+                            costInfo={watchedCostInfo}
+                            defaultCost={selectedCompany?.cost || []}
+                            defaultCostInfo={selectedCompany?.costInfo || ''}
+                        />
                     </Sidebar>
                 </ContentGrid>
             </RegistrationPageShell>

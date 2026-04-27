@@ -383,7 +383,7 @@ const CompanyModification = () => {
 
                         <MapPreview latitude={mapPosition?.lat} longitude={mapPosition?.lng} />
 
-                        <CostPreview cost={watchedCost} costInfo={watchedCostInfo} />
+                        <CostPreview cost={watchedCost} costInfo={watchedCostInfo} fixedLabel="업체 기본 가격" />
                     </Sidebar>
                 </ContentGrid>
             </RegistrationPageShell>

@@ -183,6 +183,12 @@ export const StickySidebar = styled.div`
 
     @media (max-width: 1200px) {
         position: static;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
     }
 `
 
@@ -397,7 +403,7 @@ export const GuideDot = styled.div`
 
 export const LayoutGrid = styled.div`
     display: grid;
-    grid-template-columns: ${props => props.columns ? props.columns : 'minmax(0, 1.1fr) 420px'};
+    grid-template-columns: ${props => props.columns ? props.columns : 'minmax(0, 1.1fr) clamp(260px, 33%, 420px)'};
     gap: ${props => props.gridGap ? props.gridGap : '28px'};
     align-items: ${props => props.alignItems ? props.alignItems : 'start'};
 
@@ -427,6 +433,34 @@ FormStack.propTypes = {
     stackGap: PropTypes.string,
     paddingRight: PropTypes.string,
 }
+
+export const FormColumns = styled.div`
+    display: grid;
+    grid-template-columns: ${props => props.columns ? props.columns : '160px 1fr'};
+    gap: ${props => props.columnGap ? props.columnGap : '18px'};
+    padding-right: ${props => props.paddingRight ? props.paddingRight : '0'};
+
+    @media (max-width: 1200px) {
+        grid-template-columns: 1fr;
+        padding-right: 0;
+    }
+`
+
+FormColumns.propTypes = {
+    columns: PropTypes.string,
+    columnGap: PropTypes.string,
+    paddingRight: PropTypes.string,
+}
+
+export const FormFieldLabel = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin-bottom: 4px;
+`
 
 export const FormActionRow = styled.div`
     display: flex;

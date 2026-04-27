@@ -53,14 +53,21 @@ const NoticeLine = styled(Typography.Paragraph)`
     }
 `;
 
-const CostPreview = ({cost = [], costInfo = ''}) => {
+const CostPreview = ({cost = [], costInfo = '', defaultCost = [], defaultCostInfo = '', fixedLabel = null}) => {
+    const validCost = cost.filter(Boolean);
+    const hasCustomCost = validCost.some((c) => c.count || c.cost);
+    const displayCost = hasCustomCost ? validCost : defaultCost.filter(Boolean);
+    const displayCostInfo = hasCustomCost ? costInfo : defaultCostInfo;
+    const hasDefault = defaultCost.filter(Boolean).length > 0;
+    const previewLabel = fixedLabel ?? (hasCustomCost ? '별도 이용료 (테마별)' : '업체 기본 가격');
+
     return (
         <InfoCard
             cardRadius={'24px'}
             cardPadding={'20px'}
             cardShadow={'0 16px 32px var(--color-rgba-card-shadow)'}
         >
-            <PreviewLabel>Live Preview</PreviewLabel>
+            <PreviewLabel>{previewLabel}</PreviewLabel>
             <PreviewTitle>이용료 안내</PreviewTitle>
             <PricePreviewCard>
                 <PricePreviewHeader>
@@ -69,10 +76,10 @@ const CostPreview = ({cost = [], costInfo = ''}) => {
                 <PricePreviewBody>
                     <AnimatePresence initial={false} mode="popLayout">
                         {
-                            cost.some((c) => c?.count || c?.cost) ? (
-                                cost.map((c, index) => (
+                            displayCost.some((c) => c.count || c.cost) ? (
+                                displayCost.map((c, index) => (
                                     <motion.div
-                                        key={index}
+                                        key={`${hasCustomCost ? 'custom' : 'default'}-${index}`}
                                         layout
                                         initial={{x: -24, opacity: 0}}
                                         animate={{x: 0, opacity: 1}}
@@ -85,13 +92,17 @@ const CostPreview = ({cost = [], costInfo = ''}) => {
                                     </motion.div>
                                 ))
                             ) : (
-                                <EmptyPriceText>가격을 입력하면 이 영역에 즉시 반영됩니다.</EmptyPriceText>
+                                <EmptyPriceText>
+                                    {hasDefault
+                                        ? '별도 가격을 입력하면 업체 기본 가격 대신 표시됩니다.'
+                                        : '가격을 입력하면 이 영역에 즉시 반영됩니다.'}
+                                </EmptyPriceText>
                             )
                         }
                     </AnimatePresence>
                 </PricePreviewBody>
                 <PricePreviewFooter>
-                    {costInfo ? costInfo.split('\n').map((line, index) => (
+                    {displayCostInfo ? displayCostInfo.split('\n').map((line, index) => (
                         <NoticeLine key={index}>{line}</NoticeLine>
                     )) : null}
                 </PricePreviewFooter>

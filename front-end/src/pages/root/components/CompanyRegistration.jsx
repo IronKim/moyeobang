@@ -257,7 +257,7 @@ const CompanyRegistration = () => {
 
                         <MapPreview latitude={companyData.lat} longitude={companyData.lng} />
 
-                        <CostPreview cost={watchedCost} costInfo={watchedCostInfo} />
+                        <CostPreview cost={watchedCost} costInfo={watchedCostInfo} fixedLabel="업체 기본 가격" />
                     </PreviewSection>
                 </ContentGrid>
             </RegistrationPageShell>
