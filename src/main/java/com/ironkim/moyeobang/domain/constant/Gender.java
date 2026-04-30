@@ -5,13 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RoleType {
+public enum Gender {
 	
-    ADMIN("ROLE_ADMIN", "관리자"),
-    SELLER("ROLE_SELLER", "판매자"),
-    USER("ROLE_USER", "사용자")
+    M("M", "남성"),
+    F("F", "여성")
     ;
-
+	
     private final String name;
     private final String description;
 }

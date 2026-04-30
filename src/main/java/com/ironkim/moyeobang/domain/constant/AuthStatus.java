@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RoleType {
+public enum AuthStatus {
 	
-    ADMIN("ROLE_ADMIN", "관리자"),
-    SELLER("ROLE_SELLER", "판매자"),
-    USER("ROLE_USER", "사용자")
+    PENDING("PENDING", "인증 대기"),
+    APPROVED("APPROVED", "인증 승인"),
+    REJECTED("REJECTED", "인증 거절")
     ;
 
     private final String name;

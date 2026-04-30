@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum PreferenceType {
+public enum Genre {
 
     HORROR("공포"),
     ROMANCE("로맨스"),

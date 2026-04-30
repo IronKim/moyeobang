@@ -1,28 +1,29 @@
 package com.ironkim.moyeobang.config.filter;
 
-import com.ironkim.moyeobang.dto.AccountDto;
-import com.ironkim.moyeobang.service.AuthService;
-import com.ironkim.moyeobang.util.JwtTokenUtils;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.ironkim.moyeobang.dto.AccountPrincipal;
+import com.ironkim.moyeobang.util.JwtTokenUtils;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final String key;
-    private final AuthService authService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -45,11 +46,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
 
             String accountId = JwtTokenUtils.getAccountId(token, key);
-            AccountDto accountDto = authService.loadAccountByAccountId(accountId);
-
+            List<String> roles = JwtTokenUtils.getRoles(token, key);
+            
+            AccountPrincipal principal = new AccountPrincipal(accountId, roles);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    accountDto, null, accountDto.getAuthorities()
+            		principal, null, principal.getAuthorities()
             );
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // WebAuthenticationDetailsSource를 통해 HttpServletRequest 객체를 이용해 WebAuthenticationDetails 객체를 생성한다.
             SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContextHolder에 인증 정보를 저장한다. 이후 필요한 곳에서 SecurityContextHolder를 통해 인증 정보를 가져올 수 있다.

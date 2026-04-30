@@ -1,5 +1,12 @@
 package com.ironkim.moyeobang.dto.request;
 
+import java.time.LocalDate;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.ironkim.moyeobang.validator.FourteenYearsOrOlder;
+import com.ironkim.moyeobang.validator.GenderCheck;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SellerJoinRequest {
+public class AccountJoinRequest {
     @NotBlank
     @Pattern(regexp = "^([a-zA-Z0-9]){6,20}$") // 영문, 숫자만 6~20자 조합
     private String accountId;
@@ -26,9 +33,13 @@ public class SellerJoinRequest {
     @NotBlank
     @Email
     private String email;
-    @NotBlank
-    private String businessName;
-    @NotBlank
-    @Pattern(regexp = "^[0-9]{10}$")
-    private String businessNumber;
+    private String profileImage;
+    @Length(max = 20)
+    private String profileName;
+    @Length(max = 100)
+    private String profileText;
+    @GenderCheck
+    private String gender;
+    @FourteenYearsOrOlder(nullable = true)
+    private LocalDate birthday;
 }

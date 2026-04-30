@@ -1,18 +1,32 @@
 package com.ironkim.moyeobang.util;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+import java.util.List;
+
 import com.ironkim.moyeobang.domain.constant.RoleType;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Date;
-
 public class JwtTokenUtils {
     public static String getAccountId(String token, String key) {
         return extractClaims(token, key).get("AccountId", String.class);
+    }
+    
+    public static List<String> getRoles(String token, String key) {
+        Object roles = extractClaims(token, key).get("roles");
+
+        if (roles instanceof List<?> roleList) {
+            return roleList.stream()
+                    .map(Object::toString)
+                    .toList();
+        }
+
+        return List.of();
     }
 
     public static boolean isExpired(String token, String key) {
