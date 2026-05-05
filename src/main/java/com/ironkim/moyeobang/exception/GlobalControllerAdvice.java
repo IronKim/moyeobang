@@ -18,7 +18,7 @@ public class GlobalControllerAdvice {
     public ResponseEntity<?> applicationHandler(MoyeobangApplicationException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(e.getErrorCode().getStatus())
-                .body(Response.error(e.getErrorCode().name()));
+                .body(Response.error(e.getErrorCode().name(), e.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

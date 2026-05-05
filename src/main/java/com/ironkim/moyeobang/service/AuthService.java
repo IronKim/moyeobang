@@ -1,5 +1,9 @@
 package com.ironkim.moyeobang.service;
 
+import com.ironkim.moyeobang.domain.Account;
+import com.ironkim.moyeobang.domain.constant.Gender;
+import com.ironkim.moyeobang.domain.constant.RoleType;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,8 @@ import com.ironkim.moyeobang.repository.AccountRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -37,24 +43,20 @@ public class AuthService {
             throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID, String.format("%s is duplicated", accountJoinRequest.getAccountId()));
         }
 
-//        Account account = AccountRepository.save(Account.builder()
-//                                            .accountId(userJoinRequest.getAccountId())
-//                                            .password(encoder.encode(userJoinRequest.getPassword()))
-//                                            .roleType(RoleType.USER)
-//                                            .name(userJoinRequest.getName())
-//                                            .phoneNumber(userJoinRequest.getPhoneNumber())
-//                                            .email(userJoinRequest.getEmail())
-//                                            .profileImage(userJoinRequest.getProfileImage())
-//                                            .profileName(StringUtils.isBlank(userJoinRequest.getProfileName()) ? userJoinRequest.getName() : userJoinRequest.getProfileName()) // 프로필 이름이 없으면 이름으로 대체
-//                                            .profileText(userJoinRequest.getProfileText())
-//                                            .gender(userJoinRequest.getGender())
-//                                            .birthday(userJoinRequest.getBirthday())
-//                                            .preferenceTypes(userJoinRequest.getPreferenceTypes())
-//                                            .build());
-//
-//        return UserAccountDto.fromUserAccount(userAccount);
-    	
-    	return null;
+       Account account = accountRepository.save(Account.builder()
+                                            .accountId(accountJoinRequest.getAccountId())
+                                            .password(encoder.encode(accountJoinRequest.getPassword()))
+                                            .name(accountJoinRequest.getName())
+                                            .phoneNumber(accountJoinRequest.getPhoneNumber())
+                                            .email(accountJoinRequest.getEmail())
+                                            .profileName(StringUtils.isBlank(accountJoinRequest.getProfileName()) ? accountJoinRequest.getName() : accountJoinRequest.getProfileName()) // 프로필 이름이 없으면 이름으로 대체
+                                            .profileImage(accountJoinRequest.getProfileImage())
+                                            .profileText(accountJoinRequest.getProfileText())
+                                            .gender(accountJoinRequest.getGender())
+                                            .birthday(accountJoinRequest.getBirthday())
+                                            .build());
+
+       return AccountJoinResponse.fromEntity(account);
     }
 
     public String AccountLogin(AccountLoginRequest accountLoginRequest) {

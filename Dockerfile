@@ -25,4 +25,5 @@ RUN ./gradlew build -x test --no-daemon
 FROM eclipse-temurin:17-jre-alpine
 COPY --from=build /app/build/libs/app.jar ./app.jar
 ENV TZ=Asia/Seoul
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
