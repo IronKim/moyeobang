@@ -27,4 +27,20 @@ public class SwaggerConfig {
                                                                 ))
                                 .build();
         }
+
+        @Bean
+        public GroupedOpenApi storeGroupedOpenApi() {
+                return GroupedOpenApi
+                                .builder()
+                                .group("store")
+                                .pathsToMatch("/api/v1/store/**")
+                                .addOpenApiCustomizer(
+                                                openApi -> openApi
+                                                                .setInfo(
+                                                                                new Info()
+                                                                                                .title("store api")
+                                                                                                .description("store api 명세서")
+                                                                                                .version("1.0.0")))
+                                .build();
+        }
 }

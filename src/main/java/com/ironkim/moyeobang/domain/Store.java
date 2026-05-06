@@ -1,6 +1,7 @@
 package com.ironkim.moyeobang.domain;
 
 import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
@@ -20,14 +21,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@Getter
 @Entity
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE store SET deleted_at = NOW() WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 public class Store extends SoftDeletableEntity {
-	
-	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -36,23 +45,30 @@ public class Store extends SoftDeletableEntity {
 
     @Column(length = 50, nullable = false)
     private String businessName;
-    
-    @Column(length = 10, nullable = false)
+
+    @Column(length = 10, nullable = false, unique = true)
     private String businessNumber;
-    
+
     @Column(length = 20)
     private String branchName;
-    
+
     @Column(length = 255, nullable = false)
     private String address;
-    
+
     @Column(length = 50)
     private String addressDetail;
-    
+
+    @Column(precision = 10, scale = 7, nullable = false)
+    private BigDecimal latitude;
+
+    @Column(precision = 10, scale = 7, nullable = false)
+    private BigDecimal longitude;
+
     @Column(length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
     private AuthStatus authStatus;
-    
+
+    @Builder.Default
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Theme> themeList = new ArrayList<>();
 }

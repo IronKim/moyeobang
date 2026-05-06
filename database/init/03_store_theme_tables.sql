@@ -6,6 +6,8 @@ CREATE TABLE store (
     branch_name varchar(20),
     address varchar(255) NOT NULL,
     address_detail varchar(50),
+    latitude decimal(10,7),
+    longitude decimal(10,7),
     auth_status varchar(20) NOT NULL,
     created_at timestamp NOT NULL,
     created_by varchar(20) NOT NULL,

@@ -42,6 +42,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
+    private static final String TEST_JWT_SECRET_KEY = "test-jwt-secret-key-for-unit-tests-only-2026";
+
     @InjectMocks
     private AuthService sut;
 
@@ -60,7 +62,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        setField(sut, "secretKey", "ironkim-moyeobang-app-2024.990715.secret_key-cbuzy");
+        setField(sut, "secretKey", TEST_JWT_SECRET_KEY);
         setField(sut, "expiredTimeMs", 1000L * 60 * 60 * 24);
     }
 
@@ -153,9 +155,9 @@ class AuthServiceTest {
         String token = sut.AccountLogin(loginRequest);
 
         assertThat(token).isNotBlank();
-        assertThat(JwtTokenUtils.getAccountId(token, "ironkim-moyeobang-app-2024.990715.secret_key-cbuzy"))
+        assertThat(JwtTokenUtils.getAccountId(token, TEST_JWT_SECRET_KEY))
                 .isEqualTo("testId");
-        assertThat(JwtTokenUtils.getRoles(token, "ironkim-moyeobang-app-2024.990715.secret_key-cbuzy"))
+        assertThat(JwtTokenUtils.getRoles(token, TEST_JWT_SECRET_KEY))
                 .containsExactly("USER");
     }
 
