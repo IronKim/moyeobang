@@ -19,10 +19,13 @@ import com.ironkim.moyeobang.repository.AccountRepository;
 import com.ironkim.moyeobang.repository.GenreRepository;
 import com.ironkim.moyeobang.repository.PreferenceGenreRepository;
 import com.ironkim.moyeobang.repository.RoleRepository;
+import com.ironkim.moyeobang.util.JwtTokenUtils;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -101,21 +104,32 @@ public class AuthService {
     }
 
     public String AccountLogin(AccountLoginRequest accountLoginRequest) {
-        // UserAccount userAccount =
-        // userAccountRepository.findByAccountId(userLoginRequest.getAccountId())
-        // .orElseThrow(() -> new
-        // MoyeobangApplicationException(ErrorCode.ACCOUNT_NOT_FOUND, String.format("%s
-        // is not founded", userLoginRequest.getAccountId())));
-        //
-        // if (!encoder.matches(userLoginRequest.getPassword(),
-        // userAccount.getPassword())) {
-        // throw new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD, "Password
-        // is invalid");
-        // }
-        //
-        // return JwtTokenUtils.generateToken(userAccount.getAccountId(), RoleType.USER,
-        // userAccount.getProfileImage(), userAccount.getProfileName(), secretKey,
-        // expiredTimeMs);
-        return null;
+        Account account = accountRepository.findByAccountId(accountLoginRequest.getAccountId())
+                .orElseThrow(() -> new MoyeobangApplicationException(
+                        ErrorCode.ACCOUNT_NOT_FOUND,
+                        String.format("%s 계정을 찾을 수 없습니다.", accountLoginRequest.getAccountId())));
+
+        if (!encoder.matches(accountLoginRequest.getPassword(), account.getPassword())) {
+            throw new MoyeobangApplicationException(ErrorCode.INVALID_PASSWORD, "비밀번호가 일치하지 않습니다.");
+        }
+
+        Set<String> roleSet = account.getAccountRoleList().stream()
+                .map(accountRole -> accountRole.getRole().getName())
+                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+
+        List<String> roles = new ArrayList<>(roleSet);
+
+        if (roles.isEmpty()) {
+            throw new MoyeobangApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,
+                    "계정에 설정된 권한이 없습니다. 관리자에게 문의하세요.");
+        }
+
+        return JwtTokenUtils.generateToken(
+                account.getAccountId(),
+                roles,
+                account.getProfileImage(),
+                account.getProfileName(),
+                secretKey,
+                expiredTimeMs);
     }
 }

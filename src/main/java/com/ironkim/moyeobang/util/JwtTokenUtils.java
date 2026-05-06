@@ -16,7 +16,7 @@ public class JwtTokenUtils {
     public static String getAccountId(String token, String key) {
         return extractClaims(token, key).get("AccountId", String.class);
     }
-    
+
     public static List<String> getRoles(String token, String key) {
         Object roles = extractClaims(token, key).get("roles");
 
@@ -38,10 +38,11 @@ public class JwtTokenUtils {
         return Jwts.parserBuilder().setSigningKey(getKey(key)).build().parseClaimsJws(token).getBody();
     }
 
-    public static String generateToken(String accountId, RoleType roleType, String profileImage, String profileName, String key, long expiredTimeMs) {
+    public static String generateToken(String accountId, List<String> roles, String profileImage, String profileName,
+            String key, long expiredTimeMs) {
         Claims claims = Jwts.claims();
         claims.put("AccountId", accountId);
-        claims.put("RoleType", roleType);
+        claims.put("roles", roles);
         claims.put("ProfileImage", profileImage);
         claims.put("ProfileName", profileName);
 
@@ -53,10 +54,16 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-    public static String generateToken(String accountId, RoleType roleType, String name, String businessName, String authStatus, String key, long expiredTimeMs) {
+    public static String generateToken(String accountId, RoleType roleType, String profileImage, String profileName,
+            String key, long expiredTimeMs) {
+        return generateToken(accountId, List.of(roleType.getName()), profileImage, profileName, key, expiredTimeMs);
+    }
+
+    public static String generateToken(String accountId, List<String> roles, String name, String businessName,
+            String authStatus, String key, long expiredTimeMs) {
         Claims claims = Jwts.claims();
         claims.put("AccountId", accountId);
-        claims.put("RoleType", roleType);
+        claims.put("roles", roles);
         claims.put("Name", name);
         claims.put("BusinessName", businessName);
         claims.put("AuthStatus", authStatus);
@@ -67,6 +74,12 @@ public class JwtTokenUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs))
                 .signWith(getKey(key), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public static String generateToken(String accountId, RoleType roleType, String name, String businessName,
+            String authStatus, String key, long expiredTimeMs) {
+        return generateToken(accountId, List.of(roleType.getName()), name, businessName, authStatus, key,
+                expiredTimeMs);
     }
 
     private static Key getKey(String key) { // 키를 Key 객체로 변환하는 메서드
