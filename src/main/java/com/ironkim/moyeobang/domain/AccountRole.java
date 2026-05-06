@@ -9,14 +9,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"account_id", "role_id"}))
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "account_id", "role_id" }))
 public class AccountRole {
-	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,4 +31,11 @@ public class AccountRole {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    public static AccountRole of(Account account, Role role) {
+        return AccountRole.builder()
+                .account(account)
+                .role(role)
+                .build();
+    }
 }

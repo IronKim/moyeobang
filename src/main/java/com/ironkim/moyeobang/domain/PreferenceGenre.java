@@ -9,11 +9,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"account_id", "genre_id"}))
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "account_id", "genre_id" }))
 public class PreferenceGenre {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,4 +31,11 @@ public class PreferenceGenre {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
+
+    public static PreferenceGenre of(Account account, Genre genre) {
+        return PreferenceGenre.builder()
+                .account(account)
+                .genre(genre)
+                .build();
+    }
 }

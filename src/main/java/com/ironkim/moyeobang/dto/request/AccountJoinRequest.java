@@ -1,7 +1,9 @@
 package com.ironkim.moyeobang.dto.request;
 
 import java.time.LocalDate;
+import java.util.Set;
 
+import com.ironkim.moyeobang.domain.constant.Genre;
 import com.ironkim.moyeobang.domain.constant.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,4 +68,7 @@ public class AccountJoinRequest {
     @Schema(description = "성별", example = "M 또는 F")
     @GenderCheck
     private Gender gender;
+
+    @Schema(description = "선호 장르 목록", example = "[\"ADVENTURE\", \"CRIME\"]")
+    private Set<Genre> preferenceGenres;
 }
