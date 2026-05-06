@@ -8,10 +8,11 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 spring:
-  profiles: test
+  profiles:
+    active: test
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:mysql:8:///
+    url: jdbc:tc:postgres:16:///moyeobang
   jpa:
     hibernate:
       ddl-auto: create
@@ -20,5 +21,3 @@ spring:
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   expired-time-ms: ${JWT_TOKEN_EXPIRED_TIME_MS}
-
-
