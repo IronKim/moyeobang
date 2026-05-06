@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +28,7 @@ import com.ironkim.moyeobang.config.SecurityConfig;
 import com.ironkim.moyeobang.dto.AccountPrincipal;
 import com.ironkim.moyeobang.dto.request.StoreRegisterRequest;
 import com.ironkim.moyeobang.dto.response.StoreRegisterResponse;
+import com.ironkim.moyeobang.dto.response.StoreSimpleResponse;
 import com.ironkim.moyeobang.service.AuthService;
 import com.ironkim.moyeobang.service.StoreService;
 
@@ -106,6 +109,41 @@ class StoreControllerTest {
         mockMvc.perform(post("/api/v1/store")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(request)))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void 내_스토어_목록_조회_성공() throws Exception {
+        AccountPrincipal principal = new AccountPrincipal("owner_escape", List.of("OWNER"));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                principal.getAuthorities());
+
+        List<StoreSimpleResponse> responseList = List.of(
+                new StoreSimpleResponse(1L, "미로연구소", "홍대점", com.ironkim.moyeobang.domain.constant.AuthStatus.PENDING),
+                new StoreSimpleResponse(2L, "미로연구소", "강남점", com.ironkim.moyeobang.domain.constant.AuthStatus.APPROVED)
+        );
+
+        when(storeService.getMyStores("owner_escape")).thenReturn(responseList);
+
+        mockMvc.perform(get("/api/v1/store/my")
+                .with(authentication(authenticationToken)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value("SUCCESS"))
+                .andExpect(jsonPath("$.result", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.result[0].storeId").value(1L))
+                .andExpect(jsonPath("$.result[0].businessName").value("미로연구소"))
+                .andExpect(jsonPath("$.result[0].branchName").value("홍대점"))
+                .andExpect(jsonPath("$.result[1].storeId").value(2L))
+                .andExpect(jsonPath("$.result[1].branchName").value("강남점"));
+    }
+
+    @Test
+    void 인증없이_스토어목록조회시_401반환() throws Exception {
+        mockMvc.perform(get("/api/v1/store/my"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }

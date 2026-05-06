@@ -17,6 +17,7 @@ import com.ironkim.moyeobang.domain.Store;
 import com.ironkim.moyeobang.domain.constant.AuthStatus;
 import com.ironkim.moyeobang.dto.request.StoreRegisterRequest;
 import com.ironkim.moyeobang.dto.response.StoreRegisterResponse;
+import com.ironkim.moyeobang.dto.response.StoreSimpleResponse;
 import com.ironkim.moyeobang.exception.ErrorCode;
 import com.ironkim.moyeobang.exception.MoyeobangApplicationException;
 import com.ironkim.moyeobang.repository.AccountRoleRepository;
@@ -84,6 +85,12 @@ public class StoreService {
                 : null;
 
         return StoreRegisterResponse.fromEntity(store, newToken);
+    }
+
+    public List<StoreSimpleResponse> getMyStores(String accountId) {
+        return storeRepository.findAllByAccount_AccountId(accountId).stream()
+                .map(StoreSimpleResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 
     private boolean grantOwnerRoleIfNeeded(Account account) {

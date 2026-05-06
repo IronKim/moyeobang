@@ -1,6 +1,9 @@
 package com.ironkim.moyeobang.controller;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +13,7 @@ import com.ironkim.moyeobang.dto.AccountPrincipal;
 import com.ironkim.moyeobang.dto.request.StoreRegisterRequest;
 import com.ironkim.moyeobang.dto.response.Response;
 import com.ironkim.moyeobang.dto.response.StoreRegisterResponse;
+import com.ironkim.moyeobang.dto.response.StoreSimpleResponse;
 import com.ironkim.moyeobang.service.StoreService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +32,17 @@ import lombok.RequiredArgsConstructor;
 public class StoreController {
 
     private final StoreService storeService;
+
+    @GetMapping("/my")
+    @Operation(summary = "내 스토어 목록 조회", description = "로그인한 사업주가 등록한 스토어 목록을 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패", content = @Content(schema = @Schema(implementation = Response.class)))
+    })
+    public Response<List<StoreSimpleResponse>> getMyStores(
+            @AuthenticationPrincipal AccountPrincipal principal) {
+        return Response.success(storeService.getMyStores(principal.getUsername()));
+    }
 
     @PostMapping
     @Operation(summary = "스토어 등록", description = "인증된 사용자 계정으로 스토어를 등록합니다.")

@@ -178,6 +178,47 @@ class StoreServiceTest {
         org.mockito.Mockito.verify(storeRepository, never()).save(any(Store.class));
     }
 
+    @Test
+    void 내_스토어_목록을_조회한다() {
+        String accountId = "owner_escape";
+        Store store1 = Store.builder()
+                .id(1L)
+                .businessName("미로연구소")
+                .branchName("홍대점")
+                .authStatus(AuthStatus.PENDING)
+                .build();
+        Store store2 = Store.builder()
+                .id(2L)
+                .businessName("미로연구소")
+                .branchName("강남점")
+                .authStatus(AuthStatus.APPROVED)
+                .build();
+
+        when(storeRepository.findAllByAccount_AccountId(accountId))
+                .thenReturn(java.util.Arrays.asList(store1, store2));
+
+        var response = sut.getMyStores(accountId);
+
+        assertThat(response).hasSize(2);
+        assertThat(response.get(0).getStoreId()).isEqualTo(1L);
+        assertThat(response.get(0).getBusinessName()).isEqualTo("미로연구소");
+        assertThat(response.get(0).getBranchName()).isEqualTo("홍대점");
+        assertThat(response.get(1).getStoreId()).isEqualTo(2L);
+        assertThat(response.get(1).getBranchName()).isEqualTo("강남점");
+    }
+
+    @Test
+    void 등록된_스토어가_없으면_빈_리스트를_반환한다() {
+        String accountId = "owner_escape";
+
+        when(storeRepository.findAllByAccount_AccountId(accountId))
+                .thenReturn(new ArrayList<>());
+
+        var response = sut.getMyStores(accountId);
+
+        assertThat(response).isEmpty();
+    }
+
     private StoreRegisterRequest createRequest(String businessNumber) {
         return StoreRegisterRequest.builder()
                 .businessName("미로연구소")
