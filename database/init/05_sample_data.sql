@@ -36,7 +36,7 @@ INSERT INTO account (
 VALUES
     (
         'admin_master',
-        '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiR9m6nQn2GQ4vJ0sIk5dUvNbK/Ct7u',
+        '$2a$10$sqHaul1rEVA/OO3qhTAwm.LG/U2ircZBvVVnxJI0dWCKzb72ztnD6',
         '관리자',
         '01011112222',
         'admin@moyeobang.com',
@@ -53,7 +53,7 @@ VALUES
     ),
     (
         'owner_escape',
-        '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiR9m6nQn2GQ4vJ0sIk5dUvNbK/Ct7u',
+        '$2a$10$sqHaul1rEVA/OO3qhTAwm.LG/U2ircZBvVVnxJI0dWCKzb72ztnD6',
         '홍대점장',
         '01022223333',
         'owner@moyeobang.com',
@@ -70,7 +70,7 @@ VALUES
     ),
     (
         'user_horror',
-        '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiR9m6nQn2GQ4vJ0sIk5dUvNbK/Ct7u',
+        '$2a$10$sqHaul1rEVA/OO3qhTAwm.LG/U2ircZBvVVnxJI0dWCKzb72ztnD6',
         '공포매니아',
         '01033334444',
         'horror@moyeobang.com',
@@ -87,7 +87,7 @@ VALUES
     ),
     (
         'user_romance',
-        '$2a$10$7EqJtq98hPqEX7fNZaFWoOHiR9m6nQn2GQ4vJ0sIk5dUvNbK/Ct7u',
+        '$2a$10$sqHaul1rEVA/OO3qhTAwm.LG/U2ircZBvVVnxJI0dWCKzb72ztnD6',
         '감성플레이어',
         '01044445555',
         'romance@moyeobang.com',

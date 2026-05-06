@@ -31,12 +31,12 @@ public class AuthController {
         return Response.success(authService.accountIdCheck(accountId));
     }
 
-    @PostMapping("account/join")
+    @PostMapping("/account/join")
     public Response<AccountJoinResponse> AccountJoin(@RequestBody @Valid AccountJoinRequest joinRequest) {
         return Response.success(authService.AccountJoin(joinRequest));
     }
 
-    @PostMapping("account/login")
+    @PostMapping("/account/login")
     public Response<UserLoginResponse> Accountlogin(@RequestBody AccountLoginRequest userLoginRequest) {
         return Response.success(new UserLoginResponse(authService.AccountLogin(userLoginRequest)));
     }
