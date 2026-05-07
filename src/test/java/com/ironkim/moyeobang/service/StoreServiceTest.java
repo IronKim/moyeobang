@@ -3,6 +3,7 @@ package com.ironkim.moyeobang.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,6 +37,7 @@ import com.ironkim.moyeobang.dto.response.StoreRegisterResponse;
 import com.ironkim.moyeobang.exception.ErrorCode;
 import com.ironkim.moyeobang.exception.MoyeobangApplicationException;
 import com.ironkim.moyeobang.util.JwtTokenUtils;
+import com.ironkim.moyeobang.validator.StorePermissionValidator;
 
 @ExtendWith(MockitoExtension.class)
 class StoreServiceTest {
@@ -59,6 +61,9 @@ class StoreServiceTest {
 
         @Mock
         private StoreContactRepository storeContactRepository;
+
+        @Mock
+        private StorePermissionValidator storePermissionValidator;
 
         @BeforeEach
         void setUp() {
@@ -332,11 +337,18 @@ class StoreServiceTest {
                                 .businessName("변경")
                                 .branchName("변경점")
                                 .address("변경주소")
+                                .storeNumberList(java.util.List.of(
+                                                StoreNumberRequest.builder()
+                                                                .storeNumber("01000000000")
+                                                                .build()))
                                 .latitude(new BigDecimal("37.5"))
                                 .longitude(new BigDecimal("127.0"))
                                 .build();
 
                 when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
+                doThrow(new MoyeobangApplicationException(ErrorCode.INVALID_PERMISSION, "해당 스토어를 수정할 권한이 없습니다."))
+                                .when(storePermissionValidator)
+                                .validateOwner(store, otherAccountId);
 
                 MoyeobangApplicationException e = assertThrows(MoyeobangApplicationException.class,
                                 () -> sut.updateStore(storeId, otherAccountId, updateRequest));

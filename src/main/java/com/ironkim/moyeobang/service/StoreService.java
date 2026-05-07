@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.ironkim.moyeobang.domain.Account;
 import com.ironkim.moyeobang.domain.AccountRole;
@@ -32,6 +31,7 @@ import com.ironkim.moyeobang.repository.RoleRepository;
 import com.ironkim.moyeobang.repository.StoreContactRepository;
 import com.ironkim.moyeobang.repository.StoreRepository;
 import com.ironkim.moyeobang.util.JwtTokenUtils;
+import com.ironkim.moyeobang.validator.StorePermissionValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,6 +47,7 @@ public class StoreService {
         private final AccountRoleRepository accountRoleRepository;
         private final StoreRepository storeRepository;
         private final StoreContactRepository storeContactRepository;
+        private final StorePermissionValidator storePermissionValidator;
 
         @Value("${jwt.secret-key}")
         private String secretKey;
@@ -122,11 +123,7 @@ public class StoreService {
                                                 ErrorCode.POST_NOT_FOUND,
                                                 String.format("%d 스토어를 찾을 수 없습니다.", storeId)));
 
-                if (!store.getAccount().getAccountId().equals(accountId)) {
-                        throw new MoyeobangApplicationException(
-                                        ErrorCode.INVALID_PERMISSION,
-                                        "해당 스토어를 수정할 권한이 없습니다.");
-                }
+                storePermissionValidator.validateOwner(store, accountId);
 
                 store = Store.builder()
                                 .id(store.getId())

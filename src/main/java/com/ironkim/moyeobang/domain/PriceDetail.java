@@ -10,25 +10,30 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"price_policy_id", "min_headcount", "max_headcount"}))
-public class PriceDetail extends BaseEntity{
-	
-	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "price_policy_id", "min_headcount", "max_headcount" }))
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PriceDetail extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable=false)
+    @JoinColumn(nullable = false)
     private PricePolicy pricePolicy;
 
-    @Column(nullable=false)
-    private Integer minHeadcount;
+    @Column(nullable = false)
+    private Integer headcount;
 
-    @Column(nullable=false)
-    private Integer maxHeadcount;
-
-    @Column(nullable=false)
+    @Column(nullable = false)
     private Integer price;
 }

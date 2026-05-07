@@ -3,6 +3,12 @@ package com.ironkim.moyeobang.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -18,11 +24,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE theme SET deleted_at = NOW() WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 public class Theme extends SoftDeletableEntity {
-	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -37,22 +48,23 @@ public class Theme extends SoftDeletableEntity {
 
     @Column(nullable = false)
     private Integer minHeadcount;
-    
+
     @Column(nullable = false)
     private Integer maxHeadcount;
 
     @Column(nullable = false)
     private Integer playTime;
-    
+
     @Column(nullable = false)
     private Integer difficultyLevel;
-    
+
     @Column(name = "fear_level")
     private Integer fearLevel;
-    
+
     @Column(name = "activity_level")
     private Integer activityLevel;
-    
+
+    @Builder.Default
     @OneToMany(mappedBy = "theme", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ThemeGenre> themeGenreList = new ArrayList<>();
 }

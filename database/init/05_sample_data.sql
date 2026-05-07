@@ -330,7 +330,6 @@ INSERT INTO price_policy (
     day_of_week,
     start_time,
     end_time,
-    is_all_day,
     priority,
     active,
     created_at,
@@ -347,7 +346,6 @@ SELECT
     31,
     '10:00',
     '18:00',
-    FALSE,
     1,
     TRUE,
     NOW(),
@@ -368,7 +366,6 @@ INSERT INTO price_policy (
     day_of_week,
     start_time,
     end_time,
-    is_all_day,
     priority,
     active,
     created_at,
@@ -385,7 +382,6 @@ SELECT
     96,
     '11:00',
     '22:00',
-    FALSE,
     1,
     TRUE,
     NOW(),
@@ -406,7 +402,6 @@ INSERT INTO price_policy (
     day_of_week,
     start_time,
     end_time,
-    is_all_day,
     priority,
     active,
     created_at,
@@ -423,7 +418,6 @@ SELECT
     127,
     NULL,
     NULL,
-    TRUE,
     1,
     TRUE,
     NOW(),
@@ -437,8 +431,7 @@ WHERE s.business_number = '1234567891'
 
 INSERT INTO price_detail (
     price_policy_id,
-    min_headcount,
-    max_headcount,
+    headcount,
     price,
     created_at,
     created_by,
@@ -448,7 +441,6 @@ INSERT INTO price_detail (
 SELECT
     pp.id,
     2,
-    3,
     50000,
     NOW(),
     'system',
@@ -459,8 +451,7 @@ WHERE pp.name = '심연의 저택 평일 정책';
 
 INSERT INTO price_detail (
     price_policy_id,
-    min_headcount,
-    max_headcount,
+    headcount,
     price,
     created_at,
     created_by,
@@ -470,7 +461,6 @@ INSERT INTO price_detail (
 SELECT
     pp.id,
     4,
-    6,
     90000,
     NOW(),
     'system',
@@ -481,8 +471,7 @@ WHERE pp.name = '심연의 저택 평일 정책';
 
 INSERT INTO price_detail (
     price_policy_id,
-    min_headcount,
-    max_headcount,
+    headcount,
     price,
     created_at,
     created_by,
@@ -492,7 +481,6 @@ INSERT INTO price_detail (
 SELECT
     pp.id,
     2,
-    4,
     60000,
     NOW(),
     'system',
@@ -503,8 +491,7 @@ WHERE pp.name = '비밀 문학회 주말 정책';
 
 INSERT INTO price_detail (
     price_policy_id,
-    min_headcount,
-    max_headcount,
+    headcount,
     price,
     created_at,
     created_by,
@@ -514,7 +501,6 @@ INSERT INTO price_detail (
 SELECT
     pp.id,
     5,
-    6,
     120000,
     NOW(),
     'system',
