@@ -1,8 +1,11 @@
 package com.ironkim.moyeobang.dto.request;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -13,11 +16,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Tag(name = "StoreRegisterRequest", description = "스토어 등록 요청 DTO")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "스토어 등록 요청")
 public class StoreRegisterRequest {
 
     @Schema(description = "상호명", example = "미로연구소")
@@ -42,6 +45,10 @@ public class StoreRegisterRequest {
     @Schema(description = "상세 주소", example = "2층")
     @Size(max = 50, message = "상세주소는 50자 이하여야 합니다.")
     private String addressDetail;
+
+    @Valid
+    @Schema(description = "매장 전화번호 목록")
+    private List<StoreNumberRequest> storeNumberList;
 
     @Schema(description = "위도", example = "37.5569930")
     @NotNull(message = "위도 값을 입력해주세요.")

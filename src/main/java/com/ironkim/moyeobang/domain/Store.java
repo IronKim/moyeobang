@@ -71,4 +71,8 @@ public class Store extends SoftDeletableEntity {
     @Builder.Default
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Theme> themeList = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<StoreContact> contactList = new ArrayList<>();
 }

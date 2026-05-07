@@ -7,22 +7,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Tag(name = "StoreRegisterResponse", description = "스토어 등록 응답DTO")
+@Tag(name = "StoreUpdateResponse", description = "스토어 수정 응답DTO")
 @Getter
 @Builder
 @AllArgsConstructor
-public class StoreRegisterResponse {
+public class StoreUpdateResponse {
 
     @Schema(description = "스토어 ID", example = "1")
     private Long storeId;
 
-    @Schema(description = "토큰", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
-    private String token;
-
-    public static StoreRegisterResponse fromEntity(Store store, String token) {
-        return StoreRegisterResponse.builder()
+    public static StoreUpdateResponse fromEntity(Store store) {
+        return StoreUpdateResponse.builder()
                 .storeId(store.getId())
-                .token(token)
                 .build();
     }
 }
