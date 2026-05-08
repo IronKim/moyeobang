@@ -9,15 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))
+@Getter
 public class Genre {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name", nullable = false, length=20)
+    @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private com.ironkim.moyeobang.domain.constant.Genre name;
 }
