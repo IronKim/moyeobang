@@ -1,4 +1,4 @@
-import { accountIdCheck } from '../api/AuthApiService';
+import { accountIdCheck, emailCheck } from '../api/AuthApiService';
 
 export const validateAccount = (account) => {
     if (!/^[a-zA-Z0-9]*$/.test(account)) return { isValid: false, message: '아이디는 영문, 숫자만 입력 가능합니다.' };
@@ -8,6 +8,7 @@ export const validateAccount = (account) => {
 };
 
 export const checkAccountDup = (account) => accountIdCheck(account);
+export const checkEmailDup = (email) => emailCheck(email);
 
 export const validatePassword = (password, confirmPassword = '') => {
     if (password.length < 8) return { isValid: false, field: 'password', message: '비밀번호는 8자리 이상이어야 합니다.' };

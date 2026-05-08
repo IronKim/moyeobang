@@ -55,16 +55,26 @@ public class AuthService {
                 return accountRepository.findByAccountId(accountId).isPresent();
         }
 
+        public boolean emailCheck(String email) {
+                return accountRepository.findByEmail(email).isPresent();
+        }
+
         public AccountJoinResponse AccountJoin(AccountJoinRequest accountJoinRequest) {
                 if (accountIdCheck(accountJoinRequest.getAccountId())) {
                         throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID,
                                         String.format("%s 는 이미 존재하는 계정 ID입니다.", accountJoinRequest.getAccountId()));
                 }
 
+                if (emailCheck(accountJoinRequest.getEmail())) {
+                        throw new MoyeobangApplicationException(ErrorCode.DUPLICATED_EMAIL,
+                                        String.format("%s 는 이미 가입된 이메일입니다.", accountJoinRequest.getEmail()));
+                }
+
                 // 파일이 존재하면 업로드 후 URL 저장
                 String profileImage = null;
                 if (!CollectionUtils.isEmpty(accountJoinRequest.getProfileImage())) {
-                        profileImage = fileUploadService.uploadFiles(accountJoinRequest.getProfileImage(), "profileImages")
+                        profileImage = fileUploadService
+                                        .uploadFiles(accountJoinRequest.getProfileImage(), "profileImages")
                                         .get(0);
                 }
 

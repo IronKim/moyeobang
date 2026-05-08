@@ -15,6 +15,7 @@ import {
     validatePhoneNumber,
     validateEmail,
     checkAccountDup,
+    checkEmailDup,
 } from "../../../utils/validation";
 
 const NextButton = styled(BsArrowRightCircleFill)`
@@ -40,18 +41,19 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
     const [emailError, setEmailError] = useState(false);
     const [emailMessage, setEmailMessage] = useState('');
 
-    const debounceQuery = useDebounce(inputAccountData.accountId, 300);
+    const debounceAccountId = useDebounce(inputAccountData.accountId, 300);
+    const debounceEmail = useDebounce(inputAccountData.email, 300);
     const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
 
     useEffect(() => {
-        if (!debounceQuery) return;
-        const result = validateAccount(debounceQuery);
+        if (!debounceAccountId) return;
+        const result = validateAccount(debounceAccountId);
         if (!result.isValid) {
             setAccountError(true);
             setAccountMessage(result.message);
             return;
         }
-        checkAccountDup(debounceQuery)
+        checkAccountDup(debounceAccountId)
             .then(response => {
                 if (response.data.result === true) {
                     setAccountError(true);
@@ -62,7 +64,30 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
                 }
             })
             .catch(error => console.log(error));
-    }, [debounceQuery]);
+    }, [debounceAccountId]);
+
+    useEffect(() => {
+        if (!debounceEmail) return;
+
+        const result = validateEmail(debounceEmail);
+        if (!result.isValid) {
+            setEmailError(true);
+            setEmailMessage(result.message);
+            return;
+        }
+
+        checkEmailDup(debounceEmail)
+            .then(response => {
+                if (response.data.result === true) {
+                    setEmailError(true);
+                    setEmailMessage('이미 사용중인 이메일입니다.');
+                } else {
+                    setEmailError(false);
+                    setEmailMessage('');
+                }
+            })
+            .catch(error => console.log(error));
+    }, [debounceEmail]);
 
     const handleAccountIdChange = (e) => {
         if (e.target.value.length > 20) return;
@@ -135,7 +160,29 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
             setEmailMessage(emailResult.message);
 
             if (accountResult.isValid && passwordResult.isValid && nameResult.isValid && phoneResult.isValid && emailResult.isValid) {
-                nextPage();
+                try {
+                    const [accountDupResponse, emailDupResponse] = await Promise.all([
+                        checkAccountDup(inputAccountData.accountId),
+                        checkEmailDup(inputAccountData.email),
+                    ]);
+
+                    const isDuplicatedAccount = accountDupResponse.data.result === true;
+                    const isDuplicatedEmail = emailDupResponse.data.result === true;
+
+                    setAccountError(isDuplicatedAccount);
+                    setAccountMessage(isDuplicatedAccount ? '이미 사용중인 아이디입니다.' : '');
+
+                    setEmailError(isDuplicatedEmail);
+                    setEmailMessage(isDuplicatedEmail ? '이미 사용중인 이메일입니다.' : '');
+
+                    if (!isDuplicatedAccount && !isDuplicatedEmail) {
+                        nextPage();
+                    }
+                } catch (error) {
+                    console.log(error);
+                    setAccountError(true);
+                    setAccountMessage('중복 확인에 실패했습니다. 다시 시도해주세요.');
+                }
             }
 
             setTimeout(() => {

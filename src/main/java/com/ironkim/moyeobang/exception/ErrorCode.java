@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
     DUPLICATED_ACCOUNT_ID(HttpStatus.CONFLICT, "AccountId is duplicated"),
+    DUPLICATED_EMAIL(HttpStatus.CONFLICT, "Email is duplicated"),
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "Account not founded"),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Password is invalid"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid"),

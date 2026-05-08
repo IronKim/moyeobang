@@ -173,6 +173,28 @@ public class AuthControllerTest {
                                 .andExpect(status().isOk());
         }
 
+        @Test
+        void 이메일중복체크() throws Exception {
+                when(authService.emailCheck(eq("test@naver.com"))).thenReturn(true);
+
+                mockMvc.perform(get("/api/v1/auth/email-check").param("email", "test@naver.com"))
+                                .andDo(print())
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value("SUCCESS"))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.result").value(true))
+                                .andExpect(status().isOk());
+        }
+
+        @Test
+        void 이메일중복체크시_사용가능한_이메일인경우_false반환() throws Exception {
+                when(authService.emailCheck(eq("new@naver.com"))).thenReturn(false);
+
+                mockMvc.perform(get("/api/v1/auth/email-check").param("email", "new@naver.com"))
+                                .andDo(print())
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value("SUCCESS"))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.result").value(false))
+                                .andExpect(status().isOk());
+        }
+
         private AccountJoinRequest createJoinRequest(String accountId) {
                 AccountJoinRequest request = new AccountJoinRequest();
                 request.setAccountId(accountId);

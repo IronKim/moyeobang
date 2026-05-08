@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ironkim.moyeobang.dto.request.AccountJoinRequest;
@@ -38,6 +39,14 @@ public class AuthController {
     })
     public Response<Boolean> accountIdCheck(@PathVariable String accountId) {
         return Response.success(authService.accountIdCheck(accountId));
+    }
+
+    @GetMapping("/email-check")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "이메일 중복 체크 성공")
+    })
+    public Response<Boolean> emailCheck(@RequestParam String email) {
+        return Response.success(authService.emailCheck(email));
     }
 
     @PostMapping(value = "/account/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

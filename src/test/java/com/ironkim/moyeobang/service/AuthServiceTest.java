@@ -76,6 +76,15 @@ class AuthServiceTest {
     }
 
     @Test
+    void 이메일이_존재하면_true를_반환한다() {
+        when(accountRepository.findByEmail("test@naver.com")).thenReturn(Optional.of(createAccount("testId")));
+
+        boolean result = sut.emailCheck("test@naver.com");
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
     void 계정회원가입이_정상적으로_동작한다() {
         AccountJoinRequest joinRequest = createJoinRequest(Set.of(Genre.ADVENTURE, Genre.CRIME));
         Account savedAccount = createAccount(joinRequest.getAccountId());
@@ -85,6 +94,7 @@ class AuthServiceTest {
                 createGenre(Genre.CRIME));
 
         when(accountRepository.findByAccountId(joinRequest.getAccountId())).thenReturn(Optional.empty());
+        when(accountRepository.findByEmail(joinRequest.getEmail())).thenReturn(Optional.empty());
         when(encoder.encode(joinRequest.getPassword())).thenReturn("encodedPassword");
         when(accountRepository.save(any(Account.class))).thenReturn(savedAccount);
         when(roleRepository.findByName("USER")).thenReturn(Optional.of(userRole));
@@ -113,9 +123,23 @@ class AuthServiceTest {
     }
 
     @Test
+    void 계정회원가입시_중복이메일이면_예외가_발생한다() {
+        AccountJoinRequest joinRequest = createJoinRequest(Set.of(Genre.ADVENTURE));
+        when(accountRepository.findByAccountId(joinRequest.getAccountId())).thenReturn(Optional.empty());
+        when(accountRepository.findByEmail(joinRequest.getEmail())).thenReturn(Optional.of(createAccount("otherId")));
+
+        MoyeobangApplicationException e = assertThrows(MoyeobangApplicationException.class,
+                () -> sut.AccountJoin(joinRequest));
+
+        assertThat(e.getErrorCode()).isEqualTo(ErrorCode.DUPLICATED_EMAIL);
+        then(accountRepository).should(never()).save(any(Account.class));
+    }
+
+    @Test
     void 계정회원가입시_USER역할이_없으면_예외가_발생한다() {
         AccountJoinRequest joinRequest = createJoinRequest(Set.of(Genre.ADVENTURE));
         when(accountRepository.findByAccountId(joinRequest.getAccountId())).thenReturn(Optional.empty());
+        when(accountRepository.findByEmail(joinRequest.getEmail())).thenReturn(Optional.empty());
         when(encoder.encode(joinRequest.getPassword())).thenReturn("encodedPassword");
         when(accountRepository.save(any(Account.class))).thenReturn(createAccount(joinRequest.getAccountId()));
         when(roleRepository.findByName("USER")).thenReturn(Optional.empty());
@@ -130,6 +154,7 @@ class AuthServiceTest {
     void 계정회원가입시_선호장르가_유효하지않으면_예외가_발생한다() {
         AccountJoinRequest joinRequest = createJoinRequest(Set.of(Genre.ADVENTURE, Genre.CRIME));
         when(accountRepository.findByAccountId(joinRequest.getAccountId())).thenReturn(Optional.empty());
+        when(accountRepository.findByEmail(joinRequest.getEmail())).thenReturn(Optional.empty());
         when(encoder.encode(joinRequest.getPassword())).thenReturn("encodedPassword");
         when(accountRepository.save(any(Account.class))).thenReturn(createAccount(joinRequest.getAccountId()));
         when(roleRepository.findByName("USER")).thenReturn(Optional.of(createRole("USER")));
