@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,17 +36,17 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "계정 ID 중복 체크 성공")
     })
-    public Response<Boolean> accountIdCheck(@PathVariable("accountId") String accountId) {
+    public Response<Boolean> accountIdCheck(@PathVariable String accountId) {
         return Response.success(authService.accountIdCheck(accountId));
     }
 
-    @PostMapping("/account/join")
+    @PostMapping(value = "/account/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공"),
             @ApiResponse(responseCode = "400", description = "요청 유효성 오류", content = @Content(schema = @Schema(implementation = Response.class))),
             @ApiResponse(responseCode = "409", description = "중복 계정 ID", content = @Content(schema = @Schema(implementation = Response.class)))
     })
-    public Response<AccountJoinResponse> AccountJoin(@RequestBody @Valid AccountJoinRequest joinRequest) {
+    public Response<AccountJoinResponse> AccountJoin(@ModelAttribute @Valid AccountJoinRequest joinRequest) {
         return Response.success(authService.AccountJoin(joinRequest));
     }
 

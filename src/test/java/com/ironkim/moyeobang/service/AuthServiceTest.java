@@ -201,18 +201,18 @@ class AuthServiceTest {
     }
 
     private AccountJoinRequest createJoinRequest(Set<Genre> preferenceGenres) {
-        return new AccountJoinRequest(
-                "testId",
-                "testPassw1!",
-                "testName",
-                "01012345678",
-                "test@naver.com",
-                "testProfileName",
-                "testProfileImage",
-                "testProfileText",
-                LocalDate.of(1990, 1, 1),
-                Gender.M,
-                preferenceGenres);
+        AccountJoinRequest request = new AccountJoinRequest();
+        request.setAccountId("testId");
+        request.setPassword("testPassw1!");
+        request.setName("testName");
+        request.setPhoneNumber("01012345678");
+        request.setEmail("test@naver.com");
+        request.setProfileName("testProfileName");
+        request.setProfileText("testProfileText");
+        request.setBirthday(LocalDate.of(1990, 1, 1));
+        request.setGender(Gender.M);
+        request.setPreferenceGenres(preferenceGenres);
+        return request;
     }
 
     private Account createAccount(String accountId) {

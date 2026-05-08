@@ -6,6 +6,7 @@ export const userState = atom({
     default: {
         token: '',
         accountId: '',
+        roles: [ROLETYPE.USER],
         roleType: ROLETYPE.USER,
     }
 });

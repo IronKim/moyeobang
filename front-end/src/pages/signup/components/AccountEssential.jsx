@@ -7,6 +7,7 @@ import SignupDiv from "./SignupDiv";
 import SignupText from "./SignupText";
 import SignupInputDiv from "./SignupInputDiv";
 import useDebounce from "../../../hooks/useDebounce";
+import { phone } from "../../../utils/formatters";
 import {
     validateAccount,
     validatePassword,
@@ -25,7 +26,7 @@ const NextButton = styled(BsArrowRightCircleFill)`
     }
 `
 
-const UserEssential = ({ inputuserData, onInput, nextPage }) => {
+const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
     const [accountError, setAccountError] = useState(false);
     const [accountMessage, setAccountMessage] = useState('');
     const [passwordError, setPasswordError] = useState(false);
@@ -39,7 +40,7 @@ const UserEssential = ({ inputuserData, onInput, nextPage }) => {
     const [emailError, setEmailError] = useState(false);
     const [emailMessage, setEmailMessage] = useState('');
 
-    const debounceQuery = useDebounce(inputuserData.accountId, 300);
+    const debounceQuery = useDebounce(inputAccountData.accountId, 300);
     const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
 
     useEffect(() => {
@@ -72,6 +73,7 @@ const UserEssential = ({ inputuserData, onInput, nextPage }) => {
     }
 
     const handlePasswordChange = (e) => {
+        if (e.target.value.includes(' ')) return;
         if (e.target.value.length > 20) return;
         setPasswordError(false);
         setConfirmPasswordError(false);
@@ -90,11 +92,13 @@ const UserEssential = ({ inputuserData, onInput, nextPage }) => {
     }
 
     const handlePhoneNumberChange = (e) => {
-        if (e.target.value.length > 11) return;
-        if (!/^[0-9]*$/.test(e.target.value)) return;
+        const normalizedPhoneNumber = phone.normalize(e.target.value);
+
+        if (normalizedPhoneNumber.length > 11) return;
+
         setPhoneNumberError(false);
         setPhoneNumberMessage('');
-        onInput(e);
+        onInput({ target: { name: e.target.name, value: normalizedPhoneNumber } });
     }
 
     const handleEmailChange = (e) => {
@@ -108,25 +112,25 @@ const UserEssential = ({ inputuserData, onInput, nextPage }) => {
         if (!isNextButtonClicked) {
             setIsNextButtonClicked(true);
 
-            const accountResult = validateAccount(inputuserData.accountId);
+            const accountResult = validateAccount(inputAccountData.accountId);
             setAccountError(!accountResult.isValid);
             setAccountMessage(accountResult.message);
 
-            const passwordResult = validatePassword(inputuserData.password, inputuserData.confirmPassword);
+            const passwordResult = validatePassword(inputAccountData.password, inputAccountData.confirmPassword);
             setPasswordError(!passwordResult.isValid && passwordResult.field === 'password');
             setPasswordMessage(!passwordResult.isValid && passwordResult.field === 'password' ? passwordResult.message : '');
             setConfirmPasswordError(!passwordResult.isValid && passwordResult.field === 'confirmPassword');
             setConfirmPasswordMessage(!passwordResult.isValid && passwordResult.field === 'confirmPassword' ? passwordResult.message : '');
 
-            const nameResult = validateName(inputuserData.name);
+            const nameResult = validateName(inputAccountData.name);
             setNameError(!nameResult.isValid);
             setNameMessage(nameResult.message);
 
-            const phoneResult = validatePhoneNumber(inputuserData.phoneNumber);
+            const phoneResult = validatePhoneNumber(inputAccountData.phoneNumber);
             setPhoneNumberError(!phoneResult.isValid);
             setPhoneNumberMessage(phoneResult.message);
 
-            const emailResult = validateEmail(inputuserData.email);
+            const emailResult = validateEmail(inputAccountData.email);
             setEmailError(!emailResult.isValid);
             setEmailMessage(emailResult.message);
 
@@ -147,16 +151,16 @@ const UserEssential = ({ inputuserData, onInput, nextPage }) => {
         <SignupDiv>
             <SignupText>회원가입(필수)</SignupText>
             <SignupInputDiv height={'600px'}>
-                <InputField name='accountId' value={inputuserData.accountId} onChange={handleAccountIdChange} label='아이디(6~20자 영문, 숫자만 입력)' max={20} error={accountError} helperText={accountMessage} />
-                <InputField name='password' type='password' value={inputuserData.password} onChange={handlePasswordChange} label='비밀번호(8~20자 영문, 숫자 조합)' max={20} error={passwordError} helperText={passwordMessage} />
-                <InputField name='confirmPassword' type='password' value={inputuserData.confirmPassword} onChange={handlePasswordChange} label='비밀번호 확인' max={20} error={confirmPasswordError} helperText={confirmPasswordMessage} />
-                <InputField name='name' value={inputuserData.name} onChange={handleNameChange} label='이름' max={20} error={nameError} helperText={nameMessage} />
-                <InputField name='phoneNumber' value={inputuserData.phoneNumber} onChange={handlePhoneNumberChange} label='휴대폰 번호(숫자만 입력)' max={10} error={phoneNumberError} helperText={phoneNumberMessage} />
-                <InputField name='email' value={inputuserData.email} onChange={handleEmailChange} label='이메일' max={50} error={emailError} helperText={emailMessage} onKeyDown={handleNextPage} />
+                <InputField name='accountId' value={inputAccountData.accountId} onChange={handleAccountIdChange} label='아이디(6~20자 영문, 숫자만 입력)' max={20} error={accountError} helperText={accountMessage} />
+                <InputField name='password' type='password' value={inputAccountData.password} onChange={handlePasswordChange} label='비밀번호(8~20자 영문, 숫자 조합)' max={20} error={passwordError} helperText={passwordMessage} />
+                <InputField name='confirmPassword' type='password' value={inputAccountData.confirmPassword} onChange={handlePasswordChange} label='비밀번호 확인' max={20} error={confirmPasswordError} helperText={confirmPasswordMessage} />
+                <InputField name='name' value={inputAccountData.name} onChange={handleNameChange} label='이름' max={20} error={nameError} helperText={nameMessage} />
+                <InputField name='phoneNumber' value={phone.format(inputAccountData.phoneNumber)} onChange={handlePhoneNumberChange} label='휴대폰 번호(숫자만 입력)' error={phoneNumberError} helperText={phoneNumberMessage} />
+                <InputField name='email' value={inputAccountData.email} onChange={handleEmailChange} label='이메일' max={50} error={emailError} helperText={emailMessage} onKeyDown={handleNextPage} />
                 <NextButton onClick={handleNextPage} />
             </SignupInputDiv>
         </SignupDiv>
     );
 };
 
-export default UserEssential;
+export default AccountEssential;

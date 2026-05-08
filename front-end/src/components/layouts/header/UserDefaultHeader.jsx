@@ -95,10 +95,10 @@ const UserDefaultHeader = () => {
             <HeaderNavContainer>
                 <Navs>
                     {
-                        userData.accountId === '' ? <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/login/user')}>로그인</NavButton> : <UserMenuButton />
+                        userData.accountId === '' ? <NavButton $roleType={userData.roleType} onClick={() => handleNavigate('/login')}>로그인</NavButton> : <UserMenuButton />
                     }
                     <NavButton onClick={() => handleNavigate('/')}>이벤트</NavButton>
-                    <NavButton onClick={() => handleNavigate('/sign-up/user')}>고객센터</NavButton>
+                    <NavButton onClick={() => handleNavigate('/sign-up')}>고객센터</NavButton>
                 </Navs>
             </HeaderNavContainer>
             <SloganLogoContainer onClick={() => handleNavigate('/')}>

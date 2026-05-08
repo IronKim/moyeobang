@@ -58,7 +58,7 @@ const ProfileImage = ({ id, src, onChange, width, height }) => {
             setUrl(blobUrl);
             setProfileImage(blobUrl);
             e.target.value = null;
-            onChange(blobUrl);
+            onChange(file);
         }
     };
 

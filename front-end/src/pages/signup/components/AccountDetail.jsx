@@ -103,11 +103,11 @@ const SignupButton = styled.button`
     }
 `
 
-const UserDetail = ({ inputuserData, onInput, Signup }) => {
+const AccountDetail = ({ inputAccountData, onInput, Signup }) => {
     const [isSignup, setIsSignup] = useState(false);
 
-    const handleFileChange = (blobUrl) => {
-        onInput({ target: { name: 'profileImage', value: blobUrl } }); // profileImage 업데이트
+    const handleFileChange = (file) => {
+        onInput({ target: { name: 'profileImage', value: file } });
     };
 
     const handleProfileNameChange = (e) => {
@@ -192,8 +192,8 @@ const UserDetail = ({ inputuserData, onInput, Signup }) => {
             <SignupInputDiv gap={'20px'} height={'100%'}>
                 <ProfileImage height={200} width={200} id='imageInput' onChange={handleFileChange} />
                 프로필 사진
-                <InputField name='profileName' value={inputuserData.profileName} onChange={handleProfileNameChange} label='닉네임' />
-                <TextareaField name='profileText' value={inputuserData.profileText} onChange={handleProfileTextChange} label={'프로필 소개글'} placeholder={'자기소개를 입력해주세요'} maxCount={100} />
+                <InputField name='profileName' value={inputAccountData.profileName} onChange={handleProfileNameChange} label='닉네임' />
+                <TextareaField name='profileText' value={inputAccountData.profileText} onChange={handleProfileTextChange} label={'프로필 소개글'} placeholder={'자기소개를 입력해주세요'} maxCount={100} />
                 <span style={{ fontSize: '28px' }}>성별</span>
                 <GenderDiv>
                     <GenderButton
@@ -235,4 +235,4 @@ const UserDetail = ({ inputuserData, onInput, Signup }) => {
     );
 };
 
-export default UserDetail;
+export default AccountDetail;

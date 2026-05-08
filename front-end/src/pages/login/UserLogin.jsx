@@ -21,16 +21,7 @@ const ButtonDiv = styled.div`
 `
 
 const SignUpButton = styled.p`
-    color: black;
-
-    &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-`
-
-const SellerLoginButton = styled.p`
-    color: black;
+    color: #007BFF;
 
     &:hover {
         text-decoration: underline;
@@ -141,10 +132,9 @@ const UserLogin = () => {
                         <InputField name='accountId' value={inputdata.accountId} onChange={handleAccountChange} label={'아이디'} helperText={helperText.accountId} onKeyDown={handleLogin} />
                         <InputField type='password' name='password' value={inputdata.password} onChange={handlePasswordChange} label={'비밀번호'} helperText={helperText.password} onKeyDown={handleLogin} />
                         <LoginButton onClick={handleLogin}>로그인</LoginButton>
+                        계정이 없으신가요?&nbsp;
                         <ButtonDiv>
-                            <SignUpButton onClick={() => navigate('/sign-up/user')} >회원가입</SignUpButton>
-                            /
-                            <SellerLoginButton onClick={() => navigate('/login/seller')}>사업자용 로그인</SellerLoginButton>
+                            <SignUpButton onClick={() => navigate('/sign-up')} >회원가입</SignUpButton>
                         </ButtonDiv>  
                     </LoginInputDiv>
                 </LoginDiv>

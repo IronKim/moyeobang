@@ -12,26 +12,19 @@ export const useSetupUserDataByToken = () => {
     return () => {
         const token = localStorage.getItem('moyeobangToken');
         if (token) {
-            let decodingInfoJson = jwtDecode(token);
+            const decodingInfoJson = jwtDecode(token);
+            const roles = Array.isArray(decodingInfoJson.roles) && decodingInfoJson.roles.length > 0
+                ? decodingInfoJson.roles
+                : [ROLETYPE.USER];
 
-            if (decodingInfoJson.RoleType === ROLETYPE.USER) {
-                setUserData({
-                    token: token,
-                    accountId: decodingInfoJson.AccountId,
-                    roleType: decodingInfoJson.RoleType,
-                    profileImage: decodingInfoJson.ProfileImage,
-                    profileName: decodingInfoJson.ProfileName,
-                });
-            } else if (decodingInfoJson.RoleType === ROLETYPE.SELLER) {
-                setUserData({
-                    token: token,
-                    accountId: decodingInfoJson.AccountId,
-                    roleType: decodingInfoJson.RoleType,
-                    name: decodingInfoJson.Name,
-                    businessName: decodingInfoJson.BusinessName,
-                    authStatus: decodingInfoJson.AuthStatus
-                });
-            }
+            setUserData({
+                token: token,
+                accountId: decodingInfoJson.AccountId,
+                roles: roles,
+                roleType: roles[0],
+                profileImage: decodingInfoJson.ProfileImage,
+                profileName: decodingInfoJson.ProfileName,
+            });
         }
     };
 }
@@ -105,6 +98,7 @@ export const useChangeRoleType = () => {
     return (roleType) => {
         setUserData(prevState => ({
             ...prevState,
+            roles: [roleType],
             roleType: roleType
         }));
     }

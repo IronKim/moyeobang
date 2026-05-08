@@ -25,23 +25,22 @@ public class FileUploadService {
     @Value("${supabase.public-domain}")
     private String publicDomain;
 
-    public List<String> uploadFiles(List<MultipartFile> files) {
+    public List<String> uploadFiles(List<MultipartFile> files, String directory) {
         return files.stream().map(file -> {
             try {
                 String randomFilename = generateRandomFilename(file);
 
                 PutObjectRequest request = PutObjectRequest.builder()
                         .bucket(bucket)
-                        .key(randomFilename)
+                        .key(directory + "/" + randomFilename)
                         .contentType(file.getContentType())
                         .build();
 
                 s3Client.putObject(
                         request,
-                        RequestBody.fromInputStream(file.getInputStream(), file.getSize())
-                );
+                        RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-                return publicDomain + "/" + bucket + "/" + randomFilename;
+                return publicDomain + "/" + directory + "/" + randomFilename;
 
             } catch (IOException e) {
                 throw new MoyeobangApplicationException(ErrorCode.INTERNAL_SERVER_ERROR);
@@ -58,8 +57,7 @@ public class FileUploadService {
                     HeadObjectRequest.builder()
                             .bucket(bucket)
                             .key(objectKey)
-                            .build()
-            );
+                            .build());
         } catch (NoSuchKeyException e) {
             throw new MoyeobangApplicationException(ErrorCode.BAD_REQUEST);
         } catch (S3Exception e) {
@@ -72,8 +70,7 @@ public class FileUploadService {
                     DeleteObjectRequest.builder()
                             .bucket(bucket)
                             .key(objectKey)
-                            .build()
-            );
+                            .build());
         } catch (S3Exception e) {
             throw new MoyeobangApplicationException(ErrorCode.INTERNAL_SERVER_ERROR);
         }

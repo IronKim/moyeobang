@@ -354,17 +354,17 @@ class AccountJoinRequestTest {
                         String profileText,
                         LocalDate birthday,
                         Gender gender) {
-                return new AccountJoinRequest(
-                                accountId,
-                                password,
-                                name,
-                                phoneNumber,
-                                email,
-                                profileName,
-                                profileImage,
-                                profileText,
-                                birthday,
-                                gender,
-                                Set.of(Genre.ADVENTURE, Genre.CRIME));
+                AccountJoinRequest request = new AccountJoinRequest();
+                request.setAccountId(accountId);
+                request.setPassword(password);
+                request.setName(name);
+                request.setPhoneNumber(phoneNumber);
+                request.setEmail(email);
+                request.setProfileName(profileName);
+                request.setProfileText(profileText);
+                request.setBirthday(birthday);
+                request.setGender(gender);
+                request.setPreferenceGenres(Set.of(Genre.ADVENTURE, Genre.CRIME));
+                return request;
         }
 }

@@ -26,6 +26,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,25 +46,21 @@ public class AuthControllerTest {
 
         @Test
         void 계정회원가입() throws Exception {
-                AccountJoinRequest accountJoinRequest = new AccountJoinRequest(
-                                "testId",
-                                "testPassw1!",
-                                "testName",
-                                "01012345678",
-                                "test@naver.com",
-                                "testProfileImage",
-                                "testProfileName",
-                                "testProfileText",
-                                LocalDate.of(1990, 1, 1),
-                                M,
-                                Set.of(Genre.ADVENTURE, Genre.CRIME));
+                AccountJoinRequest accountJoinRequest = createJoinRequest("testId");
                 when(authService.AccountJoin(any(AccountJoinRequest.class)))
                                 .thenReturn(new AccountJoinResponse("testId", "testName"));
 
-                mockMvc.perform(post("/api/v1/auth/account/join")
-                                .content(objectMapper.writeValueAsBytes(accountJoinRequest))
-                                .contentType(MediaType.APPLICATION_JSON) // 요청 헤더에 application/json을 담아서 보내는 것을 의미
-                ).andDo(print())
+                mockMvc.perform(multipart("/api/v1/auth/account/join")
+                                .param("accountId", accountJoinRequest.getAccountId())
+                                .param("password", accountJoinRequest.getPassword())
+                                .param("name", accountJoinRequest.getName())
+                                .param("phoneNumber", accountJoinRequest.getPhoneNumber())
+                                .param("email", accountJoinRequest.getEmail())
+                                .param("profileName", accountJoinRequest.getProfileName())
+                                .param("profileText", accountJoinRequest.getProfileText())
+                                .param("birthday", accountJoinRequest.getBirthday().toString())
+                                .param("gender", accountJoinRequest.getGender().name())
+                                .param("preferenceGenres", Genre.ADVENTURE.name(), Genre.CRIME.name())).andDo(print())
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value("SUCCESS"))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.accountId").value("testId"))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.name").value("testName"))
@@ -72,24 +69,22 @@ public class AuthControllerTest {
 
         @Test
         void 이미_회원가입된_아이디로_계정회원가입하는경우_에러반환() throws Exception {
-                AccountJoinRequest accountJoinRequest = new AccountJoinRequest(
-                                "testId",
-                                "testPassw1!",
-                                "testName",
-                                "01012345678",
-                                "test@naver.com",
-                                "testProfileImage",
-                                "testProfileName",
-                                "testProfileText",
-                                LocalDate.of(1990, 1, 1),
-                                M,
-                                Set.of(Genre.ADVENTURE, Genre.CRIME));
+                AccountJoinRequest accountJoinRequest = createJoinRequest("testId");
                 when(authService.AccountJoin(any(AccountJoinRequest.class)))
                                 .thenThrow(new MoyeobangApplicationException(ErrorCode.DUPLICATED_ACCOUNT_ID));
 
-                mockMvc.perform(post("/api/v1/auth/account/join")
-                                .content(objectMapper.writeValueAsBytes(accountJoinRequest))
-                                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                mockMvc.perform(multipart("/api/v1/auth/account/join")
+                                .param("accountId", accountJoinRequest.getAccountId())
+                                .param("password", accountJoinRequest.getPassword())
+                                .param("name", accountJoinRequest.getName())
+                                .param("phoneNumber", accountJoinRequest.getPhoneNumber())
+                                .param("email", accountJoinRequest.getEmail())
+                                .param("profileName", accountJoinRequest.getProfileName())
+                                .param("profileText", accountJoinRequest.getProfileText())
+                                .param("birthday", accountJoinRequest.getBirthday().toString())
+                                .param("gender", accountJoinRequest.getGender().name())
+                                .param("preferenceGenres", Genre.ADVENTURE.name(), Genre.CRIME.name()))
+                                .andDo(print())
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode")
                                                 .value(ErrorCode.DUPLICATED_ACCOUNT_ID.name()))
                                 .andExpect(status().isConflict());
@@ -97,22 +92,20 @@ public class AuthControllerTest {
 
         @Test
         void 요청이_유효하지_않은_경우_계정회원가입_에러반환() throws Exception {
-                AccountJoinRequest accountJoinRequest = new AccountJoinRequest(
-                                "test",
-                                "testPassw1!",
-                                "testName",
-                                "01012345678",
-                                "test@naver.com",
-                                "testProfileImage",
-                                "testProfileName",
-                                "testProfileText",
-                                LocalDate.of(1990, 1, 1),
-                                M,
-                                Set.of(Genre.ADVENTURE, Genre.CRIME));
+                AccountJoinRequest accountJoinRequest = createJoinRequest("test");
 
-                mockMvc.perform(post("/api/v1/auth/account/join")
-                                .content(objectMapper.writeValueAsBytes(accountJoinRequest))
-                                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                mockMvc.perform(multipart("/api/v1/auth/account/join")
+                                .param("accountId", accountJoinRequest.getAccountId())
+                                .param("password", accountJoinRequest.getPassword())
+                                .param("name", accountJoinRequest.getName())
+                                .param("phoneNumber", accountJoinRequest.getPhoneNumber())
+                                .param("email", accountJoinRequest.getEmail())
+                                .param("profileName", accountJoinRequest.getProfileName())
+                                .param("profileText", accountJoinRequest.getProfileText())
+                                .param("birthday", accountJoinRequest.getBirthday().toString())
+                                .param("gender", accountJoinRequest.getGender().name())
+                                .param("preferenceGenres", Genre.ADVENTURE.name(), Genre.CRIME.name()))
+                                .andDo(print())
                                 .andExpect(status().isBadRequest());
         }
 
@@ -178,5 +171,20 @@ public class AuthControllerTest {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.resultCode").value("SUCCESS"))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.result").value(false))
                                 .andExpect(status().isOk());
+        }
+
+        private AccountJoinRequest createJoinRequest(String accountId) {
+                AccountJoinRequest request = new AccountJoinRequest();
+                request.setAccountId(accountId);
+                request.setPassword("testPassw1!");
+                request.setName("testName");
+                request.setPhoneNumber("01012345678");
+                request.setEmail("test@naver.com");
+                request.setProfileName("testProfileName");
+                request.setProfileText("testProfileText");
+                request.setBirthday(LocalDate.of(1990, 1, 1));
+                request.setGender(M);
+                request.setPreferenceGenres(Set.of(Genre.ADVENTURE, Genre.CRIME));
+                return request;
         }
 }

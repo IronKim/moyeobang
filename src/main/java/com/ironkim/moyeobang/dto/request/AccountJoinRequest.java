@@ -1,6 +1,7 @@
 package com.ironkim.moyeobang.dto.request;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import com.ironkim.moyeobang.domain.constant.Genre;
@@ -18,9 +19,13 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "AccountJoinRequest", description = "회원가입 요청 DTO")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountJoinRequest {
@@ -54,8 +59,8 @@ public class AccountJoinRequest {
     @Length(max = 20)
     private String profileName;
 
-    @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg")
-    private String profileImage;
+    @Schema(description = "프로필 이미지 파일")
+    private List<MultipartFile> profileImage;
 
     @Schema(description = "프로필 소개글", example = "안녕하세요! 반갑습니다.")
     @Length(max = 100)
@@ -63,6 +68,7 @@ public class AccountJoinRequest {
 
     @Schema(description = "생년월일", example = "2000-01-01")
     @FourteenYearsOrOlder(nullable = true)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
     @Schema(description = "성별", example = "M 또는 F")
