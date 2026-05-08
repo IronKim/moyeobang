@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "price_policy_id", "min_headcount", "max_headcount" }))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "price_policy_id", "headcount" }))
 @Getter
 @Builder
 @NoArgsConstructor
