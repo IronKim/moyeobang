@@ -62,7 +62,7 @@ export const useLogin = () => {
                 }).catch(error => {
                     failLogin(error.response.status);
             });
-        } else if(roleType === ROLETYPE.SELLER) {
+        } else if(roleType === ROLETYPE.OWNER) {
             sellerLogin(inputdata)
                 .then(response => {
                     successLogin(response.data.result.token);

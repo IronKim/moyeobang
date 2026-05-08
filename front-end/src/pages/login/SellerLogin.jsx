@@ -44,7 +44,7 @@ const SellerLogin = () => {
     const login = useLogin();
 
     useEffect(() => {
-        changeRoleType(ROLETYPE.SELLER);
+        changeRoleType(ROLETYPE.OWNER);
     }, [changeRoleType]);
 
     const [helperText, setHelperText] = useState({
@@ -131,7 +131,7 @@ const SellerLogin = () => {
             return;
         }
 
-        login(inputdata, ROLETYPE.SELLER);
+        login(inputdata, ROLETYPE.OWNER);
     }
 
     return (

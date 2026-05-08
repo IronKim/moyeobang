@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled, {css} from "styled-components";
 import {IoMenu} from "react-icons/io5";
 import basicProfileImg from "../assets/images/BasicProfileImg.png";
@@ -166,13 +166,33 @@ const UserMenuButton = () => {
     const [ismenuOpen, setIsmenuOpen] = useState(false);
     const userData = useRecoilValue(userState);
     const logout = useLogout();
+    const navigate = useNavigate();
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        if (!ismenuOpen) {
+            return;
+        }
+
+        const handleOutsideClick = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsmenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [ismenuOpen]);
 
     const menuButtonClick = () => {
         setIsmenuOpen(!ismenuOpen);
     }
 
     return (
-        <Container>
+        <Container ref={menuRef}>
             <UserMenuButtonContainer $ismenuOpen={ismenuOpen} onClick={menuButtonClick}>
                 <IoMenu size={30} color={'lightgrey'} />
                 {
@@ -195,7 +215,7 @@ const UserMenuButton = () => {
                             </UserNameDiv>
                         </UserDataDiv>
                         <Div>
-                            <p>개인정보 수정</p>
+                            <p onClick={() => navigate('/my-page')}>개인정보 수정</p>
                         </Div>
                         <Div>
                             <p>예약내역</p>

@@ -12,6 +12,7 @@ import MoyeobangBoard from "./pages/moyeobangBoard/MoyeobangBoard";
 import RoomBoard from "./pages/roomBoard/RoomBoard";
 import MoyeobangBoardDetail from "./pages/moyeobangBoard/MoyeobangBoardDetail";
 import RoomBoardDetail from "./pages/roomBoard/RoomBoardDetail";
+import MyPage from "./pages/mypage/MyPage";
 
 const View = () => {
     const setupUserDataByToken = useSetupUserDataByToken();
@@ -55,6 +56,11 @@ const View = () => {
                     <Route path='sign-up' element={
                         <UserDefaultLayout>
                             <AccountSignup />
+                        </UserDefaultLayout>
+                    } />
+                    <Route path='my-page' element={
+                        <UserDefaultLayout>
+                            <MyPage />
                         </UserDefaultLayout>
                     } />
                     <Route path="*" />
