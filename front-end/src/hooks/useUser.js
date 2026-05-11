@@ -5,6 +5,7 @@ import {useResetRecoilState, useSetRecoilState} from "recoil";
 import {accountLogin} from "../api/AuthApiService";
 import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
+import {useMutation} from "react-query";
 
 const PREFERRED_ROLE_TYPE_KEY = 'moyeobangPreferredRoleType';
 
@@ -42,37 +43,43 @@ export const useSetupUserDataByToken = () => {
 export const useLogin = () => {
     const navigate = useNavigate();
     const setupUserDataByToken = useSetupUserDataByToken();
-    const successLogin = (token) => {
-        localStorage.setItem('moyeobangToken', token);
-        setupUserDataByToken();
-        navigate('/');
-        Swal.fire({
-            icon: 'success',
-            title: '로그인 성공',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
-
-    const failLogin = (status) => {
-        Swal.fire({
-            icon: 'error',
-            title: '로그인 실패',
-            text: status === 500 ?  '서버 오류입니다. 잠시 후 다시 시도해주세요.' : '아이디 또는 비밀번호를 확인해주세요.',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
-
-    return (inputdata, roleType) => {
-        if(roleType === ROLETYPE.USER) {
-            accountLogin(inputdata)
-                .then(response => {
-                    successLogin(response.data.result.token);
-                }).catch(error => {
-                    failLogin(error.response.status);
-            });
+    const loginMutation = useMutation(
+        async (inputdata) => {
+            const response = await accountLogin(inputdata);
+            return response.data.result.token;
+        },
+        {
+            onSuccess: (token) => {
+                localStorage.setItem('moyeobangToken', token);
+                setupUserDataByToken();
+                navigate('/');
+                Swal.fire({
+                    icon: 'success',
+                    title: '로그인 성공',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            },
+            onError: (error) => {
+                const status = error?.response?.status;
+                Swal.fire({
+                    icon: 'error',
+                    title: '로그인 실패',
+                    text: status === 500 ?  '서버 오류입니다. 잠시 후 다시 시도해주세요.' : '아이디 또는 비밀번호를 확인해주세요.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            },
         }
+    );
+
+    return {
+        login: (inputdata, roleType) => {
+            if (roleType === ROLETYPE.USER) {
+                loginMutation.mutate(inputdata);
+            }
+        },
+        isLoggingIn: loginMutation.isLoading,
     };
 }
 

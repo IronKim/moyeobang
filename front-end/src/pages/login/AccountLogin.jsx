@@ -8,6 +8,7 @@ import LoginDiv from "./components/LoginDiv";
 import LoginText from "./components/LoginText";
 import LoginInputDiv from "./components/LoginInputDiv";
 import LoginButton from "./components/LoginButton";
+import ProgressToast from "./components/ProgressToast";
 import {useChangeRoleType, useLogin} from "../../hooks/useUser";
 import {ROLETYPE} from "../../constants/ROLETYPE";
 
@@ -32,7 +33,7 @@ const SignUpButton = styled.p`
 const AccountLogin = () => {
     const navigate = useNavigate();
     const changeRoleType = useChangeRoleType();
-    const login = useLogin();
+    const { login, isLoggingIn } = useLogin();
 
     useEffect(() => {
         changeRoleType(ROLETYPE.USER);
@@ -125,13 +126,14 @@ const AccountLogin = () => {
 
     return (
         <MainContainer height={'68.9852vh'} >
+            <ProgressToast open={isLoggingIn} text={'로그인 처리 중입니다...'} />
             <MainBox>
                 <LoginDiv>
                     <LoginText>로그인</LoginText>
                     <LoginInputDiv>
                         <InputField name='accountId' value={inputdata.accountId} onChange={handleAccountChange} label={'아이디'} helperText={helperText.accountId} onKeyDown={handleLogin} />
                         <InputField type='password' name='password' value={inputdata.password} onChange={handlePasswordChange} label={'비밀번호'} helperText={helperText.password} onKeyDown={handleLogin} />
-                        <LoginButton onClick={handleLogin}>로그인</LoginButton>
+                        <LoginButton onClick={handleLogin} disabled={isLoggingIn}>{isLoggingIn ? '로그인 중...' : '로그인'}</LoginButton>
                         계정이 없으신가요?&nbsp;
                         <ButtonDiv>
                             <SignUpButton onClick={() => navigate('/sign-up')} >회원가입</SignUpButton>
