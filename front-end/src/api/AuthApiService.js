@@ -6,4 +6,4 @@ export const emailCheck = (email) => apiClient.get(`api/v1/auth/email-check`, { 
 
 export const accountJoin = (accountJoinRequest) => apiClient.post(`api/v1/auth/account/join`, accountJoinRequest);
 
-export const userLogin = (userLoginRequest) => apiClient.post(`api/v1/auth/account/login`, userLoginRequest);
+export const accountLogin = (accountLoginRequest) => apiClient.post(`api/v1/auth/account/login`, accountLoginRequest);

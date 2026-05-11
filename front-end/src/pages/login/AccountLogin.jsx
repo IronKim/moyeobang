@@ -29,7 +29,7 @@ const SignUpButton = styled.p`
     }
 `
 
-const UserLogin = () => {
+const AccountLogin = () => {
     const navigate = useNavigate();
     const changeRoleType = useChangeRoleType();
     const login = useLogin();
@@ -143,4 +143,4 @@ const UserLogin = () => {
     );
 };
 
-export default UserLogin;
+export default AccountLogin;

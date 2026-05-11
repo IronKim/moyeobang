@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useSetupUserDataByToken } from "./hooks/useUser";
-import UserLogin from "./pages/login/UserLogin";
+import AccountLogin from "./pages/login/AccountLogin";
 import AccountSignup from "./pages/signup/AccountSignup";
 import { ReactQueryDevtools } from "react-query/devtools";
 import UserDefaultLayout from "./components/layouts/UserDefaultLayout";
@@ -48,7 +48,7 @@ const View = () => {
                     } />
                     <Route path='login' element={
                          <UserDefaultLayout>
-                            <UserLogin />
+                            <AccountLogin />
                         </UserDefaultLayout>
                     } />
                     <Route path='sign-up' element={

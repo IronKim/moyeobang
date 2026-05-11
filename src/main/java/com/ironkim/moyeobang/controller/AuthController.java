@@ -1,5 +1,6 @@
 package com.ironkim.moyeobang.controller;
 
+import com.ironkim.moyeobang.dto.response.AccountLoginResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +20,6 @@ import com.ironkim.moyeobang.dto.request.AccountJoinRequest;
 import com.ironkim.moyeobang.dto.request.AccountLoginRequest;
 import com.ironkim.moyeobang.dto.response.AccountJoinResponse;
 import com.ironkim.moyeobang.dto.response.Response;
-import com.ironkim.moyeobang.dto.response.UserLoginResponse;
 import com.ironkim.moyeobang.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -65,7 +65,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "비밀번호 불일치", content = @Content(schema = @Schema(implementation = Response.class))),
             @ApiResponse(responseCode = "404", description = "계정 없음", content = @Content(schema = @Schema(implementation = Response.class)))
     })
-    public Response<UserLoginResponse> Accountlogin(@RequestBody AccountLoginRequest userLoginRequest) {
-        return Response.success(new UserLoginResponse(authService.AccountLogin(userLoginRequest)));
+    public Response<AccountLoginResponse> Accountlogin(@RequestBody AccountLoginRequest accountLoginRequest) {
+        return Response.success(new AccountLoginResponse(authService.AccountLogin(accountLoginRequest)));
     }
 }
