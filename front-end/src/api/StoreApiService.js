@@ -7,3 +7,11 @@ export const registerStore = (storeRegisterRequest) => {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
 };
+
+export const getMyStores = () => {
+    const token = localStorage.getItem('moyeobangToken');
+
+    return apiClient.get('api/v1/store/my', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+};

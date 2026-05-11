@@ -8,6 +8,8 @@ import StoreRegistration from "./components/StoreRegistration";
 import StoreModification from "./components/StoreModification";
 import EscapeRoomRegistration from "./components/EscapeRoomRegistration";
 import EscapeRoomModification from "./components/EscapeRoomModification";
+import {useRecoilValue} from "recoil";
+import {selectedStoreState} from "../../atoms/selectedStoreState";
 
 const OwnerMain = styled.div`
     padding: 20px;
@@ -16,6 +18,7 @@ const OwnerMain = styled.div`
 
 const OwnerHome = () => {
     const [selectedMenu, setSelectedMenu] = useState(OWNERMENU.HOME);
+    const selectedStoreId = useRecoilValue(selectedStoreState);
 
     return (
         <MainContainer backgroundColor={'#D2D2D2'} height={'100%'} style={{minHeight: '800px'}}>
@@ -29,13 +32,13 @@ const OwnerHome = () => {
                         selectedMenu === OWNERMENU.STORE_REGISTRATION && <StoreRegistration />
                     }
                     {
-                        selectedMenu === OWNERMENU.STORE_MODIFICATION && <StoreModification />
+                        selectedMenu === OWNERMENU.STORE_MODIFICATION && <StoreModification selectedStoreId={selectedStoreId} />
                     }
                     {
-                        selectedMenu === OWNERMENU.ESCAPE_ROOM_REGISTRATION && <EscapeRoomRegistration />
+                        selectedMenu === OWNERMENU.ESCAPE_ROOM_REGISTRATION && <EscapeRoomRegistration selectedStoreId={selectedStoreId} />
                     }
                     {
-                        selectedMenu === OWNERMENU.ESCAPE_ROOM_MODIFICATION && <EscapeRoomModification />
+                        selectedMenu === OWNERMENU.ESCAPE_ROOM_MODIFICATION && <EscapeRoomModification selectedStoreId={selectedStoreId} />
                     }
                 </OwnerMain>
             </MainBox>

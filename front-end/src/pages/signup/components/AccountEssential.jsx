@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import InputField from "../../../components/InputField";
 import { useBeforeunload } from "react-beforeunload";
@@ -6,7 +6,7 @@ import { BsArrowRightCircleFill } from "react-icons/bs";
 import SignupDiv from "./SignupDiv";
 import SignupText from "./SignupText";
 import SignupInputDiv from "./SignupInputDiv";
-import useDebounce from "../../../hooks/useDebounce";
+import { useSignupDupChecks } from "../../../hooks/useSignupDupChecks";
 import { phone } from "../../../utils/formatters";
 import {
     validateAccount,
@@ -14,8 +14,6 @@ import {
     validateName,
     validatePhoneNumber,
     validateEmail,
-    checkAccountDup,
-    checkEmailDup,
 } from "../../../utils/validation";
 
 const NextButton = styled(BsArrowRightCircleFill)`
@@ -28,8 +26,6 @@ const NextButton = styled(BsArrowRightCircleFill)`
 `
 
 const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
-    const [accountError, setAccountError] = useState(false);
-    const [accountMessage, setAccountMessage] = useState('');
     const [passwordError, setPasswordError] = useState(false);
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
     const [passwordMessage, setPasswordMessage] = useState('');
@@ -38,62 +34,18 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
     const [nameMessage, setNameMessage] = useState('');
     const [phoneNumberError, setPhoneNumberError] = useState(false);
     const [phoneNumberMessage, setPhoneNumberMessage] = useState('');
-    const [emailError, setEmailError] = useState(false);
-    const [emailMessage, setEmailMessage] = useState('');
-
-    const debounceAccountId = useDebounce(inputAccountData.accountId, 300);
-    const debounceEmail = useDebounce(inputAccountData.email, 300);
+    const {
+        accountError,
+        accountMessage,
+        emailError,
+        emailMessage,
+        refetchAll,
+    } = useSignupDupChecks(inputAccountData.accountId, inputAccountData.email);
     const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
-
-    useEffect(() => {
-        if (!debounceAccountId) return;
-        const result = validateAccount(debounceAccountId);
-        if (!result.isValid) {
-            setAccountError(true);
-            setAccountMessage(result.message);
-            return;
-        }
-        checkAccountDup(debounceAccountId)
-            .then(response => {
-                if (response.data.result === true) {
-                    setAccountError(true);
-                    setAccountMessage('이미 사용중인 아이디입니다.');
-                } else {
-                    setAccountError(false);
-                    setAccountMessage('');
-                }
-            })
-            .catch(error => console.log(error));
-    }, [debounceAccountId]);
-
-    useEffect(() => {
-        if (!debounceEmail) return;
-
-        const result = validateEmail(debounceEmail);
-        if (!result.isValid) {
-            setEmailError(true);
-            setEmailMessage(result.message);
-            return;
-        }
-
-        checkEmailDup(debounceEmail)
-            .then(response => {
-                if (response.data.result === true) {
-                    setEmailError(true);
-                    setEmailMessage('이미 사용중인 이메일입니다.');
-                } else {
-                    setEmailError(false);
-                    setEmailMessage('');
-                }
-            })
-            .catch(error => console.log(error));
-    }, [debounceEmail]);
 
     const handleAccountIdChange = (e) => {
         if (e.target.value.length > 20) return;
         if (!/^[a-zA-Z0-9]*$/.test(e.target.value)) return;
-        setAccountError(false);
-        setAccountMessage('');
         onInput(e);
     }
 
@@ -128,8 +80,6 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
 
     const handleEmailChange = (e) => {
         if (e.target.value.length > 50) return;
-        setEmailError(false);
-        setEmailMessage('');
         onInput(e);
     }
 
@@ -161,13 +111,7 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
 
             if (accountResult.isValid && passwordResult.isValid && nameResult.isValid && phoneResult.isValid && emailResult.isValid) {
                 try {
-                    const [accountDupResponse, emailDupResponse] = await Promise.all([
-                        checkAccountDup(inputAccountData.accountId),
-                        checkEmailDup(inputAccountData.email),
-                    ]);
-
-                    const isDuplicatedAccount = accountDupResponse.data.result === true;
-                    const isDuplicatedEmail = emailDupResponse.data.result === true;
+                    const { isDuplicatedAccount, isDuplicatedEmail } = await refetchAll();
 
                     setAccountError(isDuplicatedAccount);
                     setAccountMessage(isDuplicatedAccount ? '이미 사용중인 아이디입니다.' : '');

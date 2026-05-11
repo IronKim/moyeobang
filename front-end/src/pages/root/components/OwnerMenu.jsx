@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 import {IoMdHome} from "react-icons/io";
+import {Select} from "antd";
 import {OWNERMENU} from "../../../constants/OWNERMENU";
 import {useNavigate} from "react-router-dom";
 import {useSetRecoilState} from "recoil";
 import Swal from "sweetalert2";
 import {ROLETYPE} from "../../../constants/ROLETYPE";
 import {userState} from "../../../atoms/userState";
+import {selectedStoreState} from "../../../atoms/selectedStoreState";
 import {useLogout} from "../../../hooks/useUser";
+import {useMyStores} from "../../../hooks/useMyStores";
 
 const Menu = styled.div`
     display: flex;
@@ -110,6 +113,29 @@ const SubMenuItem = styled.div`
     }
 `;
 
+const StoreSelectWrap = styled.div`
+    margin-top: 10px;
+`;
+
+const StyledSelect = styled(Select)`
+    width: 100%;
+
+    .ant-select-selector {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        color: #ffffff !important;
+        border-radius: 10px !important;
+    }
+
+    .ant-select-selection-placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .ant-select-arrow {
+        color: rgba(255, 255, 255, 0.7);
+    }
+`;
+
 // MainMenu 컴포넌트
 const MainMenu = ({ onClick, label, isActive}) => (
     <MainMenuContainer onClick={onClick} >
@@ -138,10 +164,26 @@ const SubMenu = ({ items, activeItem, onItemClick }) => (
 const OwnerMenu = ({setSelectedMenu}) => {
     const navigate = useNavigate();
     const setUserData = useSetRecoilState(userState);
+    const setSelectedStoreId = useSetRecoilState(selectedStoreState);
     const logout = useLogout();
     const [activeMainMenus, setActiveMainMenus] = useState({});
     const [visibleSubMenus, setVisibleSubMenus] = useState({});
     const [activeTab, setActiveTab] = useState(null);
+    const [selectedStoreId, setSelectedStoreIdLocal] = useState(null);
+
+    const { data: stores = [] } = useMyStores();
+
+    useEffect(() => {
+        if (stores.length === 1 && selectedStoreId !== stores[0].storeId) {
+            setSelectedStoreIdLocal(stores[0].storeId);
+            setSelectedStoreId(stores[0].storeId);
+        }
+    }, [selectedStoreId, setSelectedStoreId, stores]);
+
+    const handleStoreChange = (value) => {
+        setSelectedStoreIdLocal(value);
+        setSelectedStoreId(value);
+    };
 
     const handleSwitchToUserHome = () => {
         Swal.fire({
@@ -212,8 +254,20 @@ const OwnerMenu = ({setSelectedMenu}) => {
     return (
         <Menu>
             <div style={{width: '90%'}}>
-                <div style={{marginTop: '18px', marginLeft: '4px', marginBottom: '6px'}}>
-                    <IoMdHome fontSize={'32px'}/>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '18px', marginBottom: '10px'}}>
+                    <IoMdHome fontSize={'32px'} style={{flexShrink: 0}}/>
+                    <StoreSelectWrap style={{flex: 1, marginTop: 0}}>
+                        <StyledSelect
+                            placeholder="업체를 선택해주세요"
+                            options={stores.map((s) => ({
+                                label: `${s.businessName} ${s.branchName}`,
+                                value: s.storeId,
+                            }))}
+                            value={selectedStoreId}
+                            onChange={handleStoreChange}
+                            notFoundContent={<span style={{color: '#aaa', fontSize: '13px'}}>등록된 업체가 없습니다</span>}
+                        />
+                    </StoreSelectWrap>
                 </div>
                 <div style={{border: '1px solid white'}}></div>
                 {menus.map((menu, index) => (
