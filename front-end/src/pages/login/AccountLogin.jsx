@@ -8,7 +8,7 @@ import LoginDiv from "./components/LoginDiv";
 import LoginText from "./components/LoginText";
 import LoginInputDiv from "./components/LoginInputDiv";
 import LoginButton from "./components/LoginButton";
-import ProgressToast from "./components/ProgressToast";
+import ProgressToast from "../../components/ProgressToast";
 import {useChangeRoleType, useLogin} from "../../hooks/useUser";
 import {ROLETYPE} from "../../constants/ROLETYPE";
 

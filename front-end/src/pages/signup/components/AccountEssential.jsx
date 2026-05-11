@@ -9,11 +9,9 @@ import SignupInputDiv from "./SignupInputDiv";
 import { useSignupDupChecks } from "../../../hooks/useSignupDupChecks";
 import { phone } from "../../../utils/formatters";
 import {
-    validateAccount,
     validatePassword,
     validateName,
     validatePhoneNumber,
-    validateEmail,
 } from "../../../utils/validation";
 
 const NextButton = styled(BsArrowRightCircleFill)`
@@ -39,7 +37,7 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
         accountMessage,
         emailError,
         emailMessage,
-        refetchAll,
+        validateForSubmit,
     } = useSignupDupChecks(inputAccountData.accountId, inputAccountData.email);
     const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
 
@@ -87,10 +85,6 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
         if (!isNextButtonClicked) {
             setIsNextButtonClicked(true);
 
-            const accountResult = validateAccount(inputAccountData.accountId);
-            setAccountError(!accountResult.isValid);
-            setAccountMessage(accountResult.message);
-
             const passwordResult = validatePassword(inputAccountData.password, inputAccountData.confirmPassword);
             setPasswordError(!passwordResult.isValid && passwordResult.field === 'password');
             setPasswordMessage(!passwordResult.isValid && passwordResult.field === 'password' ? passwordResult.message : '');
@@ -105,27 +99,10 @@ const AccountEssential = ({ inputAccountData, onInput, nextPage }) => {
             setPhoneNumberError(!phoneResult.isValid);
             setPhoneNumberMessage(phoneResult.message);
 
-            const emailResult = validateEmail(inputAccountData.email);
-            setEmailError(!emailResult.isValid);
-            setEmailMessage(emailResult.message);
-
-            if (accountResult.isValid && passwordResult.isValid && nameResult.isValid && phoneResult.isValid && emailResult.isValid) {
-                try {
-                    const { isDuplicatedAccount, isDuplicatedEmail } = await refetchAll();
-
-                    setAccountError(isDuplicatedAccount);
-                    setAccountMessage(isDuplicatedAccount ? '이미 사용중인 아이디입니다.' : '');
-
-                    setEmailError(isDuplicatedEmail);
-                    setEmailMessage(isDuplicatedEmail ? '이미 사용중인 이메일입니다.' : '');
-
-                    if (!isDuplicatedAccount && !isDuplicatedEmail) {
-                        nextPage();
-                    }
-                } catch (error) {
-                    console.log(error);
-                    setAccountError(true);
-                    setAccountMessage('중복 확인에 실패했습니다. 다시 시도해주세요.');
+            if (passwordResult.isValid && nameResult.isValid && phoneResult.isValid) {
+                const canProceed = await validateForSubmit(inputAccountData.accountId, inputAccountData.email);
+                if (canProceed) {
+                    nextPage();
                 }
             }
 

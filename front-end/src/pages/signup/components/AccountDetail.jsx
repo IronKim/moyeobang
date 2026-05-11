@@ -103,8 +103,7 @@ const SignupButton = styled.button`
     }
 `
 
-const AccountDetail = ({ inputAccountData, onInput, Signup }) => {
-    const [isSignup, setIsSignup] = useState(false);
+const AccountDetail = ({ inputAccountData, onInput, Signup, isSigningUp = false }) => {
 
     const handleFileChange = (file) => {
         onInput({ target: { name: 'profileImage', value: file } });
@@ -178,7 +177,9 @@ const AccountDetail = ({ inputAccountData, onInput, Signup }) => {
     ];
 
     const handleSignup = () => {
-        setIsSignup(true);
+        if (isSigningUp) {
+            return;
+        }
         Signup();
     }
 
@@ -229,7 +230,7 @@ const AccountDetail = ({ inputAccountData, onInput, Signup }) => {
                 </BirthdayDiv>
                 <PreferenceSelect mode='multiple' placeholder='선호하는 테마를 선택해주세요.'
                     onChange={(value) => onInput({ target: { name: 'preferenceTypes', value: value } })} options={options} allowClear variant={"borderless"} />
-                <SignupButton disabled={isSignup} onClick={handleSignup}>회원가입</SignupButton>
+                <SignupButton disabled={isSigningUp} onClick={handleSignup}>{isSigningUp ? '회원가입 중...' : '회원가입'}</SignupButton>
             </SignupInputDiv>
         </SignupDiv>
     );

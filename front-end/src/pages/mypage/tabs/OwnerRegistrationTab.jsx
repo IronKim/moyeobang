@@ -5,10 +5,12 @@ import { Button, Form, Input, Modal } from 'antd';
 import DaumPostcode from 'react-daum-postcode';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useMutation } from 'react-query';
 import { business, phone } from '../../../utils/formatters';
 import { registerStore } from '../../../api/StoreApiService';
 import { useSetupUserDataByToken } from '../../../hooks/useUser';
 import { ROLETYPE } from '../../../constants/ROLETYPE';
+import ProgressToast from '../../../components/ProgressToast';
 import { SectionTitle } from './TabCommonStyles';
 
 const { kakao } = window;
@@ -109,6 +111,12 @@ const OwnerRegistrationTab = () => {
     const isMobile = useMediaQuery('(max-width:1200px)');
     const setupUserDataByToken = useSetupUserDataByToken();
     const geocoder = kakao?.maps?.services ? new kakao.maps.services.Geocoder() : null;
+    const registerStoreMutation = useMutation(
+        async (payload) => {
+            const response = await registerStore(payload);
+            return response;
+        }
+    );
 
     const getAddressCoords = (address) => {
         if (!geocoder) {
@@ -184,7 +192,7 @@ const OwnerRegistrationTab = () => {
         }
 
         try {
-            const response = await registerStore(payload);
+            const response = await registerStoreMutation.mutateAsync(payload);
             const issuedToken = response?.data?.result?.token;
 
             if (issuedToken) {
@@ -217,6 +225,7 @@ const OwnerRegistrationTab = () => {
 
     return (
         <>
+            <ProgressToast open={registerStoreMutation.isLoading} text={'업체 등록 처리 중입니다...'} />
             <SectionTitle>업체 등록</SectionTitle>
             <OwnerFormHint>기본 정보만 먼저 입력해도 저장할 수 있도록 구성했습니다.</OwnerFormHint>
             <OwnerForm
@@ -349,8 +358,8 @@ const OwnerRegistrationTab = () => {
                     </FullWidthFormItem>
 
                     <FullWidthFormItem style={{ marginTop: 4, marginBottom: 0 }}>
-                        <OwnerSubmitButton type={'primary'} htmlType={'submit'}>
-                            업체 등록하기
+                        <OwnerSubmitButton type={'primary'} htmlType={'submit'} disabled={registerStoreMutation.isLoading}>
+                            {registerStoreMutation.isLoading ? '업체 등록 중...' : '업체 등록하기'}
                         </OwnerSubmitButton>
                     </FullWidthFormItem>
                 </OwnerFormGrid>

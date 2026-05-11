@@ -79,16 +79,40 @@ export const useSignupDupChecks = (accountId, email) => {
         }
     }, [debounceEmail, emailDupQuery.data, emailDupQuery.isError, emailDupQuery.isSuccess, emailValidation.isValid, emailValidation.message]);
 
-    const refetchAll = async () => {
-        const [accountDupResponse, emailDupResponse] = await Promise.all([
-            accountDupQuery.refetch(),
-            emailDupQuery.refetch(),
-        ]);
+    const validateForSubmit = async (rawAccountId, rawEmail) => {
+        const accountResult = validateAccount(rawAccountId || '');
+        setAccountError(!accountResult.isValid);
+        setAccountMessage(accountResult.message);
 
-        return {
-            isDuplicatedAccount: accountDupResponse.data === true,
-            isDuplicatedEmail: emailDupResponse.data === true,
-        };
+        const emailResult = validateEmail(rawEmail || '');
+        setEmailError(!emailResult.isValid);
+        setEmailMessage(emailResult.message);
+
+        if (!accountResult.isValid || !emailResult.isValid) {
+            return false;
+        }
+
+        try {
+            const [accountDupResponse, emailDupResponse] = await Promise.all([
+                checkAccountDup(rawAccountId),
+                checkEmailDup(rawEmail),
+            ]);
+
+            const isDuplicatedAccount = accountDupResponse?.data?.result === true;
+            const isDuplicatedEmail = emailDupResponse?.data?.result === true;
+
+            setAccountError(isDuplicatedAccount);
+            setAccountMessage(isDuplicatedAccount ? '이미 사용중인 아이디입니다.' : '');
+
+            setEmailError(isDuplicatedEmail);
+            setEmailMessage(isDuplicatedEmail ? '이미 사용중인 이메일입니다.' : '');
+
+            return !isDuplicatedAccount && !isDuplicatedEmail;
+        } catch (error) {
+            setAccountError(true);
+            setAccountMessage('중복 확인에 실패했습니다. 다시 시도해주세요.');
+            return false;
+        }
     };
 
     return {
@@ -96,7 +120,7 @@ export const useSignupDupChecks = (accountId, email) => {
         accountMessage,
         emailError,
         emailMessage,
-        refetchAll,
+        validateForSubmit,
         accountValidation,
         emailValidation,
     };

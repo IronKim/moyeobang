@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Swal from 'sweetalert2';
 import {Button, Divider, Form} from "antd";
 import {useMediaQuery} from "@mui/material";
+import {useRecoilValue} from "recoil";
 import '../../../css/theme-colors.css';
 import PosterImage from "./PosterImage";
 import RangeSelector from "./RangeSelector";
@@ -55,6 +56,7 @@ import {
     StickySidebar,
     SurfaceCard,
 } from "./OwnerHomeComponents";
+import {selectedStoreState} from "../../../atoms/selectedStoreState";
 
 const RegistrationPageShell = PageShell;
 const ContentGrid = LayoutGrid;
@@ -139,9 +141,11 @@ const PreviewCostRow = styled.div`
 const EscapeRoomModification = () => {
     const [form] = Form.useForm();
     const isMobile = useMediaQuery('(max-width:1200px)');
+    const selectedStoreId = useRecoilValue(selectedStoreState);
 
     const storeData = [
         {
+            storeId: 1,
             storeName: "업체명",
             branchName: "지점",
             address: "주소",
@@ -153,6 +157,7 @@ const EscapeRoomModification = () => {
             ],
         },
         {
+            storeId: 2,
             storeName: "업체명2",
             branchName: "지점2",
             address: "주소2",
@@ -205,6 +210,18 @@ const EscapeRoomModification = () => {
 
     const [selectedStoreIndex, setSelectedStoreIndex] = useState(null);
     const [selectedThemeIndex, setSelectedThemeIndex] = useState(null);
+
+    useEffect(() => {
+        if (selectedStoreId === null || selectedStoreId === undefined) {
+            return;
+        }
+
+        const matchedIndex = storeData.findIndex((store) => store.storeId === selectedStoreId);
+        if (matchedIndex >= 0) {
+            setSelectedStoreIndex(matchedIndex);
+            form.setFieldsValue({ store: matchedIndex });
+        }
+    }, [form, selectedStoreId]);
 
     const filteredThemes = themeData
         .map((theme, index) => ({...theme, index}))

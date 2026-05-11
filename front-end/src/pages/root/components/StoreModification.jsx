@@ -4,6 +4,7 @@ import {Button, Divider, Form, Modal} from "antd";
 import DaumPostcode from 'react-daum-postcode';
 import styled from "styled-components";
 import {useMediaQuery} from "@mui/material";
+import {useRecoilValue} from "recoil";
 import '../../../css/theme-colors.css';
 import CostFields from './CostFields';
 import CostPreview from './CostPreview';
@@ -40,6 +41,7 @@ import {
     SurfaceCard,
 } from "./OwnerHomeComponents";
 import {phone} from "../../../utils/formatters";
+import {selectedStoreState} from "../../../atoms/selectedStoreState";
 
 const {kakao} = window;
 
@@ -93,9 +95,11 @@ const StoreModification = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const isMobile = useMediaQuery('(max-width:1200px)');
     const geocoder = new kakao.maps.services.Geocoder();
+    const selectedStoreId = useRecoilValue(selectedStoreState);
 
     const storeData = [
         {
+            storeId: 1,
             storeName: "업체명",
             branchName: "지점",
             address: "주소",
@@ -116,6 +120,7 @@ const StoreModification = () => {
             costInfo: "ex) 1인은 2인 금액으로 책정됩니다.\n 5인 이상은 별도 문의 바랍니다."
         },
         {
+            storeId: 2,
             storeName: "업체명2",
             branchName: "지점2",
             address: "주소2",
@@ -135,6 +140,17 @@ const StoreModification = () => {
 
     const [selectedStoreIndex, setSelectedStoreIndex] = useState(0);
     const [mapPosition, setMapPosition] = useState({lat: 37.5665, lng: 126.9780});
+
+    useEffect(() => {
+        if (selectedStoreId === null || selectedStoreId === undefined) {
+            return;
+        }
+
+        const matchedIndex = storeData.findIndex((store) => store.storeId === selectedStoreId);
+        if (matchedIndex >= 0) {
+            setSelectedStoreIndex(matchedIndex);
+        }
+    }, [selectedStoreId]);
 
     useEffect(() => {
         const selected = storeData[selectedStoreIndex];

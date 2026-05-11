@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Divider, Form} from "antd";
 import {useMediaQuery} from "@mui/material";
+import {useRecoilValue} from "recoil";
 import '../../../css/theme-colors.css';
 import PosterImage from "./PosterImage";
 import RangeSelector from "./RangeSelector";
@@ -53,6 +54,7 @@ import {
     StickySidebar,
     SurfaceCard,
 } from "./OwnerHomeComponents";
+import {selectedStoreState} from "../../../atoms/selectedStoreState";
 
 const RegistrationPageShell = PageShell;
 const ContentGrid = LayoutGrid;
@@ -111,6 +113,7 @@ const PreviewCostRow = styled.div`
 const EscapeRoomRegistration = () => {
     const [form] = Form.useForm();
     const isMobile = useMediaQuery('(max-width:1200px)');
+    const selectedStoreId = useRecoilValue(selectedStoreState);
     const [selectedStoreIndex, setSelectedStoreIndex] = useState(null);
 
     const watchedCost = Form.useWatch('cost', form) || [];
@@ -118,6 +121,7 @@ const EscapeRoomRegistration = () => {
 
     const storeData = [
         {
+            storeId: 1,
             storeName: "업체명",
             branchName: "지점",
             address: "주소",
@@ -127,6 +131,7 @@ const EscapeRoomRegistration = () => {
             costInfo: "ex) 1인은 2인 금액으로 책정됩니다.\n 5인 이상은 별도 문의 바랍니다.",
         },
         {
+            storeId: 2,
             storeName: "업체명2",
             branchName: "지점2",
             address: "주소2",
@@ -139,6 +144,18 @@ const EscapeRoomRegistration = () => {
 
     const selectedStore = selectedStoreIndex !== null ? storeData[selectedStoreIndex] : null;
     const isDisabled = selectedStoreIndex === null;
+
+    useEffect(() => {
+        if (selectedStoreId === null || selectedStoreId === undefined) {
+            return;
+        }
+
+        const matchedIndex = storeData.findIndex((store) => store.storeId === selectedStoreId);
+        if (matchedIndex >= 0) {
+            setSelectedStoreIndex(matchedIndex);
+            form.setFieldsValue({ store: matchedIndex });
+        }
+    }, [form, selectedStoreId]);
 
     const genres = [
         {icon: <TbGhost2Filled />, label: '공포'},
