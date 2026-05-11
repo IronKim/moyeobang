@@ -2,7 +2,7 @@ import React from 'react';
 import {AnimatePresence, motion} from 'motion/react';
 import {Typography} from 'antd';
 import styled from 'styled-components';
-import {InfoCard, PreviewLabel} from './SellerHomeComponents';
+import {InfoCard, PreviewLabel} from './OwnerHomeComponents';
 
 const PreviewTitle = styled.h4`
     margin: 0 0 12px;

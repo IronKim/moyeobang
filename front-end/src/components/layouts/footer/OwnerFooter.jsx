@@ -13,7 +13,7 @@ const FooterContainer = styled.div`
     }
 `
 
-const SellerFooter = () => {
+const OwnerFooter = () => {
     return (
         <FooterContainer>
             
@@ -21,4 +21,4 @@ const SellerFooter = () => {
     );
 };
 
-export default SellerFooter;
+export default OwnerFooter;

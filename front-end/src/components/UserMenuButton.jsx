@@ -193,7 +193,7 @@ const UserMenuButton = () => {
         setIsmenuOpen(!ismenuOpen);
     }
 
-    const handleOpenSellerManagement = () => {
+    const handleOpenOwnerManagement = () => {
         localStorage.setItem('moyeobangPreferredRoleType', ROLETYPE.OWNER);
         setUserData((prev) => ({
             ...prev,
@@ -229,7 +229,7 @@ const UserMenuButton = () => {
                         {
                             isOwnerAuthorized && (
                                 <Div>
-                                    <p onClick={handleOpenSellerManagement}>업체 관리</p>
+                                    <p onClick={handleOpenOwnerManagement}>업체 관리</p>
                                 </Div>
                             )
                         }

@@ -3,8 +3,8 @@ import {useRecoilValue} from "recoil";
 import {userState} from "../../atoms/userState";
 import UserDefaultLayout from "../../components/layouts/UserDefaultLayout";
 import UserHome from "./UserHome";
-import SellerManagementLayout from "../../components/layouts/SellerManagementLayout";
-import SellerHome from "./SellerHome";
+import OwnerManagementLayout from "../../components/layouts/OwnerManagementLayout";
+import OwnerHome from "./OwnerHome";
 
 const Home = () => {
     const userData = useRecoilValue(userState);
@@ -17,9 +17,9 @@ const Home = () => {
                         <UserHome />
                     </UserDefaultLayout>
                 ) : (
-                    <SellerManagementLayout>
-                        <SellerHome />
-                    </SellerManagementLayout>
+                    <OwnerManagementLayout>
+                        <OwnerHome />
+                    </OwnerManagementLayout>
                 )
             }
         </>

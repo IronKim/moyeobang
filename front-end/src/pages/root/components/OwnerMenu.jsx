@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styled from "styled-components";
 import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 import {IoMdHome} from "react-icons/io";
-import {SELLERMENU} from "../../../constants/SELLERMENU";
+import {OWNERMENU} from "../../../constants/OWNERMENU";
 import {useNavigate} from "react-router-dom";
 import {useSetRecoilState} from "recoil";
 import Swal from "sweetalert2";
@@ -135,7 +135,7 @@ const SubMenu = ({ items, activeItem, onItemClick }) => (
     </>
 );
 
-const SellerMenu = ({setSelectedMenu}) => {
+const OwnerMenu = ({setSelectedMenu}) => {
     const navigate = useNavigate();
     const setUserData = useSetRecoilState(userState);
     const logout = useLogout();
@@ -181,22 +181,22 @@ const SellerMenu = ({setSelectedMenu}) => {
         setActiveTab({ menuIndex, item });
         switch (item) {
             case '업체 등록':
-                setSelectedMenu(SELLERMENU.COMPANY_REGISTRATION);
+                setSelectedMenu(OWNERMENU.COMPANY_REGISTRATION);
                 break;
             case '업체 수정 및 삭제':
-                setSelectedMenu(SELLERMENU.COMPANY_MODIFICATION);
+                setSelectedMenu(OWNERMENU.COMPANY_MODIFICATION);
                 break;
             case '방탈출 등록':
-                setSelectedMenu(SELLERMENU.ESCAPE_ROOM_REGISTRATION);
+                setSelectedMenu(OWNERMENU.ESCAPE_ROOM_REGISTRATION);
                 break;
             case '방탈출 수정 및 삭제':
-                setSelectedMenu(SELLERMENU.ESCAPE_ROOM_MODIFICATION);
+                setSelectedMenu(OWNERMENU.ESCAPE_ROOM_MODIFICATION);
                 break;
             case '예약금 확인':
-                setSelectedMenu(SELLERMENU.RESERVATION_DEPOSIT_CHECK);
+                setSelectedMenu(OWNERMENU.RESERVATION_DEPOSIT_CHECK);
                 break;
             case '예약내역 관리':
-                setSelectedMenu(SELLERMENU.RESERVATION_MANAGEMENT);
+                setSelectedMenu(OWNERMENU.RESERVATION_MANAGEMENT);
                 break;
             default:
                 break;
@@ -247,4 +247,4 @@ const SellerMenu = ({setSelectedMenu}) => {
     );
 };
 
-export default SellerMenu;
+export default OwnerMenu;

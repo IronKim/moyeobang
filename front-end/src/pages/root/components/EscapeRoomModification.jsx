@@ -54,7 +54,7 @@ import {
     SectionTitle,
     StickySidebar,
     SurfaceCard,
-} from "./SellerHomeComponents";
+} from "./OwnerHomeComponents";
 
 const RegistrationPageShell = PageShell;
 const ContentGrid = LayoutGrid;

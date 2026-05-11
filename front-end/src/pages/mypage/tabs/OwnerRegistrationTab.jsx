@@ -13,17 +13,17 @@ import { SectionTitle } from './TabCommonStyles';
 
 const { kakao } = window;
 
-const SellerFormHint = styled.p`
+const OwnerFormHint = styled.p`
     color: #6b7784;
     font-size: 13px;
     margin: 2px 0 12px 0;
 `;
 
-const SellerForm = styled(Form)`
+const OwnerForm = styled(Form)`
     width: 100%;
 `;
 
-const SellerFormGrid = styled.div`
+const OwnerFormGrid = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -33,7 +33,7 @@ const SellerFormGrid = styled.div`
     }
 `;
 
-const SellerFormItem = styled(Form.Item)`
+const OwnerFormItem = styled(Form.Item)`
     margin-bottom: 10px;
 
     .ant-form-item-label > label {
@@ -42,24 +42,24 @@ const SellerFormItem = styled(Form.Item)`
     }
 `;
 
-const FullWidthFormItem = styled(SellerFormItem)`
+const FullWidthFormItem = styled(OwnerFormItem)`
     grid-column: 1 / -1;
 `;
 
-const SellerInput = styled(Input)`
+const OwnerInput = styled(Input)`
     && {
         border-radius: 10px;
         min-height: 42px;
     }
 `;
 
-const AddressSearchInput = styled(SellerInput)`
+const AddressSearchInput = styled(OwnerInput)`
     && {
         cursor: pointer;
     }
 `;
 
-const SellerTextArea = styled(Input.TextArea)`
+const OwnerTextArea = styled(Input.TextArea)`
     && {
         border-radius: 10px;
     }
@@ -90,7 +90,7 @@ const ContactActionButton = styled(Button)`
     }
 `;
 
-const SellerSubmitButton = styled(Button)`
+const OwnerSubmitButton = styled(Button)`
     && {
         height: 44px;
         border-radius: 10px;
@@ -101,8 +101,8 @@ const SellerSubmitButton = styled(Button)`
     }
 `;
 
-const SellerRegistrationTab = () => {
-    const [sellerForm] = Form.useForm();
+const OwnerRegistrationTab = () => {
+    const [ownerForm] = Form.useForm();
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [companyCoords, setCompanyCoords] = useState({ latitude: null, longitude: null });
     const navigate = useNavigate();
@@ -132,7 +132,7 @@ const SellerRegistrationTab = () => {
     const handleAddressComplete = async (data) => {
         const selectedAddress = data.roadAddress || data.jibunAddress || data.address;
 
-        sellerForm.setFieldsValue({
+        ownerForm.setFieldsValue({
             address: selectedAddress,
         });
 
@@ -146,7 +146,7 @@ const SellerRegistrationTab = () => {
         setIsAddressModalOpen(false);
     };
 
-    const handleSellerSubmit = async (values) => {
+    const handleOwnerSubmit = async (values) => {
         if (!companyCoords.latitude || !companyCoords.longitude) {
             await Swal.fire({
                 icon: 'warning',
@@ -201,8 +201,8 @@ const SellerRegistrationTab = () => {
                 confirmButtonText: '확인',
             });
 
-            sellerForm.resetFields();
-            sellerForm.setFieldsValue({ storeNumberList: [{ storeNumber: '' }] });
+            ownerForm.resetFields();
+            ownerForm.setFieldsValue({ storeNumberList: [{ storeNumber: '' }] });
             setCompanyCoords({ latitude: null, longitude: null });
             navigate('/');
         } catch (error) {
@@ -218,11 +218,11 @@ const SellerRegistrationTab = () => {
     return (
         <>
             <SectionTitle>업체 등록</SectionTitle>
-            <SellerFormHint>기본 정보만 먼저 입력해도 저장할 수 있도록 구성했습니다.</SellerFormHint>
-            <SellerForm
-                form={sellerForm}
+            <OwnerFormHint>기본 정보만 먼저 입력해도 저장할 수 있도록 구성했습니다.</OwnerFormHint>
+            <OwnerForm
+                form={ownerForm}
                 layout={'vertical'}
-                onFinish={handleSellerSubmit}
+                onFinish={handleOwnerSubmit}
                 initialValues={{
                     businessName: '',
                     branchName: '',
@@ -233,23 +233,23 @@ const SellerRegistrationTab = () => {
                     description: '',
                 }}
             >
-                <SellerFormGrid>
-                    <SellerFormItem
+                <OwnerFormGrid>
+                    <OwnerFormItem
                         name={'businessName'}
                         label={'업체명'}
                         rules={[{ required: true, message: '업체명을 입력해주세요.' }]}
                     >
-                        <SellerInput placeholder={'업체명을 입력해주세요'} maxLength={30} />
-                    </SellerFormItem>
+                        <OwnerInput placeholder={'업체명을 입력해주세요'} maxLength={30} />
+                    </OwnerFormItem>
 
-                    <SellerFormItem
+                    <OwnerFormItem
                         name={'branchName'}
                         label={'지점명'}
                     >
-                        <SellerInput placeholder={'예: 강남점'} maxLength={30} />
-                    </SellerFormItem>
+                        <OwnerInput placeholder={'예: 강남점'} maxLength={30} />
+                    </OwnerFormItem>
 
-                    <SellerFormItem
+                    <OwnerFormItem
                         name={'businessNumber'}
                         label={'사업자번호'}
                         getValueFromEvent={(e) => business.normalize(e?.target?.value || '')}
@@ -259,8 +259,8 @@ const SellerRegistrationTab = () => {
                             { pattern: /^[0-9]{10}$/, message: '사업자번호 10자리를 입력해주세요.' },
                         ]}
                     >
-                        <SellerInput placeholder={'숫자만 입력해주세요'} maxLength={12} inputMode={'numeric'} />
-                    </SellerFormItem>
+                        <OwnerInput placeholder={'숫자만 입력해주세요'} maxLength={12} inputMode={'numeric'} />
+                    </OwnerFormItem>
 
                     <FullWidthFormItem label={'연락처'} required>
                         <Form.List
@@ -291,7 +291,7 @@ const SellerRegistrationTab = () => {
                                                     },
                                                 ]}
                                             >
-                                                <SellerInput
+                                                <OwnerInput
                                                     placeholder={'전화번호 숫자만 입력해주세요'}
                                                     maxLength={13}
                                                     inputMode={'numeric'}
@@ -338,23 +338,23 @@ const SellerRegistrationTab = () => {
                         label={'상세주소'}
                         rules={[{ required: true, message: '상세주소를 입력해주세요.' }]}
                     >
-                        <SellerInput placeholder={'상세주소를 입력해주세요'} maxLength={80} />
+                        <OwnerInput placeholder={'상세주소를 입력해주세요'} maxLength={80} />
                     </FullWidthFormItem>
 
                     <FullWidthFormItem
                         name={'description'}
                         label={'업체 소개'}
                     >
-                        <SellerTextArea placeholder={'고객에게 보여줄 업체 소개를 입력해주세요'} rows={4} maxLength={500} showCount />
+                        <OwnerTextArea placeholder={'고객에게 보여줄 업체 소개를 입력해주세요'} rows={4} maxLength={500} showCount />
                     </FullWidthFormItem>
 
                     <FullWidthFormItem style={{ marginTop: 4, marginBottom: 0 }}>
-                        <SellerSubmitButton type={'primary'} htmlType={'submit'}>
+                        <OwnerSubmitButton type={'primary'} htmlType={'submit'}>
                             업체 등록하기
-                        </SellerSubmitButton>
+                        </OwnerSubmitButton>
                     </FullWidthFormItem>
-                </SellerFormGrid>
-            </SellerForm>
+                </OwnerFormGrid>
+            </OwnerForm>
 
             <Modal
                 title={'주소 검색'}
@@ -373,4 +373,4 @@ const SellerRegistrationTab = () => {
     );
 };
 
-export default SellerRegistrationTab;
+export default OwnerRegistrationTab;

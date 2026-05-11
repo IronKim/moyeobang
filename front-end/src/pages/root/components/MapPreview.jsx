@@ -2,7 +2,7 @@ import React from 'react';
 import {Map, MapMarker} from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
 import addressImage from '../../../assets/images/Address.png';
-import {InfoCard, PreviewLabel} from './SellerHomeComponents';
+import {InfoCard, PreviewLabel} from './OwnerHomeComponents';
 
 const PreviewTitle = styled.h4`
     margin: 0 0 12px;

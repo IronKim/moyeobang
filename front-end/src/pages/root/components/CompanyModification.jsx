@@ -38,7 +38,7 @@ import {
     SectionTitle,
     StickySidebar,
     SurfaceCard,
-} from "./SellerHomeComponents";
+} from "./OwnerHomeComponents";
 import {phone} from "../../../utils/formatters";
 
 const {kakao} = window;

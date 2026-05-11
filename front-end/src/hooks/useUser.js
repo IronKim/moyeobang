@@ -2,7 +2,6 @@ import {ROLETYPE} from "../constants/ROLETYPE";
 import {jwtDecode} from "jwt-decode";
 import {userState} from "../atoms/userState";
 import {useResetRecoilState, useSetRecoilState} from "recoil";
-import {sellerLogin, userLogin} from "../api/AuthApiService";
 import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -72,13 +71,6 @@ export const useLogin = () => {
                 }).catch(error => {
                     failLogin(error.response.status);
             });
-        } else if(roleType === ROLETYPE.OWNER) {
-            sellerLogin(inputdata)
-                .then(response => {
-                    successLogin(response.data.result.token);
-                }).catch(error => {
-                    failLogin(error.response.status);
-            })
         }
     };
 }

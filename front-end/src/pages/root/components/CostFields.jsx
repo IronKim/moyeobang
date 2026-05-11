@@ -3,7 +3,7 @@ import {AnimatePresence, motion} from 'motion/react';
 import {Button, Form} from 'antd';
 import {TbSquareMinusFilled} from 'react-icons/tb';
 import styled from 'styled-components';
-import {FormInput, FormLabelTitle, FormRow, FormTextArea, ItemDiv, RequiredSpan} from './SellerHomeComponents';
+import {FormInput, FormLabelTitle, FormRow, FormTextArea, ItemDiv, RequiredSpan} from './OwnerHomeComponents';
 
 const CostListWrap = styled.div`
     width: 100%;

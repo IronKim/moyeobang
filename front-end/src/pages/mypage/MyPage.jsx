@@ -10,7 +10,7 @@ import basicProfileImg from '../../assets/images/BasicProfileImg.png';
 import ReservationTab from './tabs/ReservationTab';
 import ProfileSettingsTab from './tabs/ProfileSettingsTab';
 import ActivityTab from './tabs/ActivityTab';
-import SellerRegistrationTab from './tabs/SellerRegistrationTab';
+import OwnerRegistrationTab from './tabs/OwnerRegistrationTab';
 
 const PageInner = styled.div`
     width: 92%;
@@ -199,7 +199,7 @@ const TabActions = styled.div`
     }
 `;
 
-const SellerBadge = styled.span`
+const OwnerBadge = styled.span`
     font-size: 11px;
     font-weight: 700;
     color: #0e4c78;
@@ -208,7 +208,7 @@ const SellerBadge = styled.span`
     padding: 4px 8px;
 `;
 
-const SellerActionButton = styled.button`
+const OwnerActionButton = styled.button`
     border: 1px solid ${props => (props.$active ? '#0e74b7' : '#b9d6ea')};
     background: ${props => (props.$active ? '#0e74b7' : '#ffffff')};
     color: ${props => (props.$active ? '#ffffff' : '#215174')};
@@ -234,11 +234,11 @@ const MyPage = () => {
     const userData = useRecoilValue(userState);
     const setUserData = useSetRecoilState(userState);
     const [activeTab, setActiveTab] = useState('reservation');
-    const isSellerAuthorized =
+    const isOwnerAuthorized =
         userData.roleType === ROLETYPE.OWNER || userData.roles?.includes(ROLETYPE.OWNER);
 
-    const handleSellerActionClick = () => {
-        if (isSellerAuthorized) {
+    const handleOwnerActionClick = () => {
+        if (isOwnerAuthorized) {
             localStorage.setItem('moyeobangPreferredRoleType', ROLETYPE.OWNER);
             setUserData((prev) => ({
                 ...prev,
@@ -246,7 +246,7 @@ const MyPage = () => {
             }));
             navigate('/');
         } else {
-            setActiveTab('seller');
+            setActiveTab('owner');
         }
     };
 
@@ -320,14 +320,14 @@ const MyPage = () => {
                                 활동 기록
                             </TabButton>
                             <TabActions>
-                                <SellerBadge>사장님 전용</SellerBadge>
-                                <SellerActionButton
+                                <OwnerBadge>사장님 전용</OwnerBadge>
+                                <OwnerActionButton
                                     type={'button'}
-                                    $active={activeTab === 'seller'}
-                                    onClick={handleSellerActionClick}
+                                    $active={activeTab === 'owner'}
+                                    onClick={handleOwnerActionClick}
                                 >
-                                    {isSellerAuthorized ? '업체 관리' : '업체 등록'}
-                                </SellerActionButton>
+                                    {isOwnerAuthorized ? '업체 관리' : '업체 등록'}
+                                </OwnerActionButton>
                             </TabActions>
                         </TabBar>
 
@@ -335,7 +335,7 @@ const MyPage = () => {
                             {activeTab === 'reservation' && <ReservationTab />}
                             {activeTab === 'profile' && <ProfileSettingsTab />}
                             {activeTab === 'activity' && <ActivityTab />}
-                            {activeTab === 'seller' && <SellerRegistrationTab />}
+                            {activeTab === 'owner' && <OwnerRegistrationTab />}
                         </TabPanel>
                     </TabSection>
                 </PageInner>

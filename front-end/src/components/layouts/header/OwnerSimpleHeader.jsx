@@ -57,7 +57,7 @@ const Logo = styled.img`
     }
 `
 
-const SellerSimpleHeader = () => {
+const OwnerSimpleHeader = () => {
     const navigate = useNavigate();
 
     return (
@@ -72,4 +72,4 @@ const SellerSimpleHeader = () => {
     );
 };
 
-export default SellerSimpleHeader;
+export default OwnerSimpleHeader;
