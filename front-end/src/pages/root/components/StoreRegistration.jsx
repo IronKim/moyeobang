@@ -1,14 +1,20 @@
 import React, {useState} from 'react';
 import {Divider, Form, Modal} from "antd";
 import DaumPostcode from 'react-daum-postcode';
-import styled from "styled-components";
 import {useMediaQuery} from "@mui/material";
+import {useMutation, useQueryClient} from "react-query";
+import {useNavigate} from "react-router-dom";
+import {useSetRecoilState} from "recoil";
+import Swal from "sweetalert2";
 import '../../../css/theme-colors.css';
-import CostFields from './CostFields';
-import CostPreview from './CostPreview';
 import MapPreview from './MapPreview';
 import {
+    AddressSearchInput,
+    ContactActionButton,
+    ContactListWrap,
+    ContactRow,
     Container,
+    FieldColumn,
     FieldHint,
     FormActionRow,
     FormContainer,
@@ -16,6 +22,7 @@ import {
     FormLabelTitle,
     FormRow,
     FormStack,
+    FormTextArea,
     GradientSubmitButton,
     GuideCard,
     GuideDot,
@@ -31,55 +38,39 @@ import {
     LayoutGrid,
     PageShell,
     RequiredSpan,
+    SectionBlock,
     SectionDescription,
     SectionHeader,
     SectionTitle,
     StickySidebar,
     SurfaceCard,
 } from "./OwnerHomeComponents";
-import {phone} from "../../../utils/formatters";
+import {business, koreaPhone} from "../../../utils/formatters";
+import {registerStore} from "../../../api/StoreApiService";
+import {useSetupUserDataByToken} from "../../../hooks/useUser";
+import {ROLETYPE} from "../../../constants/ROLETYPE";
+import ProgressToast from "../../../components/ProgressToast";
+import {selectedStoreState} from "../../../atoms/selectedStoreState";
 
 const {kakao} = window;
 
-const RegistrationPageShell = PageShell;
-const ContentGrid = LayoutGrid;
-const FormSurface = SurfaceCard;
-const PreviewSection = StickySidebar;
-const FormGrid = FormStack;
-const ModernParagraph = FormRow;
-const ModernTitleDiv = FormLabelTitle;
-const HintText = FieldHint;
-const ModernInput = FormInput;
-const ActionRow = FormActionRow;
-const SubmitButton = GradientSubmitButton;
-
-const SectionBlock = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-`;
-
-const FieldColumn = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-`;
-
-const AddressSearchInput = styled(ModernInput)`
-    cursor: pointer;
-`;
-
 const StoreRegistration = () => {
     const [form] = Form.useForm();
+    const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
+    const setSelectedStoreId = useSetRecoilState(selectedStoreState);
+    const setupUserDataByToken = useSetupUserDataByToken();
     const [storeData, setStoreData] = useState({
-        latitude: '',
-        longitude: '',
+        lat: null,
+        lng: null,
     });
-
-    const watchedCost = Form.useWatch('cost', form) || [];
-    const watchedCostInfo = Form.useWatch('costInfo', form) || '';
+    const registerStoreMutation = useMutation(
+        async (payload) => {
+            const response = await registerStore(payload);
+            return response;
+        }
+    );
 
     const isMobile = useMediaQuery('(max-width:1200px)');
     const geocoder = new kakao.maps.services.Geocoder();
@@ -112,26 +103,103 @@ const StoreRegistration = () => {
         setIsModalOpen(false);
     };
 
+    const handleSubmit = async (values) => {
+        if (!storeData.lat || !storeData.lng) {
+            await Swal.fire({
+                icon: 'warning',
+                title: '주소 확인 필요',
+                text: '주소를 다시 선택해 주세요.',
+                confirmButtonText: '확인',
+            });
+            return;
+        }
+
+        const payload = {
+            businessName: values.name,
+            branchName: values.branchName,
+            businessNumber: values.businessNumber,
+            address: values.address,
+            addressDetail: values.addressDetail,
+            description: values.description,
+            storeNumberList: (values.contacts || []).map((item) => ({ storeNumber: item?.value || '' })),
+            latitude: storeData.lat,
+            longitude: storeData.lng,
+        };
+
+        const confirmResult = await Swal.fire({
+            icon: 'question',
+            title: '업체를 등록할까요?',
+            text: '입력한 정보로 업체를 등록하고 해당 업체 화면으로 이동합니다.',
+            showCancelButton: true,
+            confirmButtonText: '등록',
+            cancelButtonText: '취소',
+        });
+
+        if (!confirmResult.isConfirmed) {
+            return;
+        }
+
+        try {
+            const response = await registerStoreMutation.mutateAsync(payload);
+            const issuedToken = response?.data?.result?.token;
+            const registeredStoreId = response?.data?.result?.storeId;
+
+            if (issuedToken) {
+                localStorage.setItem('moyeobangToken', issuedToken);
+            }
+
+            if (registeredStoreId) {
+                setSelectedStoreId(registeredStoreId);
+            }
+
+            await queryClient.invalidateQueries(['myStores']);
+
+            localStorage.setItem('moyeobangPreferredRoleType', ROLETYPE.OWNER);
+            setupUserDataByToken();
+
+            await Swal.fire({
+                icon: 'success',
+                title: '업체 등록 완료',
+                text: '업체가 정상적으로 등록되었습니다.',
+                confirmButtonText: '확인',
+            });
+
+            form.resetFields();
+            form.setFieldsValue({ contacts: [{ value: '' }], description: '', businessNumber: '' });
+            setStoreData({ lat: null, lng: null });
+            navigate('/');
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: '업체 등록 실패',
+                text: error?.response?.data?.result?.message || '잠시 후 다시 시도해주세요.',
+                confirmButtonText: '확인',
+            });
+        }
+    };
+
     return (
         <Container>
-            <RegistrationPageShell>
+            <ProgressToast open={registerStoreMutation.isLoading} text={'업체 등록 처리 중입니다...'} />
+            <PageShell>
                 <HeroCard>
                     <HeroBadge>Seller Studio</HeroBadge>
                     <HeroTitle>업체 등록</HeroTitle>
                     <HeroDescription>
-                        지점 정보, 주소, 가격 정책을 한 번에 정리해서 등록할 수 있습니다.
+                        지점 정보와 주소를 입력해 업체 기본 정보를 등록할 수 있습니다.
                     </HeroDescription>
                 </HeroCard>
 
-                <ContentGrid>
-                    <FormSurface>
+                <LayoutGrid>
+                    <SurfaceCard>
                         <FormContainer
                             form={form}
                             scrollToFirstError={true}
-                            onFinish={(values) => console.log(values)}
+                            onFinish={handleSubmit}
                             initialValues={{
-                                cost: [{count: '', cost: ''}],
-                                costInfo: '',
+                                businessNumber: '',
+                                contacts: [{value: ''}],
+                                description: '',
                             }}
                         >
                             <SectionBlock>
@@ -142,9 +210,9 @@ const StoreRegistration = () => {
                                     </SectionDescription>
                                 </SectionHeader>
 
-                                <FormGrid>
-                                    <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체명</ModernTitleDiv>
+                                <FormStack>
+                                    <FormRow>
+                                        <FormLabelTitle level={4}><RequiredSpan>*</RequiredSpan>업체명</FormLabelTitle>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'name'}
@@ -154,23 +222,41 @@ const StoreRegistration = () => {
                                                     {validator: validateNoLeadingSpace},
                                                 ]}
                                             >
-                                                <ModernInput placeholder="브랜드명 또는 업체명을 입력해주세요" />
+                                                <FormInput placeholder="브랜드명 또는 업체명을 입력해주세요" />
                                             </ItemDiv>
-                                            <HintText>검색성과 신뢰도를 위해 공식 표기명을 사용하는 편이 좋습니다.</HintText>
+                                            <FieldHint>검색성과 신뢰도를 위해 공식 표기명을 사용하는 편이 좋습니다.</FieldHint>
                                         </FieldColumn>
-                                    </ModernParagraph>
+                                    </FormRow>
 
-                                    <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</ModernTitleDiv>
+                                    <FormRow>
+                                        <FormLabelTitle level={4}><RequiredSpan>&nbsp;</RequiredSpan>지점</FormLabelTitle>
                                         <FieldColumn>
                                             <ItemDiv name={'branchName'} width={'100%'}>
-                                                <ModernInput placeholder="예: 강남점, 성수 플래그십" />
+                                                <FormInput placeholder="예: 강남점, 성수 플래그십" />
                                             </ItemDiv>
                                         </FieldColumn>
-                                    </ModernParagraph>
+                                    </FormRow>
 
-                                    <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>주소</ModernTitleDiv>
+                                    <FormRow>
+                                        <FormLabelTitle level={4}><RequiredSpan>*</RequiredSpan>사업자번호</FormLabelTitle>
+                                        <FieldColumn>
+                                            <ItemDiv
+                                                name={'businessNumber'}
+                                                width={'100%'}
+                                                getValueFromEvent={(e) => business.normalize(e?.target?.value || '')}
+                                                getValueProps={(value) => ({value: business.format(value || '')})}
+                                                rules={[
+                                                    {required: true, message: '사업자번호를 입력해주세요.'},
+                                                    {pattern: /^[0-9]{10}$/, message: '사업자번호 10자리를 입력해주세요.'},
+                                                ]}
+                                            >
+                                                <FormInput placeholder="숫자만 입력해주세요" maxLength={12} inputMode="numeric" />
+                                            </ItemDiv>
+                                        </FieldColumn>
+                                    </FormRow>
+
+                                    <FormRow>
+                                        <FormLabelTitle level={4}><RequiredSpan>*</RequiredSpan>주소</FormLabelTitle>
                                         <FieldColumn>
                                             <ItemDiv
                                                 name={'address'}
@@ -187,80 +273,124 @@ const StoreRegistration = () => {
                                                     {validator: validateNoLeadingSpace},
                                                 ]}
                                             >
-                                                <ModernInput placeholder="상세주소를 입력해주세요" />
+                                                <FormInput placeholder="상세주소를 입력해주세요" />
                                             </ItemDiv>
                                         </FieldColumn>
-                                    </ModernParagraph>
+                                    </FormRow>
 
-                                    <ModernParagraph>
-                                        <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>연락처</ModernTitleDiv>
+                                    <FormRow>
+                                        <FormLabelTitle level={4}><RequiredSpan>*</RequiredSpan>연락처</FormLabelTitle>
                                         <FieldColumn>
-                                            <ItemDiv
-                                                name={'contact'}
-                                                width={'100%'}
-                                                getValueFromEvent={(e) => phone.normalize(e?.target?.value || '')}
-                                                getValueProps={(value) => ({value: phone.format(value || '')})}
+                                            <Form.List
+                                                name={'contacts'}
                                                 rules={[
-                                                    {required: true, message: '연락처를 입력해주세요.'},
-                                                    {pattern: /^[0-9]*$/, message: '숫자만 입력해주세요.'},
-                                                    {max: 11, message: '연락처는 11자리 이하로 입력해주세요.'},
+                                                    {
+                                                        validator: async (_, value) => {
+                                                            if (!value || value.length === 0) {
+                                                                throw new Error('연락처를 1개 이상 입력해주세요.');
+                                                            }
+                                                        },
+                                                    },
                                                 ]}
                                             >
-                                                <ModernInput placeholder="전화번호 숫자만 입력해주세요" maxLength={13} inputMode="numeric" />
+                                                {(fields, { add, remove }, { errors }) => (
+                                                    <ContactListWrap>
+                                                        {fields.map((field) => (
+                                                            <ContactRow key={field.key}>
+                                                                <ItemDiv
+                                                                    name={[field.name, 'value']}
+                                                                    width={'100%'}
+                                                                    getValueFromEvent={(e) => koreaPhone.normalize(e?.target?.value || '')}
+                                                                    getValueProps={(value) => ({value: koreaPhone.format(value || '')})}
+                                                                    rules={[
+                                                                        {required: true, message: '연락처를 입력해주세요.'},
+                                                                        {
+                                                                            validator: (_, value) => {
+                                                                                if (!value || koreaPhone.isValid(value)) {
+                                                                                    return Promise.resolve();
+                                                                                }
+                                                                                return Promise.reject('올바른 전화번호를 입력해주세요.');
+                                                                            },
+                                                                        },
+                                                                    ]}
+                                                                >
+                                                                    <FormInput placeholder="전화번호 숫자만 입력해주세요" maxLength={13} inputMode="numeric" />
+                                                                </ItemDiv>
+
+                                                                <ContactActionButton
+                                                                    type={'default'}
+                                                                    onClick={() => remove(field.name)}
+                                                                    disabled={fields.length === 1}
+                                                                >
+                                                                    삭제
+                                                                </ContactActionButton>
+                                                            </ContactRow>
+                                                        ))}
+
+                                                        <ContactActionButton
+                                                            type={'dashed'}
+                                                            onClick={() => add({ value: '' })}
+                                                        >
+                                                            연락처 추가
+                                                        </ContactActionButton>
+
+                                                        <Form.ErrorList errors={errors} />
+                                                    </ContactListWrap>
+                                                )}
+                                            </Form.List>
+                                        </FieldColumn>
+                                    </FormRow>
+
+                                    <FormRow>
+                                        <FormLabelTitle level={4}><RequiredSpan>&nbsp;</RequiredSpan>업체 소개</FormLabelTitle>
+                                        <FieldColumn>
+                                            <ItemDiv name={'description'} width={'100%'}>
+                                                <FormTextArea
+                                                    placeholder="고객에게 보여줄 업체 소개를 입력해주세요"
+                                                    rows={4}
+                                                    maxLength={500}
+                                                    showCount
+                                                />
                                             </ItemDiv>
                                         </FieldColumn>
-                                    </ModernParagraph>
-                                </FormGrid>
-                            </SectionBlock>
+                                    </FormRow>
 
-                            <Divider style={{margin: '28px 0'}} />
-
-                            <SectionBlock>
-                                <SectionHeader column marginBottom={'8px'}>
-                                    <SectionTitle>가격 정보</SectionTitle>
-                                    <SectionDescription>
-                                        이용 인원별 가격을 등록하면 오른쪽 카드에서 바로 확인할 수 있습니다.
-                                    </SectionDescription>
-                                </SectionHeader>
-
-                                <CostFields />
-
-                                <ActionRow justifyContent={'center'} paddingTop={'8px'}>
-                                    <SubmitButton
-                                        htmlType={'submit'}
-                                        type="primary"
-                                        $buttonMinWidth={'150px'}
-                                        $buttonHeight={'50px'}
-                                        $buttonShadow={'0 14px 28px var(--color-rgba-submit-shadow)'}
-                                    >
-                                        등록하기
-                                    </SubmitButton>
-                                </ActionRow>
+                                    <FormActionRow justifyContent={'center'} paddingTop={'8px'}>
+                                        <GradientSubmitButton
+                                            htmlType={'submit'}
+                                            type="primary"
+                                            disabled={registerStoreMutation.isLoading}
+                                            $buttonMinWidth={'150px'}
+                                            $buttonHeight={'50px'}
+                                            $buttonShadow={'0 14px 28px var(--color-rgba-submit-shadow)'}
+                                        >
+                                            {registerStoreMutation.isLoading ? '업체 등록 중...' : '등록하기'}
+                                        </GradientSubmitButton>
+                                    </FormActionRow>
+                                </FormStack>
                             </SectionBlock>
                         </FormContainer>
-                    </FormSurface>
+                    </SurfaceCard>
 
                     {isMobile && <Divider style={{margin: 0}} />}
 
-                    <PreviewSection>
+                    <StickySidebar>
                         <GuideCard>
                             <GuideTitle>등록 가이드</GuideTitle>
                             <GuideText lineHeight={'1.7'}>
-                                기본 정보와 가격 구성을 먼저 잡아두면 이후 수정 작업이 훨씬 쉬워집니다.
+                                기본 정보를 정확히 등록해두면 이후 수정 작업이 훨씬 쉬워집니다.
                             </GuideText>
                             <GuideList>
                                 <GuideItem><GuideDot />업체명은 검색에 보이는 기준 이름으로 입력</GuideItem>
                                 <GuideItem><GuideDot />주소를 선택하면 지도 위치가 함께 반영</GuideItem>
-                                <GuideItem><GuideDot />가격 항목은 인원 단위로 나누면 비교가 쉬움</GuideItem>
+                                <GuideItem><GuideDot />지점/연락처까지 함께 입력하면 운영 관리가 수월</GuideItem>
                             </GuideList>
                         </GuideCard>
 
                         <MapPreview latitude={storeData.lat} longitude={storeData.lng} />
-
-                        <CostPreview cost={watchedCost} costInfo={watchedCostInfo} fixedLabel="업체 기본 가격" />
-                    </PreviewSection>
-                </ContentGrid>
-            </RegistrationPageShell>
+                    </StickySidebar>
+                </LayoutGrid>
+            </PageShell>
 
             <Modal
                 title="주소 검색"

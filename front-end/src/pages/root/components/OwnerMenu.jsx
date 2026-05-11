@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 import {IoMdHome} from "react-icons/io";
 import {Select} from "antd";
 import {OWNERMENU} from "../../../constants/OWNERMENU";
 import {useNavigate} from "react-router-dom";
-import {useSetRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import Swal from "sweetalert2";
 import {ROLETYPE} from "../../../constants/ROLETYPE";
 import {userState} from "../../../atoms/userState";
@@ -123,8 +123,12 @@ const StyledSelect = styled(Select)`
     .ant-select-selector {
         background-color: rgba(255, 255, 255, 0.1) !important;
         border-color: rgba(255, 255, 255, 0.3) !important;
-        color: #ffffff !important;
+        color: ${({$transparent}) => $transparent ? 'transparent' : '#ffffff'} !important;
         border-radius: 10px !important;
+    }
+
+    .ant-select-selection-item {
+        color: ${({$transparent}) => $transparent ? 'transparent' : '#ffffff'} !important;
     }
 
     .ant-select-selection-placeholder {
@@ -135,6 +139,7 @@ const StyledSelect = styled(Select)`
         color: rgba(255, 255, 255, 0.7);
     }
 `;
+
 
 // MainMenu 컴포넌트
 const MainMenu = ({ onClick, label, isActive}) => (
@@ -161,28 +166,56 @@ const SubMenu = ({ items, activeItem, onItemClick }) => (
     </>
 );
 
-const OwnerMenu = ({setSelectedMenu}) => {
+const OwnerMenu = ({selectedMenu, setSelectedMenu}) => {
     const navigate = useNavigate();
     const setUserData = useSetRecoilState(userState);
-    const setSelectedStoreId = useSetRecoilState(selectedStoreState);
+    const [selectedStoreId, setSelectedStoreId] = useRecoilState(selectedStoreState);
     const logout = useLogout();
     const [activeMainMenus, setActiveMainMenus] = useState({});
     const [visibleSubMenus, setVisibleSubMenus] = useState({});
     const [activeTab, setActiveTab] = useState(null);
-    const [selectedStoreId, setSelectedStoreIdLocal] = useState(null);
+    const prevSelectedStoreIdRef = useRef(undefined);
 
     const { data: stores = [] } = useMyStores();
 
     useEffect(() => {
-        if (stores.length === 1 && selectedStoreId !== stores[0].storeId) {
-            setSelectedStoreIdLocal(stores[0].storeId);
+        if (!stores.length) {
+            return;
+        }
+
+        if (selectedStoreId === null || selectedStoreId === undefined) {
             setSelectedStoreId(stores[0].storeId);
         }
     }, [selectedStoreId, setSelectedStoreId, stores]);
 
+    useEffect(() => {
+        if (selectedStoreId === null || selectedStoreId === undefined) {
+            return;
+        }
+
+        if (prevSelectedStoreIdRef.current === undefined) {
+            prevSelectedStoreIdRef.current = selectedStoreId;
+            return;
+        }
+
+        if (prevSelectedStoreIdRef.current !== selectedStoreId) {
+            setSelectedMenu(OWNERMENU.HOME);
+            setActiveTab(null);
+            prevSelectedStoreIdRef.current = selectedStoreId;
+        }
+    }, [selectedStoreId, setSelectedMenu]);
+
+    const REGISTER_OPTION_VALUE = '__register__';
+
     const handleStoreChange = (value) => {
-        setSelectedStoreIdLocal(value);
+        if (value === REGISTER_OPTION_VALUE) {
+            setSelectedMenu(OWNERMENU.STORE_REGISTRATION);
+            setActiveTab(null);
+            return;
+        }
         setSelectedStoreId(value);
+        setSelectedMenu(OWNERMENU.HOME);
+        setActiveTab(null);
     };
 
     const handleSwitchToUserHome = () => {
@@ -222,9 +255,6 @@ const OwnerMenu = ({setSelectedMenu}) => {
     const handleSubMenuItemClick = (menuIndex, item) => {
         setActiveTab({ menuIndex, item });
         switch (item) {
-            case '업체 등록':
-                setSelectedMenu(OWNERMENU.STORE_REGISTRATION);
-                break;
             case '업체 수정 및 삭제':
                 setSelectedMenu(OWNERMENU.STORE_MODIFICATION);
                 break;
@@ -246,7 +276,7 @@ const OwnerMenu = ({setSelectedMenu}) => {
     };
 
     const menus = [
-        { label: '업체 관리', subItems: ['업체 등록', '업체 수정 및 삭제',] },
+        { label: '업체 관리', subItems: ['업체 수정 및 삭제'] },
         { label: '방탈출 관리', subItems: ['방탈출 등록', '방탈출 수정 및 삭제'] },
         { label: '예약 관리', subItems: ['예약금 확인', '예약내역 관리'] },
     ];
@@ -258,14 +288,21 @@ const OwnerMenu = ({setSelectedMenu}) => {
                     <IoMdHome fontSize={'32px'} style={{flexShrink: 0}}/>
                     <StoreSelectWrap style={{flex: 1, marginTop: 0}}>
                         <StyledSelect
+                            $transparent={selectedMenu === OWNERMENU.STORE_REGISTRATION}
                             placeholder="업체를 선택해주세요"
-                            options={stores.map((s) => ({
-                                label: `${s.businessName} ${s.branchName}`,
-                                value: s.storeId,
-                            }))}
+                            options={[
+                                ...stores.map((s) => ({
+                                    label: `${s.businessName}${s.branchName ? ` ${s.branchName}` : ''}`,
+                                    value: s.storeId,
+                                })),
+                                {
+                                    label: <span style={{color: '#a5b4fc', fontWeight: 700}}>+ 업체 등록</span>,
+                                    value: REGISTER_OPTION_VALUE,
+                                },
+                            ]}
                             value={selectedStoreId}
                             onChange={handleStoreChange}
-                            notFoundContent={<span style={{color: '#aaa', fontSize: '13px'}}>등록된 업체가 없습니다</span>}
+                            notFoundContent={null}
                         />
                     </StoreSelectWrap>
                 </div>

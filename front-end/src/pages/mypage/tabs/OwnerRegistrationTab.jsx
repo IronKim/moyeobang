@@ -6,7 +6,7 @@ import DaumPostcode from 'react-daum-postcode';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useMutation } from 'react-query';
-import { business, phone } from '../../../utils/formatters';
+import { business, koreaPhone } from '../../../utils/formatters';
 import { registerStore } from '../../../api/StoreApiService';
 import { useSetupUserDataByToken } from '../../../hooks/useUser';
 import { ROLETYPE } from '../../../constants/ROLETYPE';
@@ -290,13 +290,17 @@ const OwnerRegistrationTab = () => {
                                         <ContactRow key={field.key}>
                                             <ContactInputItem
                                                 name={[field.name, 'storeNumber']}
-                                                getValueFromEvent={(e) => phone.normalize(e?.target?.value || '')}
-                                                getValueProps={(value) => ({ value: phone.format(value || '') })}
+                                                getValueFromEvent={(e) => koreaPhone.normalize(e?.target?.value || '')}
+                                                getValueProps={(value) => ({ value: koreaPhone.format(value || '') })}
                                                 rules={[
                                                     { required: true, message: '연락처를 입력해주세요.' },
                                                     {
-                                                        pattern: /^(010\d{8}|01[16789]\d{7,8})$/,
-                                                        message: '올바른 연락처를 입력해주세요.',
+                                                        validator: (_, value) => {
+                                                            if (!value || koreaPhone.isValid(value)) {
+                                                                return Promise.resolve();
+                                                            }
+                                                            return Promise.reject('올바른 전화번호를 입력해주세요.');
+                                                        },
                                                     },
                                                 ]}
                                             >

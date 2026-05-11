@@ -299,6 +299,10 @@ export const FormInput = styled(Input)`
     }
 `
 
+export const AddressSearchInput = styled(FormInput)`
+    cursor: pointer;
+`
+
 export const FormTextArea = styled(Input.TextArea)`
     border-radius: 14px;
     border-color: var(--color-border-input);
@@ -429,6 +433,39 @@ export const FormStack = styled.div`
     }
 `
 
+export const SectionBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+`
+
+export const FieldColumn = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+`
+
+export const ContactListWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`
+
+export const ContactRow = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+`
+
+export const ContactActionButton = styled(Button)`
+    && {
+        min-width: 56px;
+        height: 42px;
+        border-radius: 10px;
+    }
+`
+
 FormStack.propTypes = {
     stackGap: PropTypes.string,
     paddingRight: PropTypes.string,
@@ -490,6 +527,25 @@ export const GradientSubmitButton = styled(Button)`
         background: linear-gradient(135deg, var(--color-blue-900) 0%, var(--color-blue-600) 100%) !important;
         border: none;
         color: var(--color-white);
+    }
+`
+
+export const DeleteButton = styled(Button)`
+    && {
+        min-width: 112px;
+        height: 46px;
+        border-radius: 999px;
+        font-weight: 700;
+        border-color: #ef4444;
+        color: #ef4444;
+        background: #fff;
+    }
+
+    &&:hover,
+    &&:focus {
+        color: #dc2626 !important;
+        border-color: #dc2626 !important;
+        background: #fff !important;
     }
 `
 
