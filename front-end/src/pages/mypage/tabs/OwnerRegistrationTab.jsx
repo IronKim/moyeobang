@@ -104,7 +104,7 @@ const OwnerSubmitButton = styled(Button)`
 const OwnerRegistrationTab = () => {
     const [ownerForm] = Form.useForm();
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-    const [companyCoords, setCompanyCoords] = useState({ latitude: null, longitude: null });
+    const [storeCoords, setStoreCoords] = useState({ latitude: null, longitude: null });
     const navigate = useNavigate();
     const isMobile = useMediaQuery('(max-width:1200px)');
     const setupUserDataByToken = useSetupUserDataByToken();
@@ -138,16 +138,16 @@ const OwnerRegistrationTab = () => {
 
         try {
             const coords = await getAddressCoords(selectedAddress);
-            setCompanyCoords(coords);
+            setStoreCoords(coords);
         } catch (error) {
-            setCompanyCoords({ latitude: null, longitude: null });
+            setStoreCoords({ latitude: null, longitude: null });
         }
 
         setIsAddressModalOpen(false);
     };
 
     const handleOwnerSubmit = async (values) => {
-        if (!companyCoords.latitude || !companyCoords.longitude) {
+        if (!storeCoords.latitude || !storeCoords.longitude) {
             await Swal.fire({
                 icon: 'warning',
                 title: '주소 확인 필요',
@@ -165,8 +165,8 @@ const OwnerRegistrationTab = () => {
             addressDetail: values.addressDetail,
             description: values.description,
             storeNumberList: values.storeNumberList,
-            latitude: companyCoords.latitude,
-            longitude: companyCoords.longitude,
+            latitude: storeCoords.latitude,
+            longitude: storeCoords.longitude,
         };
 
         const confirmResult = await Swal.fire({
@@ -203,7 +203,7 @@ const OwnerRegistrationTab = () => {
 
             ownerForm.resetFields();
             ownerForm.setFieldsValue({ storeNumberList: [{ storeNumber: '' }] });
-            setCompanyCoords({ latitude: null, longitude: null });
+            setStoreCoords({ latitude: null, longitude: null });
             navigate('/');
         } catch (error) {
             await Swal.fire({

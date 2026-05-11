@@ -140,9 +140,9 @@ const EscapeRoomModification = () => {
     const [form] = Form.useForm();
     const isMobile = useMediaQuery('(max-width:1200px)');
 
-    const companyData = [
+    const storeData = [
         {
-            companyName: "업체명",
+            storeName: "업체명",
             branchName: "지점",
             address: "주소",
             addressDetail: "상세주소",
@@ -153,7 +153,7 @@ const EscapeRoomModification = () => {
             ],
         },
         {
-            companyName: "업체명2",
+            storeName: "업체명2",
             branchName: "지점2",
             address: "주소2",
             addressDetail: "상세주소2",
@@ -166,7 +166,7 @@ const EscapeRoomModification = () => {
 
     const themeData = [
         {
-            companyIndex: 0,
+            storeIndex: 0,
             themeName: "테마명1",
             themeImage: '',
             themeIntro: "스토리 소개...",
@@ -178,7 +178,7 @@ const EscapeRoomModification = () => {
             time: 60,
         },
         {
-            companyIndex: 0,
+            storeIndex: 0,
             themeName: "테마명2",
             themeImage: '',
             themeIntro: "스토리 소개 2...",
@@ -190,7 +190,7 @@ const EscapeRoomModification = () => {
             time: 70,
         },
         {
-            companyIndex: 1,
+            storeIndex: 1,
             themeName: "테마명3",
             themeImage: '',
             themeIntro: "스토리 소개 3...",
@@ -203,14 +203,14 @@ const EscapeRoomModification = () => {
         },
     ];
 
-    const [selectedCompanyIndex, setSelectedCompanyIndex] = useState(null);
+    const [selectedStoreIndex, setSelectedStoreIndex] = useState(null);
     const [selectedThemeIndex, setSelectedThemeIndex] = useState(null);
 
     const filteredThemes = themeData
         .map((theme, index) => ({...theme, index}))
-        .filter((theme) => theme.companyIndex === selectedCompanyIndex);
+        .filter((theme) => theme.storeIndex === selectedStoreIndex);
 
-    const selectedCompany = selectedCompanyIndex !== null ? companyData[selectedCompanyIndex] : null;
+    const selectedStore = selectedStoreIndex !== null ? storeData[selectedStoreIndex] : null;
     const isDisabled = selectedThemeIndex === null;
 
     const watchedCost = Form.useWatch('cost', form) || [];
@@ -316,7 +316,7 @@ const EscapeRoomModification = () => {
                                                 <ModernSelect
                                                     placeholder="업체를 선택해주세요"
                                                     onChange={(value) => {
-                                                        setSelectedCompanyIndex(value);
+                                                        setSelectedStoreIndex(value);
                                                         setSelectedThemeIndex(null);
                                                         form.resetFields([
                                                             'themeName', 'themeImage', 'themeIntro',
@@ -331,11 +331,11 @@ const EscapeRoomModification = () => {
                                                             time: 60,
                                                         });
                                                     }}
-                                                    options={companyData.map((data, index) => ({
-                                                        label: `${data.companyName} ${data.branchName}`,
+                                                    options={storeData.map((data, index) => ({
+                                                        label: `${data.storeName} ${data.branchName}`,
                                                         value: index,
                                                     }))}
-                                                    value={selectedCompanyIndex}
+                                                    value={selectedStoreIndex}
                                                     style={{width: '100%'}}
                                                 />
                                             </ItemDiv>
@@ -348,7 +348,7 @@ const EscapeRoomModification = () => {
                                             <ItemDiv width={'100%'}>
                                                 <ModernSelect
                                                     placeholder="테마를 선택해주세요"
-                                                    disabled={selectedCompanyIndex === null}
+                                                    disabled={selectedStoreIndex === null}
                                                     onChange={(value) => setSelectedThemeIndex(value)}
                                                     options={filteredThemes.map((theme) => ({
                                                         label: theme.themeName,
@@ -556,22 +556,22 @@ const EscapeRoomModification = () => {
                         </GuideCard>
 
                         <SideCard>
-                            <PreviewLabel>Selected Company</PreviewLabel>
+                            <PreviewLabel>Selected Store</PreviewLabel>
                             <PreviewTitle>
-                                {selectedCompany
-                                    ? `${selectedCompany.companyName} ${selectedCompany.branchName}`
+                                {selectedStore
+                                    ? `${selectedStore.storeName} ${selectedStore.branchName}`
                                     : '업체를 선택해주세요'}
                             </PreviewTitle>
                             <PreviewText>
-                                {selectedCompany
-                                    ? `${selectedCompany.address} ${selectedCompany.addressDetail}`
+                                {selectedStore
+                                    ? `${selectedStore.address} ${selectedStore.addressDetail}`
                                     : '업체를 선택하면 주소/연락처/가격 정보가 여기에 표시됩니다.'}
                             </PreviewText>
-                            {selectedCompany && (
+                            {selectedStore && (
                                 <>
-                                    <PreviewText style={{marginTop: '8px'}}>{selectedCompany.contact}</PreviewText>
+                                    <PreviewText style={{marginTop: '8px'}}>{selectedStore.contact}</PreviewText>
                                     <PreviewCostList>
-                                        {selectedCompany.cost.map((item, idx) => (
+                                        {selectedStore.cost.map((item, idx) => (
                                             <PreviewCostRow key={idx}>
                                                 <span>{item.count}</span>
                                                 <span>{item.cost}</span>
@@ -585,8 +585,8 @@ const EscapeRoomModification = () => {
                         <CostPreview
                             cost={watchedCost}
                             costInfo={watchedCostInfo}
-                            defaultCost={selectedCompany?.cost || []}
-                            defaultCostInfo={selectedCompany?.costInfo || ''}
+                            defaultCost={selectedStore?.cost || []}
+                            defaultCostInfo={selectedStore?.costInfo || ''}
                         />
                     </Sidebar>
                 </ContentGrid>

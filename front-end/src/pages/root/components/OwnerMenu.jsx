@@ -181,10 +181,10 @@ const OwnerMenu = ({setSelectedMenu}) => {
         setActiveTab({ menuIndex, item });
         switch (item) {
             case '업체 등록':
-                setSelectedMenu(OWNERMENU.COMPANY_REGISTRATION);
+                setSelectedMenu(OWNERMENU.STORE_REGISTRATION);
                 break;
             case '업체 수정 및 삭제':
-                setSelectedMenu(OWNERMENU.COMPANY_MODIFICATION);
+                setSelectedMenu(OWNERMENU.STORE_MODIFICATION);
                 break;
             case '방탈출 등록':
                 setSelectedMenu(OWNERMENU.ESCAPE_ROOM_REGISTRATION);

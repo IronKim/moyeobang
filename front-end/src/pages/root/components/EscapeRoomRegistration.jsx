@@ -111,14 +111,14 @@ const PreviewCostRow = styled.div`
 const EscapeRoomRegistration = () => {
     const [form] = Form.useForm();
     const isMobile = useMediaQuery('(max-width:1200px)');
-    const [selectedCompanyIndex, setSelectedCompanyIndex] = useState(null);
+    const [selectedStoreIndex, setSelectedStoreIndex] = useState(null);
 
     const watchedCost = Form.useWatch('cost', form) || [];
     const watchedCostInfo = Form.useWatch('costInfo', form);
 
-    const companyData = [
+    const storeData = [
         {
-            companyName: "업체명",
+            storeName: "업체명",
             branchName: "지점",
             address: "주소",
             addressDetail: "상세주소",
@@ -127,7 +127,7 @@ const EscapeRoomRegistration = () => {
             costInfo: "ex) 1인은 2인 금액으로 책정됩니다.\n 5인 이상은 별도 문의 바랍니다.",
         },
         {
-            companyName: "업체명2",
+            storeName: "업체명2",
             branchName: "지점2",
             address: "주소2",
             addressDetail: "상세주소2",
@@ -137,8 +137,8 @@ const EscapeRoomRegistration = () => {
         },
     ];
 
-    const selectedCompany = selectedCompanyIndex !== null ? companyData[selectedCompanyIndex] : null;
-    const isDisabled = selectedCompanyIndex === null;
+    const selectedStore = selectedStoreIndex !== null ? storeData[selectedStoreIndex] : null;
+    const isDisabled = selectedStoreIndex === null;
 
     const genres = [
         {icon: <TbGhost2Filled />, label: '공포'},
@@ -185,7 +185,7 @@ const EscapeRoomRegistration = () => {
                             scrollToFirstError={true}
                             onFinish={(values) => console.log(values)}
                             initialValues={{
-                                company: undefined,
+                                store: undefined,
                                 themename: '',
                                 themeimage: '',
                                 themeintro: '',
@@ -204,18 +204,18 @@ const EscapeRoomRegistration = () => {
                                     <ModernTitleDiv level={4}><RequiredSpan>*</RequiredSpan>업체 선택</ModernTitleDiv>
                                     <FieldColumn>
                                         <ItemDiv
-                                            name={'company'}
+                                            name={'store'}
                                             width={'100%'}
                                             rules={[{required: true, message: '업체를 선택해주세요.'}]}
                                         >
                                             <ModernSelect
                                                 placeholder="업체를 선택해주세요"
-                                                onChange={(value) => setSelectedCompanyIndex(value)}
-                                                options={companyData.map((data, index) => ({
-                                                    label: `${data.companyName} ${data.branchName}`,
+                                                onChange={(value) => setSelectedStoreIndex(value)}
+                                                options={storeData.map((data, index) => ({
+                                                    label: `${data.storeName} ${data.branchName}`,
                                                     value: index,
                                                 }))}
-                                                value={selectedCompanyIndex}
+                                                value={selectedStoreIndex}
                                                 style={{width: '100%'}}
                                             />
                                         </ItemDiv>
@@ -383,22 +383,22 @@ const EscapeRoomRegistration = () => {
                         </GuideCard>
 
                         <SideCard>
-                            <PreviewLabel>Selected Company</PreviewLabel>
+                            <PreviewLabel>Selected Store</PreviewLabel>
                             <PreviewTitle>
-                                {selectedCompany
-                                    ? `${selectedCompany.companyName} ${selectedCompany.branchName}`
+                                {selectedStore
+                                    ? `${selectedStore.storeName} ${selectedStore.branchName}`
                                     : '업체를 선택해주세요'}
                             </PreviewTitle>
                             <PreviewText>
-                                {selectedCompany
-                                    ? `${selectedCompany.address} ${selectedCompany.addressDetail}`
+                                {selectedStore
+                                    ? `${selectedStore.address} ${selectedStore.addressDetail}`
                                     : '업체를 선택하면 주소/연락처/가격 정보가 여기에 표시됩니다.'}
                             </PreviewText>
-                            {selectedCompany && (
+                            {selectedStore && (
                                 <>
-                                    <PreviewText style={{marginTop: '8px'}}>{selectedCompany.contact}</PreviewText>
+                                    <PreviewText style={{marginTop: '8px'}}>{selectedStore.contact}</PreviewText>
                                     <PreviewCostList>
-                                        {selectedCompany.cost.map((item, idx) => (
+                                        {selectedStore.cost.map((item, idx) => (
                                             <PreviewCostRow key={idx}>
                                                 <span>{item.count}</span>
                                                 <span>{item.cost}</span>
@@ -412,8 +412,8 @@ const EscapeRoomRegistration = () => {
                         <CostPreview
                             cost={watchedCost}
                             costInfo={watchedCostInfo}
-                            defaultCost={selectedCompany?.cost || []}
-                            defaultCostInfo={selectedCompany?.costInfo || ''}
+                            defaultCost={selectedStore?.cost || []}
+                            defaultCostInfo={selectedStore?.costInfo || ''}
                         />
                     </Sidebar>
                 </ContentGrid>

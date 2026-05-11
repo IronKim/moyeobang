@@ -4,8 +4,8 @@ import MainBox from "../../components/MainBox";
 import styled from "styled-components";
 import OwnerMenu from "./components/OwnerMenu";
 import {OWNERMENU} from "../../constants/OWNERMENU";
-import CompanyRegistration from "./components/CompanyRegistration";
-import CompanyModification from "./components/CompanyModification";
+import StoreRegistration from "./components/StoreRegistration";
+import StoreModification from "./components/StoreModification";
 import EscapeRoomRegistration from "./components/EscapeRoomRegistration";
 import EscapeRoomModification from "./components/EscapeRoomModification";
 
@@ -26,10 +26,10 @@ const OwnerHome = () => {
                         selectedMenu === OWNERMENU.HOME && <div>HOME</div>
                     }
                     {
-                        selectedMenu === OWNERMENU.COMPANY_REGISTRATION && <CompanyRegistration />
+                        selectedMenu === OWNERMENU.STORE_REGISTRATION && <StoreRegistration />
                     }
                     {
-                        selectedMenu === OWNERMENU.COMPANY_MODIFICATION && <CompanyModification />
+                        selectedMenu === OWNERMENU.STORE_MODIFICATION && <StoreModification />
                     }
                     {
                         selectedMenu === OWNERMENU.ESCAPE_ROOM_REGISTRATION && <EscapeRoomRegistration />
