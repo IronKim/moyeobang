@@ -10,6 +10,7 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +36,10 @@ public class StoreUpdateRequest {
 
     @Schema(description = "상세주소", example = "2층")
     private String addressDetail;
+
+    @Schema(description = "업체 소개", example = "홍대 앞에서 운영 중인 몰입형 방탈출 카페입니다.")
+    @Size(max = 500, message = "업체 소개는 500자 이하여야 합니다.")
+    private String description;
 
     @Valid
     @Schema(description = "매장 전화번호 목록")

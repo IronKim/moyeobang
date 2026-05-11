@@ -3,10 +3,10 @@ import styled, {css} from "styled-components";
 import {IoMenu} from "react-icons/io5";
 import basicProfileImg from "../assets/images/BasicProfileImg.png";
 import {useNavigate} from "react-router-dom";
-import {useRecoilValue, useResetRecoilState} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {userState} from "../atoms/userState";
-import Swal from "sweetalert2";
 import {useLogout} from "../hooks/useUser";
+import {ROLETYPE} from "../constants/ROLETYPE";
 
 const Container = styled.div`
     position: static;
@@ -165,9 +165,11 @@ const Div = styled.div`
 const UserMenuButton = () => {
     const [ismenuOpen, setIsmenuOpen] = useState(false);
     const userData = useRecoilValue(userState);
+    const setUserData = useSetRecoilState(userState);
     const logout = useLogout();
     const navigate = useNavigate();
     const menuRef = useRef(null);
+    const isOwnerAuthorized = userData.roleType === ROLETYPE.OWNER || userData.roles?.includes(ROLETYPE.OWNER);
 
     useEffect(() => {
         if (!ismenuOpen) {
@@ -190,6 +192,16 @@ const UserMenuButton = () => {
     const menuButtonClick = () => {
         setIsmenuOpen(!ismenuOpen);
     }
+
+    const handleOpenSellerManagement = () => {
+        localStorage.setItem('moyeobangPreferredRoleType', ROLETYPE.OWNER);
+        setUserData((prev) => ({
+            ...prev,
+            roleType: ROLETYPE.OWNER,
+        }));
+        setIsmenuOpen(false);
+        navigate('/');
+    };
 
     return (
         <Container ref={menuRef}>
@@ -214,6 +226,13 @@ const UserMenuButton = () => {
                                 </NameText>
                             </UserNameDiv>
                         </UserDataDiv>
+                        {
+                            isOwnerAuthorized && (
+                                <Div>
+                                    <p onClick={handleOpenSellerManagement}>업체 관리</p>
+                                </Div>
+                            )
+                        }
                         <Div>
                             <p onClick={() => navigate('/my-page')}>개인정보 수정</p>
                         </Div>

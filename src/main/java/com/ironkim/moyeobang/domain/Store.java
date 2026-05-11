@@ -58,6 +58,9 @@ public class Store extends SoftDeletableEntity {
     @Column(length = 50)
     private String addressDetail;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(precision = 10, scale = 7, nullable = false)
     private BigDecimal latitude;
 

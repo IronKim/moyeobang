@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userState } from '../../atoms/userState';
 import { ROLETYPE } from '../../constants/ROLETYPE';
 import MainContainer from '../../components/MainContainer';
@@ -232,12 +232,18 @@ const TabPanel = styled.div`
 const MyPage = () => {
     const navigate = useNavigate();
     const userData = useRecoilValue(userState);
+    const setUserData = useSetRecoilState(userState);
     const [activeTab, setActiveTab] = useState('reservation');
     const isSellerAuthorized =
         userData.roleType === ROLETYPE.OWNER || userData.roles?.includes(ROLETYPE.OWNER);
 
     const handleSellerActionClick = () => {
         if (isSellerAuthorized) {
+            localStorage.setItem('moyeobangPreferredRoleType', ROLETYPE.OWNER);
+            setUserData((prev) => ({
+                ...prev,
+                roleType: ROLETYPE.OWNER,
+            }));
             navigate('/');
         } else {
             setActiveTab('seller');

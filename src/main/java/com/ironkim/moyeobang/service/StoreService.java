@@ -78,6 +78,7 @@ public class StoreService {
                                 .branchName(request.getBranchName())
                                 .address(request.getAddress())
                                 .addressDetail(request.getAddressDetail())
+                                .description(request.getDescription())
                                 .latitude(request.getLatitude())
                                 .longitude(request.getLongitude())
                                 .authStatus(AuthStatus.PENDING)
@@ -133,6 +134,7 @@ public class StoreService {
                                 .branchName(request.getBranchName())
                                 .address(request.getAddress())
                                 .addressDetail(request.getAddressDetail())
+                                .description(request.getDescription())
                                 .latitude(request.getLatitude())
                                 .longitude(request.getLongitude())
                                 .build();

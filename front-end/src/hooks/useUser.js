@@ -6,6 +6,8 @@ import {sellerLogin, userLogin} from "../api/AuthApiService";
 import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
 
+const PREFERRED_ROLE_TYPE_KEY = 'moyeobangPreferredRoleType';
+
 export const useSetupUserDataByToken = () => {
     const setUserData = useSetRecoilState(userState)
 
@@ -16,12 +18,20 @@ export const useSetupUserDataByToken = () => {
             const roles = Array.isArray(decodingInfoJson.roles) && decodingInfoJson.roles.length > 0
                 ? decodingInfoJson.roles
                 : [ROLETYPE.USER];
+            const preferredRoleType = localStorage.getItem(PREFERRED_ROLE_TYPE_KEY);
+            const effectiveRoleType = preferredRoleType && roles.includes(preferredRoleType)
+                ? preferredRoleType
+                : roles[0];
+
+            if (preferredRoleType && !roles.includes(preferredRoleType)) {
+                localStorage.removeItem(PREFERRED_ROLE_TYPE_KEY);
+            }
 
             setUserData({
                 token: token,
                 accountId: decodingInfoJson.AccountId,
                 roles: roles,
-                roleType: roles[0],
+                roleType: effectiveRoleType,
                 profileImage: decodingInfoJson.ProfileImage,
                 profileName: decodingInfoJson.ProfileName,
             });
@@ -96,10 +106,21 @@ export const useChangeRoleType = () => {
     const setUserData = useSetRecoilState(userState);
 
     return (roleType) => {
-        setUserData(prevState => ({
-            ...prevState,
-            roles: [roleType],
-            roleType: roleType
-        }));
+        setUserData(prevState => {
+            const isAuthenticated = Boolean(prevState.token);
+            const availableRoles = Array.isArray(prevState.roles) ? prevState.roles : [];
+            const canChangeRoleType = isAuthenticated
+                ? availableRoles.includes(roleType)
+                : true;
+
+            if (isAuthenticated && canChangeRoleType) {
+                localStorage.setItem(PREFERRED_ROLE_TYPE_KEY, roleType);
+            }
+
+            return {
+                ...prevState,
+                roleType: canChangeRoleType ? roleType : prevState.roleType,
+            };
+        });
     }
 }

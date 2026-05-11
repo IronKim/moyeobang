@@ -1,4 +1,4 @@
-const normalizePhoneNumber = (value = '') => value.replace(/\D/g, '').slice(0, 11);
+const normalizePhoneNumber = (value = '') => String(value ?? '').replace(/\D/g, '').slice(0, 11);
 
 const formatPhoneNumber = (value = '') => {
     const digits = normalizePhoneNumber(value);
@@ -40,7 +40,7 @@ const formatPhoneNumber = (value = '') => {
 
 const normalizeEmail = (value = '') => value.trim();
 
-const normalizeBusinessNumber = (value = '') => value.replace(/\D/g, '').slice(0, 10);
+const normalizeBusinessNumber = (value = '') => String(value ?? '').replace(/\D/g, '').slice(0, 10);
 
 const formatBusinessNumber = (value = '') => {
     const digits = normalizeBusinessNumber(value);

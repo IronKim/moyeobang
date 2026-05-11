@@ -40,6 +40,9 @@ public class StoreDetailResponse {
     @Schema(description = "상세주소", example = "2층")
     private String addressDetail;
 
+    @Schema(description = "업체 소개", example = "홍대 앞에서 운영 중인 몰입형 방탈출 카페입니다.")
+    private String storeDescription;
+
     @Schema(description = "위도", example = "37.556993")
     private BigDecimal latitude;
 
@@ -61,6 +64,7 @@ public class StoreDetailResponse {
                 .branchName(store.getBranchName())
                 .address(store.getAddress())
                 .addressDetail(store.getAddressDetail())
+                .storeDescription(store.getDescription())
                 .latitude(store.getLatitude())
                 .longitude(store.getLongitude())
                 .authStatus(store.getAuthStatus())

@@ -3,6 +3,12 @@ import styled from "styled-components";
 import {RiArrowDownSLine, RiArrowUpSLine} from "react-icons/ri";
 import {IoMdHome} from "react-icons/io";
 import {SELLERMENU} from "../../../constants/SELLERMENU";
+import {useNavigate} from "react-router-dom";
+import {useSetRecoilState} from "recoil";
+import Swal from "sweetalert2";
+import {ROLETYPE} from "../../../constants/ROLETYPE";
+import {userState} from "../../../atoms/userState";
+import {useLogout} from "../../../hooks/useUser";
 
 const Menu = styled.div`
     display: flex;
@@ -23,6 +29,38 @@ const Menu = styled.div`
         display: none;
     }
 `
+
+const BottomActions = styled.div`
+    width: 90%;
+    margin-top: auto;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`;
+
+const SideActionButton = styled.button`
+    border: 1px solid #8f9cff;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.18);
+    }
+`;
+
+const SideLogoutButton = styled(SideActionButton)`
+    border-color: #ffb6b6;
+
+    &:hover {
+        background: rgba(255, 104, 104, 0.2);
+    }
+`;
 
 const MainMenuContainer = styled.div`
     margin: 10px 0 10px 8px;
@@ -98,9 +136,34 @@ const SubMenu = ({ items, activeItem, onItemClick }) => (
 );
 
 const SellerMenu = ({setSelectedMenu}) => {
+    const navigate = useNavigate();
+    const setUserData = useSetRecoilState(userState);
+    const logout = useLogout();
     const [activeMainMenus, setActiveMainMenus] = useState({});
     const [visibleSubMenus, setVisibleSubMenus] = useState({});
     const [activeTab, setActiveTab] = useState(null);
+
+    const handleSwitchToUserHome = () => {
+        Swal.fire({
+            icon: 'question',
+            title: '유저 홈으로 이동',
+            text: '사업자 화면에서 나가서 유저 홈으로 이동하시겠어요?',
+            showCancelButton: true,
+            confirmButtonText: '이동',
+            cancelButtonText: '취소',
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            localStorage.setItem('moyeobangPreferredRoleType', ROLETYPE.USER);
+            setUserData((prev) => ({
+                ...prev,
+                roleType: ROLETYPE.USER,
+            }));
+            navigate('/');
+        });
+    };
 
     const handleMainMenuClick = (menuIndex, isFunction) => {
         setActiveMainMenus(prevState => ({
@@ -171,6 +234,15 @@ const SellerMenu = ({setSelectedMenu}) => {
                     </div>
                 ))}
             </div>
+
+            <BottomActions>
+                <SideActionButton type={'button'} onClick={handleSwitchToUserHome}>
+                    유저 홈으로
+                </SideActionButton>
+                <SideLogoutButton type={'button'} onClick={logout}>
+                    로그아웃
+                </SideLogoutButton>
+            </BottomActions>
         </Menu>
     );
 };

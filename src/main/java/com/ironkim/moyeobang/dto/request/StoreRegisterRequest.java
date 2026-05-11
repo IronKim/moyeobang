@@ -46,6 +46,10 @@ public class StoreRegisterRequest {
     @Size(max = 50, message = "상세주소는 50자 이하여야 합니다.")
     private String addressDetail;
 
+    @Schema(description = "업체 소개", example = "홍대 앞에서 운영 중인 몰입형 방탈출 카페입니다.")
+    @Size(max = 500, message = "업체 소개는 500자 이하여야 합니다.")
+    private String description;
+
     @Valid
     @Schema(description = "매장 전화번호 목록")
     private List<StoreNumberRequest> storeNumberList;
