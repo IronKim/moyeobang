@@ -16,6 +16,25 @@ export const useSetupUserDataByToken = () => {
         const token = localStorage.getItem('moyeobangToken');
         if (token) {
             const decodingInfoJson = jwtDecode(token);
+            
+            // 토큰 만료 여부 확인 (exp는 Unix timestamp, 초 단위)
+            const currentTime = Date.now();
+            const expirationTime = decodingInfoJson.exp * 1000; // 밀리초로 변환
+            const isTokenExpired = expirationTime < currentTime;
+
+            if (isTokenExpired) {
+                // 토큰이 만료되었으면 로그아웃 처리
+                localStorage.removeItem('moyeobangToken');
+                localStorage.removeItem(PREFERRED_ROLE_TYPE_KEY);
+                setUserData({
+                    token: '',
+                    accountId: '',
+                    roles: [ROLETYPE.USER],
+                    roleType: ROLETYPE.USER,
+                });
+                return;
+            }
+
             const roles = Array.isArray(decodingInfoJson.roles) && decodingInfoJson.roles.length > 0
                 ? decodingInfoJson.roles
                 : [ROLETYPE.USER];
