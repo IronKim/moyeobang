@@ -69,7 +69,7 @@ const StoreModification = () => {
         return `${store?.businessName || ''}${store?.branchName ? ` ${store.branchName}` : ''}`.trim();
     }, [myStores, selectedStoreId]);
 
-    const {data: selectedStoreDetail, isLoading: isStoreDetailLoading} = useQuery(
+    const {data: selectedStoreDetail, isLoading: isStoreDetailLoading, refetch: refetchStoreDetail} = useQuery(
         ['storeDetail', selectedStoreId],
         async () => {
             const response = await getStoreDetail(selectedStoreId);
@@ -110,6 +110,7 @@ const StoreModification = () => {
         }
 
         const mappedContacts = (selectedStoreDetail.storeNumberList || []).map((item) => ({
+            id: item?.id,
             value: koreaPhone.normalize(item?.storeNumber || ''),
         }));
 
@@ -198,8 +199,7 @@ const StoreModification = () => {
             showCancelButton: true,
             confirmButtonText: '삭제',
             cancelButtonText: '취소',
-            confirmButtonColor: '#ef4444',
-            reverseButtons: true,
+            confirmButtonColor: '#ef4444'
         });
 
         if (!result.isConfirmed) {
@@ -256,8 +256,7 @@ const StoreModification = () => {
             html: `"${label}"의 정보를 입력한 내용으로 수정합니다.`,
             showCancelButton: true,
             confirmButtonText: '수정',
-            cancelButtonText: '취소',
-            reverseButtons: true,
+            cancelButtonText: '취소'
         });
 
         if (!result.isConfirmed) {
@@ -270,15 +269,36 @@ const StoreModification = () => {
             address: values.address,
             addressDetail: values.addressDetail,
             description: values.description,
-            storeNumberList: (values.contacts || []).map((item) => ({storeNumber: item?.value || ''})),
+            storeNumberList: (values.contacts || []).map((item) => ({
+                ...(item?.id && {id: item.id}),
+                storeNumber: item?.value || '',
+            })),
             latitude: mapPosition?.lat,
             longitude: mapPosition?.lng,
         };
 
         try {
             await updateStoreMutation.mutateAsync(payload);
-            queryClient.invalidateQueries(['myStores']);
-            queryClient.invalidateQueries(['storeDetail', selectedStoreId]);
+            await queryClient.invalidateQueries(['myStores']);
+            const refreshed = await refetchStoreDetail();
+            const refreshedStoreDetail = refreshed?.data;
+
+            if (refreshedStoreDetail) {
+                const refreshedContacts = (refreshedStoreDetail.storeNumberList || []).map((item) => ({
+                    id: item?.id,
+                    value: koreaPhone.normalize(item?.storeNumber || ''),
+                }));
+
+                form.setFieldsValue({
+                    name: refreshedStoreDetail.businessName,
+                    branchName: refreshedStoreDetail.branchName,
+                    businessNumber: refreshedStoreDetail.businessNumber,
+                    address: refreshedStoreDetail.address,
+                    addressDetail: refreshedStoreDetail.addressDetail,
+                    contacts: refreshedContacts.length ? refreshedContacts : [{value: ''}],
+                    description: refreshedStoreDetail.storeDescription || '',
+                });
+            }
 
             await Swal.fire({
                 icon: 'success',
@@ -379,7 +399,6 @@ const StoreModification = () => {
                                             >
                                                 <FormInput placeholder="숫자만 입력해주세요" maxLength={12} inputMode="numeric" disabled />
                                             </ItemDiv>
-                                            <FieldHint>사업자번호는 현재 수정 API에서 변경을 지원하지 않아 읽기 전용입니다.</FieldHint>
                                         </FieldColumn>
                                     </FormRow>
 

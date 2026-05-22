@@ -9,5 +9,5 @@ import com.ironkim.moyeobang.domain.Store;
 public interface StoreRepository extends JpaRepository<Store, Long> {
     boolean existsByBusinessNumber(String businessNumber);
 
-    List<Store> findAllByAccount_AccountId(String accountId);
+    List<Store> findAllByAccount_AccountIdOrderByCreatedAtDesc(String accountId);
 }

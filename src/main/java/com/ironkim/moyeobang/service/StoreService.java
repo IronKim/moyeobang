@@ -105,7 +105,7 @@ public class StoreService {
         }
 
         public List<StoreSimpleResponse> getMyStores(String accountId) {
-                return storeRepository.findAllByAccount_AccountId(accountId).stream()
+                return storeRepository.findAllByAccount_AccountIdOrderByCreatedAtDesc(accountId).stream()
                                 .map(StoreSimpleResponse::fromEntity)
                                 .collect(Collectors.toList());
         }
@@ -126,18 +126,13 @@ public class StoreService {
 
                 storePermissionValidator.validateOwner(store, accountId);
 
-                store = Store.builder()
-                                .id(store.getId())
-                                .account(store.getAccount())
-                                .businessName(request.getBusinessName())
-                                .businessNumber(store.getBusinessNumber())
-                                .branchName(request.getBranchName())
-                                .address(request.getAddress())
-                                .addressDetail(request.getAddressDetail())
-                                .description(request.getDescription())
-                                .latitude(request.getLatitude())
-                                .longitude(request.getLongitude())
-                                .build();
+                store.setBusinessName(request.getBusinessName());
+                store.setBranchName(request.getBranchName());
+                store.setAddress(request.getAddress());
+                store.setAddressDetail(request.getAddressDetail());
+                store.setDescription(request.getDescription());
+                store.setLatitude(request.getLatitude());
+                store.setLongitude(request.getLongitude());
 
                 for (StoreNumberRequest storeNumberRequest : request.getStoreNumberList()) {
                         storeContactRepository.save(StoreContact.builder()

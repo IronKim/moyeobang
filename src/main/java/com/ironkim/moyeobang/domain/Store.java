@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -44,27 +45,34 @@ public class Store extends SoftDeletableEntity {
     private Account account;
 
     @Column(length = 50, nullable = false)
+    @Setter
     private String businessName;
 
     @Column(length = 10, nullable = false, unique = true)
     private String businessNumber;
 
     @Column(length = 20)
+    @Setter
     private String branchName;
 
     @Column(length = 255, nullable = false)
+    @Setter
     private String address;
 
     @Column(length = 50)
+    @Setter
     private String addressDetail;
 
     @Column(columnDefinition = "TEXT")
+    @Setter
     private String description;
 
     @Column(precision = 10, scale = 7, nullable = false)
+    @Setter
     private BigDecimal latitude;
 
     @Column(precision = 10, scale = 7, nullable = false)
+    @Setter
     private BigDecimal longitude;
 
     @Column(length = 20, nullable = false)

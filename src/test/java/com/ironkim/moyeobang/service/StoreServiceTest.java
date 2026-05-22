@@ -199,7 +199,7 @@ class StoreServiceTest {
                                 .authStatus(AuthStatus.APPROVED)
                                 .build();
 
-                when(storeRepository.findAllByAccount_AccountId(accountId))
+                when(storeRepository.findAllByAccount_AccountIdOrderByCreatedAtDesc(accountId))
                                 .thenReturn(java.util.Arrays.asList(store1, store2));
 
                 var response = sut.getMyStores(accountId);
@@ -216,7 +216,7 @@ class StoreServiceTest {
         void 등록된_스토어가_없으면_빈_리스트를_반환한다() {
                 String accountId = "owner_escape";
 
-                when(storeRepository.findAllByAccount_AccountId(accountId))
+                when(storeRepository.findAllByAccount_AccountIdOrderByCreatedAtDesc(accountId))
                                 .thenReturn(new ArrayList<>());
 
                 var response = sut.getMyStores(accountId);
@@ -294,6 +294,7 @@ class StoreServiceTest {
                                 .branchName("강남점")
                                 .address("서울특별시 강남구 테헤란로 456")
                                 .addressDetail("3층")
+                                .description("새롭게 리뉴얼된 매장")
                                 .storeNumberList(java.util.List.of(
                                                 StoreNumberRequest.builder()
                                                                 .id(10L)
@@ -311,6 +312,13 @@ class StoreServiceTest {
                 var response = sut.updateStore(storeId, accountId, updateRequest);
 
                 assertThat(response.getStoreId()).isEqualTo(storeId);
+                assertThat(existingStore.getBusinessName()).isEqualTo("미로연구소 업그레이드");
+                assertThat(existingStore.getBranchName()).isEqualTo("강남점");
+                assertThat(existingStore.getAddress()).isEqualTo("서울특별시 강남구 테헤란로 456");
+                assertThat(existingStore.getAddressDetail()).isEqualTo("3층");
+                assertThat(existingStore.getDescription()).isEqualTo("새롭게 리뉴얼된 매장");
+                assertThat(existingStore.getLatitude()).isEqualByComparingTo(new BigDecimal("37.501274"));
+                assertThat(existingStore.getLongitude()).isEqualByComparingTo(new BigDecimal("127.039585"));
                 verify(storeContactRepository, times(2)).save(any(StoreContact.class));
         }
 
